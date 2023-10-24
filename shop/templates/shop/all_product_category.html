@@ -1,0 +1,69 @@
+{% extends 'shop/base.html'%}
+{%load static%}
+ {%block content%}
+<main class="container">
+      {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show container" role="alert">
+      <strong>{{ message }}!</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+      <section class="text-center mb-4">
+            <h2 class=" text-warning">{{category.name}}</h2>
+        <div class="row wow fadeIn">
+
+          {% for item in products %}
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card">
+
+              <div class="view overlay">
+
+                <a href="{%url 'product_detail' item.pk%}"><img src="{{ item.image.url }}" class="card-img-top" height="210" ></a>
+
+                  <div class="mask rgba-white-slight"><a class="link-secondary text-decoration-none" href="{%url 'product_detail' item.id%}"> <h4>{{item.name}}</h4> </a></div>
+                </a>
+              </div>
+
+              <div class="card-body text-center">
+                <a href="{%url 'add_to_product' item.pk%}" class="grey-text">
+                  <h5><button type="button" class="btn btn-warning">В корзину</button></h5>
+                </a>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>
+
+                  Цена: {{ item.price_1 }}
+
+                  </strong>
+                </h4>
+
+              </div>
+
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+                  {%if category.name == 'Самосборные коробки' or category.name == 'Четырехклапанные коробки'%}
+        <div class="px-4 pt-5 my-5 text-center border-bottom">
+    <h1 class="display-4 fw-bold text-body-emphasis">Не нашли коробки нужного размера?</h1>
+    <div class="col-lg-6 mx-auto">
+      <h3 class="">Изготовим по индивидуальным размерам от 1000 шт.</h3>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+          <a href="https://cubekazan.ru/tel:+79950071654" class="nav-link p-0 text-muted"><button type="button" class="btn btn-warning btn-lg px-4 me-sm-3">Заказать</button></a>
+      </div>
+    </div>
+    <div class="overflow-hidden" >
+      <div class="container px-5">
+        <img src="{%static 'images/size.jpg'%}" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="700" height="500" loading="lazy">
+      </div>
+    </div>
+  </div>
+          {%endif%}
+</main>
+
+{%endblock%}
