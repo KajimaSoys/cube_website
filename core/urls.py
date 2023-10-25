@@ -15,7 +15,7 @@ urlpatterns = [
                   path('company/', include('news.urls')),
               ]
 
-admin.site.site_header = "Куб administration"
+admin.site.site_header = "Панель управления сайта Куб Казань"
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += [
         re_path(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',

@@ -4,7 +4,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django.utils.html import mark_safe
 
-from .models import Category, Product, Orders, Basket, ProductImage
+from .models import Category, Product, Orders, ProductImage, ProductList
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -15,13 +15,10 @@ class ProductAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-# Register your models here.
-
-
 @admin.register(Category)
 class CategoryAdmin(SortableAdminMixin, admin.ModelAdmin):
     """Настройки для категорий"""
-    list_display = ['slug', 'name',  'ordering_id']
+    list_display = ['slug', 'name',  'order']
     list_editable = ['name']
     list_filter = ['name']
     prepopulated_fields = {'slug': ('name',)}
@@ -34,10 +31,16 @@ class ProductImageInline(SortableInlineAdminMixin, admin.TabularInline):
     def thumbnail(self, obj):
         if obj.image:
             return mark_safe(f'<a href="{obj.image.url}"><img src="{obj.image.url}" width="200" /></a>')
-        return "Предпросмотр пока недоступен, сохраните отзыв для отображения фото."
+        return "Предпросмотр пока недоступен. Добавьте фото и сохраните товар для отображения фото."
 
     thumbnail.short_description = "Предпросмотр фото"
     readonly_fields = ['thumbnail']
+
+
+class ProductListInline(admin.StackedInline):
+    model = ProductList
+    extra = 0
+    autocomplete_fields = ('product',)
 
 
 @admin.register(Product)
@@ -45,8 +48,8 @@ class ProductAdmin(SortableAdminMixin, admin.ModelAdmin):
     """Настройки для товаров"""
     list_display = ['name', 'price_1', 'in_stock']
     list_filter = ['in_stock', 'category']
-    list_editable = ['in_stock', 'price_1',]
-    search_fields = ['material']
+    list_editable = ['in_stock', 'price_1', ]
+    search_fields = ['material', 'name']
     list_display_links = ['name']
     form = ProductAdminForm
     inlines = [ProductImageInline]
@@ -54,18 +57,7 @@ class ProductAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    # readonly_fields = ['products', 'name', 'phone_number', 'created', 'address']
-    list_display = ['user', 'name']
-    list_display_links = ['user']
+    list_display = ['name', 'get_orders']
+    list_display_links = ['name']
 
-
-admin.site.register(Basket)
-
-
-# @admin.register(ProductImage)
-# class OrdersAdmin(admin.ModelAdmin):
-#     list_display = ['name', 'product', 'image']
-#     list_display_links = ['name', ]
-#     list_filter = ['product', ]
-    
-    
+    inlines = [ProductListInline]
