@@ -7,15 +7,50 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib import messages
-from django.http import  HttpResponseRedirect
+from django.http import HttpResponseRedirect
 
-
-from .models import Category, Product, Basket, Orders, ProductImage
+from .models import Category, Product, Basket, Orders, ProductImage, ProductPrice
 from .forms import OrderForm
 from .services import send_sms
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
-# Create your views here.
+
+######################################################
+#                      New views                     #
+######################################################
+
+
+class GetProductPrice(APIView):
+    queryset = ProductPrice.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        product_id = request.GET.get('product_id')
+        count = int(request.GET.get('count', 0))
+
+        if not product_id:
+            return Response({'error': 'product_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Получаем все цены для данного продукта, отсортированные по количеству
+            product_prices = ProductPrice.objects.filter(product_id=product_id).order_by('count')
+
+            # Ищем подходящую цену на основе заданного количества
+            for product_price in product_prices:
+                if count >= product_price.count:
+                    price = product_price.price
+        except ProductPrice.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'price': price}, status=status.HTTP_200_OK)
+
+
+######################################################
+#                      Old views                     #
+######################################################
+
 
 class HomeView(TemplateView):
     """Home page"""

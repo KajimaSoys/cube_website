@@ -3,8 +3,13 @@ from django.views.decorators.cache import cache_page
 
 from shop import views
 from .services import send_sms
+from .views import GetProductPrice
 
 urlpatterns = [
+    # New urls
+    path('api/v1/get_price/', GetProductPrice.as_view(), name='get-product-price'),
+
+    # Old urls
     path('', views.HomeView.as_view(), name='home'),
     path('all_categories/', views.CategoryList.as_view(), name='all_categories'),
     path('all_product_category/<slug:slug>', views.AllProductCategory.as_view(),

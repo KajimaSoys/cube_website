@@ -4,6 +4,8 @@ from imagekit.processors import ResizeToFill
 from django_resized import ResizedImageField
 import uuid
 from datetime import datetime
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 
 def default_id():
@@ -25,7 +27,7 @@ class Category(models.Model):
     Model Category of Shop App
     """
     name = models.CharField(max_length=70, verbose_name='Название категории', unique=True)
-    slug = models.SlugField(max_length=70, unique=True)
+    slug = models.SlugField(max_length=70, unique=True, verbose_name='Транслитерация')
     image_cat = models.ImageField(verbose_name='Фотография категории', upload_to='shop/images_cat')
     image_cat_thumbnail = ImageSpecField(source='image_cat', processors=[ResizeToFill(200, 300)], format='jpeg')
     order = models.PositiveIntegerField(default=0, blank=False, null=False, db_index=True, verbose_name="Порядок")
@@ -46,24 +48,30 @@ class Product(models.Model):
     """
     Model Product of Shop App
     """
-    name = models.CharField(verbose_name='Имя товара', max_length=100)
-    description = models.TextField(verbose_name='Описание товара', help_text='Введите подробное описание товара')
-    size = models.CharField(verbose_name='Размеры Товара', max_length=30, blank=True, null=True)
-    material = models.CharField(verbose_name='Материал', max_length=50, blank=True, null=True)
-    price_1 = models.FloatField(verbose_name='Цена от 1', blank=False)
-
-    # TODO delete field from model
-    image = models.ImageField(verbose_name='Фотография товара', upload_to='shop/images')
-
-    in_stock = models.BooleanField(verbose_name="В наличии", default=True)
     category = models.ForeignKey(Category, verbose_name='Выберите категорию товара', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='Наименование', max_length=100)
+    description = models.TextField(verbose_name='Описание товара', help_text='Введите подробное описание товара')
+    in_stock = models.BooleanField(verbose_name="В наличии", default=True)
+
+    size = models.CharField(verbose_name='Размер', max_length=30, blank=True, null=True)
+    material = models.CharField(verbose_name='Материал', max_length=50, blank=True, null=True)
+
     order = models.PositiveIntegerField(
         default=0,
         blank=False,
         null=False,
         db_index=True,
         verbose_name="Порядок")
+
+    # TODO delete image, image_thumbnail, price_1 fields from model
+    image = models.ImageField(verbose_name='Фотография товара (deprecated)', upload_to='shop/images')
     image_thumbnail = ImageSpecField(source='image', processors=ResizeToFill(220, 310), format='jpeg')
+    price_1 = models.FloatField(verbose_name='Цена от 1 шт', blank=False)
+
+    def price_at_count_100(self):
+        price_obj = self.prices.filter(count=100).first()
+        return price_obj.price if price_obj else None
+    price_at_count_100.short_description = "От 100 шт"
 
     class Meta:
         verbose_name = "Товар"
@@ -73,6 +81,56 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=Product)
+def update_product_price(sender, instance, **kwargs):
+    print('Product change')
+    ProductPrice.objects.update_or_create(
+        product=instance,
+        count=1,
+        defaults={'price': instance.price_1}
+    )
+
+
+class ProductPrice(models.Model):
+    """
+    Model ProductPrice of Shop App.
+    This model holds the pricing information for different quantities of a product.
+    """
+    product = models.ForeignKey(Product, related_name='prices', on_delete=models.CASCADE, verbose_name='Товар')
+    count = models.PositiveIntegerField(verbose_name='Кол-во товара',
+                                        help_text='От какого кол-ва товара начинает действовать оптовая цена')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена',
+                                help_text='Цена за ед. товара при указанном кол-ве товара')
+    order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+        verbose_name="Порядок")
+
+    class Meta:
+        verbose_name = "Цена"
+        verbose_name_plural = "Цены"
+        unique_together = ('product', 'count')
+        ordering = ['order', ]
+
+    def __str__(self):
+        return f'При заказе от {self.count}шт. стоимость за ед. {self.price}руб.'
+
+
+@receiver(pre_save, sender=ProductPrice)
+def update_product_price_1(sender, instance, **kwargs):
+    print('ProductPrice change')
+    if instance.count == 1:
+        try:
+            target_product = Product.objects.get(pk=instance.product.pk)
+            if target_product.price_1 != instance.price:
+                target_product.price_1 = instance.price
+                target_product.save(update_fields=['price_1'])
+        except Product.DoesNotExist:
+            pass
 
 
 class ProductImage(models.Model):
@@ -135,10 +193,10 @@ class ProductList(models.Model):
     price = models.DecimalField(verbose_name='Стоимость, руб.', default=0, decimal_places=2, max_digits=10)
 
     def total(self):
-        return self.count * self.product.price_1
+        return self.count * self.price
 
     def __str__(self):
-        return f"{self.product.name}, {self.product.price_1} руб. * {self.count} = {self.total()} руб."
+        return f"{self.product.name}, {self.price} руб. * {self.count} = {self.total()} руб."
 
     class Meta:
         verbose_name = 'товар'

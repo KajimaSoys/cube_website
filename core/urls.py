@@ -1,9 +1,9 @@
 
 from django.contrib import admin
-from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.views.static import serve as mediaserve
-from core import settings
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -16,12 +16,12 @@ urlpatterns = [
               ]
 
 admin.site.site_header = "Панель управления сайта Куб Казань"
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += [
-        re_path(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',
-            mediaserve, {'document_root': settings.MEDIA_ROOT}),
-        re_path(f'^{settings.STATIC_URL.lstrip("/")}(?P<path>.*)$',
-            mediaserve, {'document_root': settings.STATIC_ROOT}),
-    ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += [
+#         re_path(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',
+#             mediaserve, {'document_root': settings.MEDIA_ROOT}),
+#         re_path(f'^{settings.STATIC_URL.lstrip("/")}(?P<path>.*)$',
+#             mediaserve, {'document_root': settings.STATIC_ROOT}),
+#     ]
 handler404 = 'shop.utils.handle_non_found'
 handler500 = 'shop.utils.handle_error'
