@@ -162,7 +162,26 @@ class Orders(models.Model):
 
     phone_number = models.CharField(blank=True, verbose_name='Номер телефона', max_length=30)
     name = models.CharField(max_length=30, verbose_name='ФИО', blank=True)
-    address = models.CharField(verbose_name='Адрес доставки', max_length=70, default='Чистопольская ул. 7, Казань')
+    pickup = models.BooleanField(verbose_name='Самовывоз', default=True)
+    address = models.CharField(verbose_name='Адрес доставки', max_length=70, default='', blank=True)
+
+    whatsapp_link = models.CharField(verbose_name='Ссылка на WhatsApp', max_length=100, blank=True)
+    comment = models.TextField(verbose_name='Комментарий к заказу', blank=True)
+    order_status_choices = [
+        ('created', 'Заказ создан'),
+        ('material_purchase', 'Закупка сырья'),
+        ('felling', 'Вырубка'),
+        ('packing', 'На упаковке'),
+        ('ready_on_stock', 'Готов на складе'),
+        ('ready_on_shop', 'Готов в магазине'),
+        ('completed', 'Сдан'),
+        ('unknown', 'Неизвестно'),
+        ('return', 'Возврат'),
+    ]
+
+    order_status = models.CharField(verbose_name="Статус заказа", choices=order_status_choices,
+                                       default='created', max_length=20)
+
 
     created_at = models.DateTimeField(verbose_name='Дата создания', default=default_date)
     updated_at = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
