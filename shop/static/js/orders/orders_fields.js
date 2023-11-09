@@ -2,11 +2,50 @@ if (window.jQuery) {
     $(document).ready(function (jQuery) {
         jQuery(function ($) {
             if (window.location.href.indexOf("/change/") !== -1 || window.location.href.indexOf("/add/") !== -1) {
-                // masking для поля даты
+                // masking для полей номера и даты
                 $('#id_phone_number').mask("8 (999) 999-99-99", {autoclear: false});
                 $('#id_created_at_0').mask("99.99.9999", {autoclear: false});
 
-                // Присваиваем element строку с итоговой стоимостью
+                // Ссылка на whatsapp
+                let whatsappDiv = $(".field-whatsapp_link > div > div");
+                let whatsappText = whatsappDiv.text();
+
+                if (whatsappText) {
+                    let whatsappLink = $("<a>");
+                    whatsappLink.attr("href", whatsappText);
+                    whatsappLink.attr("target", "_blank");
+                    whatsappLink.text(whatsappText)
+                    whatsappLink.attr("style", "bottom: -9px; position: relative;")
+                    whatsappDiv.replaceWith(whatsappLink);
+                }
+                else {
+                    whatsappDiv.text('Сохраните заказ, чтобы получить ссылку')
+                }
+
+                // Поле для комментария
+                $("textarea").attr({"rows": "3",
+                        "cols": "54"
+                });
+
+
+                // Блок обработки true/false на поле самовывоза
+                let address = $('.form-row.field-address');
+                let pickup = $('input#id_pickup');
+                if (pickup.prop('checked')) {
+                    address.hide();
+                }
+
+                pickup.on('change', function() {
+                    if (pickup.prop('checked')){
+                        address.hide();
+                    } else {
+                        address.show();
+                    }
+                });
+
+
+                // Блок с расчетом итоговой стоимости
+                // Присваиваем элементу строку с итоговой стоимостью
                 let total_fieldset = $(".module.aligned ")[1]
 
                 // вставляем наш элемент после inline поля

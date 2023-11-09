@@ -160,12 +160,12 @@ class Orders(models.Model):
     uuid = models.UUIDField(verbose_name='Номер заказа', primary_key=True, default=uuid.uuid4, editable=False)
     id = models.BigIntegerField(verbose_name='Номер заказа', default=default_id)
 
-    phone_number = models.CharField(blank=True, verbose_name='Номер телефона', max_length=30)
-    name = models.CharField(max_length=30, verbose_name='ФИО', blank=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', max_length=30)
+    name = models.CharField( verbose_name='ФИО', max_length=30)
     pickup = models.BooleanField(verbose_name='Самовывоз', default=True)
     address = models.CharField(verbose_name='Адрес доставки', max_length=70, default='', blank=True)
 
-    whatsapp_link = models.CharField(verbose_name='Ссылка на WhatsApp', max_length=100, blank=True)
+    whatsapp_link = models.URLField(verbose_name='Ссылка на WhatsApp', max_length=100, blank=True)
     comment = models.TextField(verbose_name='Комментарий к заказу', blank=True)
     order_status_choices = [
         ('created', 'Заказ создан'),
@@ -182,14 +182,13 @@ class Orders(models.Model):
     order_status = models.CharField(verbose_name="Статус заказа", choices=order_status_choices,
                                        default='created', max_length=20)
 
-
     created_at = models.DateTimeField(verbose_name='Дата создания', default=default_date)
     updated_at = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
 
     total = models.DecimalField(verbose_name='Итоговая стоимость, руб.', default=0, decimal_places=2, max_digits=10)
 
     def get_orders(self):
-        return ", ".join([o.product.name for o in ProductList.objects.filter(order_id=self.uuid)])
+        return ", ".join([f'{o.product.name} - {o.count}шт, {o.price} руб.' for o in ProductList.objects.filter(order_id=self.uuid)])
 
     get_orders.short_description = "Заказ"
 
@@ -199,6 +198,12 @@ class Orders(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name} - {self.total} рублей'
+
+    def save(self, *args, **kwargs):
+        """Создание ссылки на whatsapp"""
+        clean_phone = self.phone_number.replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
+        self.whatsapp_link = f'https://wa.me/7{clean_phone[1:]}'
+        super(Orders, self).save(*args, **kwargs)
 
 
 class ProductList(models.Model):

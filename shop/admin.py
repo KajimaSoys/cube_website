@@ -3,6 +3,9 @@ from django.contrib import admin
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django.utils.html import mark_safe, format_html
+from django.forms import Textarea
+from django.forms.models import BaseInlineFormSet
+from django.db import models
 from django.urls import path, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from urllib.parse import urlparse, parse_qs
@@ -34,14 +37,22 @@ class CategoryAdmin(SortableAdminMixin, admin.ModelAdmin):
     readonly_fields = ['thumbnail']
 
 
-class ProductPriceInline(SortableInlineAdminMixin, admin.TabularInline):
+class ProductPriceInlineFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Устанавливаем начальное значение поля 'count' на 1 или 100 в зависимости от количества форм
+        initial_count_value = 100 if self.instance.pk and self.instance.prices.count() > 0 else 1
+        for form in self.forms:
+            form.fields['count'].initial = initial_count_value
+
+
+class ProductPriceInline(admin.TabularInline):
     model = ProductPrice
     extra = 1
+    formset = ProductPriceInlineFormSet
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super(ProductPriceInline, self).get_formset(request, obj, **kwargs)
-        form = formset.form
-        form.base_fields['count'].initial = 100
         return formset
 
 
@@ -93,8 +104,15 @@ class ProductAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ['name', 'get_orders']
+    list_display = ['name', 'get_orders', 'total', 'order_status', 'whatsapp_link_tag', 'comment', ]
     list_display_links = ['name']
+    readonly_fields = ['whatsapp_link']
+
+    list_editable = ['comment', 'order_status', ]
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
+    }
 
     inlines = [ProductListInline]
 
@@ -104,8 +122,12 @@ class OrdersAdmin(admin.ModelAdmin):
                 'id',
                 'phone_number',
                 'name',
+                'pickup',
                 'address',
                 'created_at',
+                'order_status',
+                'whatsapp_link',
+                'comment',
             ],
         }),
         ('Итого', {
@@ -119,5 +141,10 @@ class OrdersAdmin(admin.ModelAdmin):
         js = (
             'admin/js/vendor/jquery/jquery.js',
             'js/jquery.maskedinput.js',
-            'js/orders_fields.js'
+            'js/orders/orders_fields.js',
         )
+
+    def whatsapp_link_tag(self, obj):
+        return format_html('<a href="{}" target="_blank">{}</a>', obj.whatsapp_link, obj.whatsapp_link)
+
+    whatsapp_link_tag.short_description = 'Ссылка на WhatsApp'
