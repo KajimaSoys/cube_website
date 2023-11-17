@@ -11,7 +11,7 @@ urlpatterns = [
                   path('__debug__/', include('debug_toolbar.urls')),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
                   path('api-auth/', include('rest_framework.urls')),
-                  path('api/v1/', include('api.urls')),
+                  path('api/v1/', include('DEPRECATED_api.urls')),
                   path('company/', include('news.urls')),
               ]
 

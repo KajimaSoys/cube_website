@@ -1,5 +1,5 @@
 from django.urls import path
-from api import views
+from DEPRECATED_api import views
 
 urlpatterns = [
     path('all_cat', views.CatalogView.as_view()),
