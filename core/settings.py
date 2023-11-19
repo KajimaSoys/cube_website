@@ -8,7 +8,10 @@ INSTALLED_APPS = [
     # project apps
     'shop.apps.ShopConfig',
     'news.apps.NewsConfig',
+    'pages.common_elements.apps.CommonElementsConfig',
     'pages.main_page.apps.MainPageConfig',
+    'pages.catalog_page.apps.CatalogPageConfig',
+    'pages.delivery_page.apps.DeliveryPageConfig',
 
     # default
     'django.contrib.admin',
@@ -119,19 +122,42 @@ except ImportError:
 ADMIN_ORDERING = (
     ('shop', ('Category', 'Product', 'Orders')),
     ('news', ('News', 'Reviews')),
-    ('main_page', ('HeaderBlock',
-                   'MainBlock',
-                   'CatalogTeaserBlock',
-                   'ServiceOptionsBlock',
-                   'NewProductBlock',
-                   'PopularProductBlock',
-                   'DeliveryBlock',
-                   'AdvantagesBlock',
-                   'CartonInfoBlock',
-                   'RequestBlock',
-                   'QuestionsBlock',
-                   'ContactsBlock',
-                   'AddQuestionBlock')),
+    (
+        'common_elements',
+        (
+            'HeaderBlock',
+            'RecommendedProductBlock',
+            'AddQuestionBlock'
+        )
+    ),
+    (
+        'main_page',
+        (
+            'MainBlock',
+            'CatalogTeaserBlock',
+            'ServiceOptionsBlock',
+            'NewProductBlock',
+            'PopularProductBlock',
+            'DeliveryBlock',
+            'AdvantagesBlock',
+            'CartonInfoBlock',
+            'RequestBlock',
+            'QuestionsBlock',
+            'ContactsBlock',
+        )
+    ),
+    (
+        'catalog_page',
+        (
+            'AddQuestionBlock',
+        )
+    ),
+    (
+        'delivery_page',
+        (
+            'Payment',
+        )
+    ),
     ('auth', ('User', 'Group')),
 )
 

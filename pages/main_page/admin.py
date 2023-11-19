@@ -1,6 +1,5 @@
 from django.contrib import admin
 from pages.main_page.models import (
-    HeaderBlock,
     MainBlock,
     CatalogTeaserBlock,
     ServiceOptionsBlock,
@@ -12,14 +11,8 @@ from pages.main_page.models import (
     RequestBlock,
     QuestionsBlock,
     ContactsBlock,
-    AddQuestionBlock,
 )
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-
-
-@admin.register(HeaderBlock)
-class HeaderBlockAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(MainBlock)
@@ -191,10 +184,3 @@ class QuestionsBlockAdmin(SortableAdminMixin, admin.ModelAdmin):
 @admin.register(ContactsBlock)
 class ContactsBlockAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(AddQuestionBlock)
-class AddQuestionBlockAdmin(admin.ModelAdmin):
-    pass
-
-

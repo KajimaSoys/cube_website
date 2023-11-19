@@ -3,28 +3,6 @@ from ckeditor.fields import RichTextField
 from shop.models import Product
 
 
-class HeaderBlock(models.Model):
-    """
-    Description of HeaderBlock Model of Main Page App
-    """
-
-    logo = models.FileField(verbose_name='Логотип', upload_to='main_page/header/', max_length=500)
-
-    number = models.CharField(verbose_name='Номер компании', max_length=255)
-    mail = models.CharField(verbose_name='Почта', max_length=255, help_text='Используется в футере')
-    address = models.CharField(verbose_name='Адрес компании', max_length=255)
-
-    tg_link = models.CharField(verbose_name='ссылка на Telegram', max_length=255, help_text='Используется в футере')
-    whatsapp_link = models.CharField(verbose_name='ссылка на Whatsapp', max_length=255, help_text='Используется в футере')
-
-    def __str__(self):
-        return 'Навигационная панель'
-
-    class Meta:
-        verbose_name = '1 - Навигационная панель'
-        verbose_name_plural = '1 - Навигационная панель'
-
-
 class MainBlock(models.Model):
     """
     Description of MainBlock Model of Main Page App
@@ -45,8 +23,8 @@ class MainBlock(models.Model):
         return 'Главный блок'
 
     class Meta:
-        verbose_name = '2 - Главный блок'
-        verbose_name_plural = '2 - Главный блок'
+        verbose_name = '1 - Главный блок'
+        verbose_name_plural = '1 - Главный блок'
 
 
 class CatalogTeaserBlock(models.Model):
@@ -60,8 +38,8 @@ class CatalogTeaserBlock(models.Model):
         return 'Тизер  каталога'
 
     class Meta:
-        verbose_name = '3 - Тизер каталога'
-        verbose_name_plural = '3 - Тизер каталога'
+        verbose_name = '2 - Тизер каталога'
+        verbose_name_plural = '2 - Тизер каталога'
 
 
 class ServiceOptionsBlock(models.Model):
@@ -84,8 +62,8 @@ class ServiceOptionsBlock(models.Model):
         return 'Услуги компании'
 
     class Meta:
-        verbose_name = '4 - Услуги компании'
-        verbose_name_plural = '4 - Услуги компании'
+        verbose_name = '3 - Услуги компании'
+        verbose_name_plural = '3 - Услуги компании'
 
 
 class NewProductBlock(models.Model):
@@ -101,7 +79,7 @@ class NewProductBlock(models.Model):
 
     class Meta:
         verbose_name = 'новинка'
-        verbose_name_plural = '5 - Новинки'
+        verbose_name_plural = '4 - Новинки'
         ordering = ['order', ]
 
 
@@ -118,7 +96,7 @@ class PopularProductBlock(models.Model):
 
     class Meta:
         verbose_name = 'популярная модель'
-        verbose_name_plural = '6 - Популярные модели'
+        verbose_name_plural = '5 - Популярные модели'
         ordering = ['order', ]
 
 
@@ -143,8 +121,8 @@ class DeliveryBlock(models.Model):
         return 'Доставка'
 
     class Meta:
-        verbose_name = '7 - Доставка'
-        verbose_name_plural = '7 - Доставка'
+        verbose_name = '6 - Доставка'
+        verbose_name_plural = '6 - Доставка'
 
 
 class AdvantagesBlock(models.Model):
@@ -182,8 +160,8 @@ class AdvantagesBlock(models.Model):
         return 'Преимущества компании'
 
     class Meta:
-        verbose_name = '8 - Преимущества компании'
-        verbose_name_plural = '8 - Преимущества компании'
+        verbose_name = '7 - Преимущества компании'
+        verbose_name_plural = '7 - Преимущества компании'
 
 
 class CartonInfoBlock(models.Model):
@@ -207,8 +185,8 @@ class CartonInfoBlock(models.Model):
         return 'Информация о картоне'
 
     class Meta:
-        verbose_name = '9 - Информация о картоне'
-        verbose_name_plural = '9 - Информация о картоне'
+        verbose_name = '8 - Информация о картоне'
+        verbose_name_plural = '8 - Информация о картоне'
 
 
 class RequestBlock(models.Model):
@@ -225,8 +203,8 @@ class RequestBlock(models.Model):
         return 'Блок заявки в Whatsapp'
 
     class Meta:
-        verbose_name = '10 - Блок заявки в Whatsapp'
-        verbose_name_plural = '10 - Блок заявки в Whatsapp'
+        verbose_name = '9 - Блок заявки в Whatsapp'
+        verbose_name_plural = '9 - Блок заявки в Whatsapp'
 
 
 class QuestionsBlock(models.Model):
@@ -248,8 +226,8 @@ class QuestionsBlock(models.Model):
         return 'Частые вопросы'
 
     class Meta:
-        verbose_name = '11 - Частые вопросы'
-        verbose_name_plural = '11 - Частые вопросы'
+        verbose_name = '10 - Частые вопросы'
+        verbose_name_plural = '10 - Частые вопросы'
         ordering = ['order', ]
 
 
@@ -273,26 +251,5 @@ class ContactsBlock(models.Model):
         return 'Контакты'
 
     class Meta:
-        verbose_name = '12 - Контакты'
-        verbose_name_plural = '12 - Контакты'
-
-
-class AddQuestionBlock(models.Model):
-    """
-    Description of AddQuestionBlock Model of Main Page App
-    """
-
-    title = models.CharField(verbose_name='Заголовок', max_length=500)
-    description = models.CharField(verbose_name='Описание', max_length=500)
-
-    image = models.FileField(verbose_name='Фото', upload_to='main_page/add_question/', max_length=500)
-
-    def __str__(self):
-        return 'Блок "Остались вопросы?"'
-
-    class Meta:
-        verbose_name = '13 - Блок "Остались вопросы?"'
-        verbose_name_plural = '13 - Блок "Остались вопросы?"'
-
-
-
+        verbose_name = '11 - Контакты'
+        verbose_name_plural = '11 - Контакты'
