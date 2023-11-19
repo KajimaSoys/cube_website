@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('mail', models.CharField(help_text='Используется в футере', max_length=255, verbose_name='Почта')),
                 ('address', models.CharField(max_length=255, verbose_name='Адрес компании')),
                 ('tg_link', models.CharField(help_text='Используется в футере', max_length=255, verbose_name='ссылка на Telegram')),
-                ('whatsapp_link', models.CharField(help_text='Используется в футере', max_length=255, verbose_name='ссылка на Whatsapp')),
+                ('whatsapp_link', models.CharField(help_text='Используется в футере', max_length=255, verbose_name='Ссылка на Whatsapp')),
             ],
             options={
                 'verbose_name': 'Навигационная панель и футер',

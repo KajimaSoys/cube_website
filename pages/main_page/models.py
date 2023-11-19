@@ -196,6 +196,8 @@ class RequestBlock(models.Model):
 
     title = RichTextField(verbose_name='Заголовок')
     description = models.CharField(verbose_name='Описание', max_length=500)
+    whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255,
+                                     help_text='Используется в кнопке')
 
     image = models.FileField(verbose_name='Фото', upload_to='main_page/request/', max_length=500)
 
@@ -237,8 +239,8 @@ class ContactsBlock(models.Model):
     """
 
     title = RichTextField(verbose_name='Заголовок')
-    tg_link = models.CharField(verbose_name='ссылка на Telegram', max_length=255)
-    whatsapp_link = models.CharField(verbose_name='ссылка на Whatsapp', max_length=255)
+    tg_link = models.CharField(verbose_name='Ссылка на Telegram', max_length=255)
+    whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255)
 
     monday_friday_schedule = models.CharField(verbose_name='Расписание (понедельник-пятница)', max_length=255, help_text='чч:мм-чч:мм')
     sunday_schedule = models.CharField(verbose_name='Расписание (суббота)', max_length=255, help_text='чч:мм-чч:мм')

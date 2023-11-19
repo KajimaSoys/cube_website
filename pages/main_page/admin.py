@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
@@ -15,9 +16,21 @@ from pages.main_page.models import (
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 
 
+def generate_thumbnail(obj, image_field):
+    image = getattr(obj, image_field, None)
+    if image:
+        return mark_safe(f'<a href="{image.url}"><img src="{image.url}" width="200" /></a>')
+    return "Предпросмотр пока недоступен. Добавьте фото и сохраните объект для отображения фото."
+
+
 @admin.register(MainBlock)
 class MainBlockAdmin(admin.ModelAdmin):
-    pass
+
+    def thumbnail(self, obj):
+        return generate_thumbnail(obj, 'image')
+
+    thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail']
 
 
 @admin.register(CatalogTeaserBlock)
@@ -37,21 +50,38 @@ class ServiceOptionsBlockAdmin(admin.ModelAdmin):
             'fields': [
                 'option_first',
                 'image_first',
+                'thumbnail_first',
             ],
         }),
         ('Карточка №2', {
             'fields': [
                 'option_second',
                 'image_second',
+                'thumbnail_second',
             ],
         }),
         ('Карточка №3', {
             'fields': [
                 'option_third',
                 'image_third',
+                'thumbnail_third',
             ],
         }),
     ]
+
+    def thumbnail_first(self, obj):
+        return generate_thumbnail(obj, 'image_first')
+
+    def thumbnail_second(self, obj):
+        return generate_thumbnail(obj, 'image_second')
+
+    def thumbnail_third(self, obj):
+        return generate_thumbnail(obj, 'image_third')
+
+    thumbnails = [thumbnail_first, thumbnail_second, thumbnail_third]
+    for thumbnail in thumbnails:
+        thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail_first', 'thumbnail_second', 'thumbnail_third']
 
 
 @admin.register(NewProductBlock)
@@ -78,6 +108,7 @@ class DeliveryBlockAdmin(admin.ModelAdmin):
                 'text_first',
                 'additional_first',
                 'image_first',
+                'thumbnail_first',
             ],
         }),
         ('Карточка №2', {
@@ -86,9 +117,21 @@ class DeliveryBlockAdmin(admin.ModelAdmin):
                 'text_second',
                 'additional_second',
                 'image_second',
+                'thumbnail_second',
             ],
         }),
     ]
+
+    def thumbnail_first(self, obj):
+        return generate_thumbnail(obj, 'image_first')
+
+    def thumbnail_second(self, obj):
+        return generate_thumbnail(obj, 'image_second')
+
+    thumbnails = [thumbnail_first, thumbnail_second]
+    for thumbnail in thumbnails:
+        thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail_first', 'thumbnail_second']
 
 
 @admin.register(AdvantagesBlock)
@@ -159,6 +202,7 @@ class CartonInfoBlockAdmin(admin.ModelAdmin):
                 'subtitle_first',
                 'text_first',
                 'image_first',
+                'thumbnail_first',
             ],
         }),
         ('Карточка №2', {
@@ -166,14 +210,31 @@ class CartonInfoBlockAdmin(admin.ModelAdmin):
                 'subtitle_second',
                 'text_second',
                 'image_second',
+                'thumbnail_second',
             ],
         }),
     ]
 
+    def thumbnail_first(self, obj):
+        return generate_thumbnail(obj, 'image_first')
+
+    def thumbnail_second(self, obj):
+        return generate_thumbnail(obj, 'image_second')
+
+    thumbnails = [thumbnail_first, thumbnail_second]
+    for thumbnail in thumbnails:
+        thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail_first', 'thumbnail_second']
+
 
 @admin.register(RequestBlock)
 class RequestBlockAdmin(admin.ModelAdmin):
-    pass
+
+    def thumbnail(self, obj):
+        return generate_thumbnail(obj, 'image')
+
+    thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail', ]
 
 
 @admin.register(QuestionsBlock)

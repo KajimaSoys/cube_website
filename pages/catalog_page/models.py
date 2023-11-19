@@ -8,7 +8,7 @@ class AddQuestionBlock(models.Model):
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
     description = models.CharField(verbose_name='Описание', max_length=500)
-    whatsapp_link = models.CharField(verbose_name='ссылка на Whatsapp', max_length=255,
+    whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255,
                                      help_text='Используется в кнопке')
 
     image = models.FileField(verbose_name='Фото', upload_to='catalog_page/add_question/', max_length=500)

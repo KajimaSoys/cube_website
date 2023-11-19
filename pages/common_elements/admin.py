@@ -5,11 +5,32 @@ from pages.common_elements.models import (
     AddQuestionBlock,
 )
 from adminsortable2.admin import SortableAdminMixin
+from django.utils.html import mark_safe
 
 
 @admin.register(HeaderBlock)
 class HeaderBlockAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = [
+        (None, {
+            'fields': [
+                'logo',
+                'thumbnail',
+                'number',
+                'mail',
+                'address',
+                'tg_link',
+                'whatsapp_link',
+            ],
+        }),
+    ]
+
+    def thumbnail(self, obj):
+        if obj.logo:
+            return mark_safe(f'<a href="{obj.logo.url}"><img src="{obj.logo.url}" width="200" /></a>')
+        return "Предпросмотр пока недоступен. Добавьте фото и сохраните объект для отображения фото."
+
+    thumbnail.short_description = "Предпросмотр логотипа"
+    readonly_fields = ['thumbnail']
 
 
 @admin.register(RecommendedProductBlock)
@@ -19,4 +40,10 @@ class RecommendedProductBlockAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 @admin.register(AddQuestionBlock)
 class AddQuestionBlockAdmin(admin.ModelAdmin):
-    pass
+    def thumbnail(self, obj):
+        if obj.image:
+            return mark_safe(f'<a href="{obj.image.url}"><img src="{obj.image.url}" width="200" /></a>')
+        return "Предпросмотр пока недоступен. Добавьте фото и сохраните объект для отображения фото."
+
+    thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail']

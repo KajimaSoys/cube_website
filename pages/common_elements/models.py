@@ -1,5 +1,6 @@
 from django.db import models
 from shop.models import Product
+from django_resized import ResizedImageField
 
 
 class HeaderBlock(models.Model):
@@ -13,8 +14,8 @@ class HeaderBlock(models.Model):
     mail = models.CharField(verbose_name='Почта', max_length=255, help_text='Используется в футере')
     address = models.CharField(verbose_name='Адрес компании', max_length=255)
 
-    tg_link = models.CharField(verbose_name='ссылка на Telegram', max_length=255, help_text='Используется в футере')
-    whatsapp_link = models.CharField(verbose_name='ссылка на Whatsapp', max_length=255, help_text='Используется в футере')
+    tg_link = models.CharField(verbose_name='Ссылка на Telegram', max_length=255, help_text='Используется в футере')
+    whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255, help_text='Используется в футере')
 
     def __str__(self):
         return 'Навигационная панель'
@@ -48,8 +49,14 @@ class AddQuestionBlock(models.Model):
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
     description = models.CharField(verbose_name='Описание', max_length=500)
+    whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255,
+                                     help_text='Используется в кнопке')
 
-    image = models.FileField(verbose_name='Фото', upload_to='common_elements/add_question/', max_length=500)
+    # image = models.FileField(verbose_name='Фото', upload_to='common_elements/add_question/', max_length=500)
+    image = ResizedImageField(upload_to='common_elements/add_question/',
+                              verbose_name='Фото',
+                              size=[1260, None],
+                              quality=80, )
 
     def __str__(self):
         return 'Блок "Остались вопросы?"'
