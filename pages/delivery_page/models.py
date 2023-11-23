@@ -1,9 +1,9 @@
 from django.db import models
 
 
-class Payment(models.Model):
+class PaymentBlock(models.Model):
     """
-    Description of DeliveryBlock Model of Delivery Page App
+    Description of PaymentBlock Model of Delivery Page App
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
@@ -21,5 +21,5 @@ class Payment(models.Model):
         return 'Доставка'
 
     class Meta:
-        verbose_name = '1 - Оплата'
-        verbose_name_plural = '1 - Оплата'
+        verbose_name = '2 - Оплата'
+        verbose_name_plural = '2 - Оплата'

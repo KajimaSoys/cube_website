@@ -1,5 +1,5 @@
 from django.contrib import admin
-from pages.delivery_page.models import PaymentBlock
+from pages.contacts_page.models import OutsideView
 from django.utils.html import mark_safe
 
 
@@ -10,32 +10,23 @@ def generate_thumbnail(obj, image_field):
     return "Предпросмотр пока недоступен. Добавьте фото и сохраните объект для отображения фото."
 
 
-@admin.register(PaymentBlock)
-class PaymentBlockAdmin(admin.ModelAdmin):
+@admin.register(OutsideView)
+class OutsideViewAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {
-            'fields': [
-                'title',
-                'question_link',
-            ],
-        }),
         ('Карточка №1', {
             'fields': [
-                'subtitle_first',
-                'text_first',
                 'image_first',
                 'thumbnail_first',
+                'text_first',
             ],
         }),
         ('Карточка №2', {
             'fields': [
-                'subtitle_second',
-                'text_second',
                 'image_second',
                 'thumbnail_second',
+                'text_second',
             ],
         }),
-
     ]
 
     def thumbnail_first(self, obj):

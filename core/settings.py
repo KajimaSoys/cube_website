@@ -1,6 +1,11 @@
 import os
 from pathlib import Path
 
+# app-model ordering imports
+from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 USE_DJANGO_JQUERY = True
 
@@ -11,7 +16,11 @@ INSTALLED_APPS = [
     'pages.common_elements.apps.CommonElementsConfig',
     'pages.main_page.apps.MainPageConfig',
     'pages.catalog_page.apps.CatalogPageConfig',
+    'pages.product_page.apps.ProductPageConfig',
     'pages.delivery_page.apps.DeliveryPageConfig',
+    'pages.contacts_page.apps.ContactsPageConfig',
+    'pages.about_page.apps.AboutPageConfig',
+    'pages.reviews_page.apps.ReviewsPageConfig',
 
     # default
     'django.contrib.admin',
@@ -119,6 +128,9 @@ try:
 except ImportError:
     from .prod_settings import *
 
+
+# app-model ordering
+
 ADMIN_ORDERING = (
     ('shop', ('Category', 'Product', 'Orders')),
     ('news', ('News', 'Reviews')),
@@ -144,6 +156,7 @@ ADMIN_ORDERING = (
             'RequestBlock',
             'QuestionsBlock',
             'ContactsBlock',
+            'AddQuestionBlock'
         )
     ),
     (
@@ -153,15 +166,152 @@ ADMIN_ORDERING = (
         )
     ),
     (
+        'product_page',
+        (
+            'RecommendedProductBlock',
+        )
+    ),
+    (
         'delivery_page',
         (
-            'Payment',
+            'DeliveryBlock',
+            'PaymentBlock',
+            'RecommendedProductBlock',
+            'AddQuestionBlock',
+        )
+    ),
+    (
+        'contacts_page',
+        (
+            'ContactsBlock',
+            'OutsideView',
+            'AddQuestionBlock',
+        )
+    ),
+    (
+        'about_page',
+        (
+            'AdvantagesBlock',
+            'ServiceOptionsBlock',
+            'CartonInfoBlock',
+            'ContactsBlock',
+            'OutsideView',
+            'AddQuestionBlock',
+        )
+    ),
+    (
+        'reviews_page',
+        (
+            'RecommendedProductBlock',
+            'AddQuestionBlock',
         )
     ),
     ('auth', ('User', 'Group')),
 )
 
-from django.contrib import admin
+LINKED_MODELS = [
+    # main_page
+    {
+        'source_app': 'common_elements',
+        'target_app': 'main_page',
+        'model_name': 'AddQuestionBlock',
+        'model_name_verbose': '12 - Блок "Остались вопросы?"'
+    },
+
+    # product_page
+    {
+        'source_app': 'common_elements',
+        'target_app': 'product_page',
+        'model_name': 'RecommendedProductBlock',
+        'model_name_verbose': '1 - Рекомендуемые товары'
+    },
+
+    # delivery_page
+    {
+        'source_app': 'main_page',
+        'target_app': 'delivery_page',
+        'model_name': 'DeliveryBlock',
+        'model_name_verbose': '1 - Доставка'
+    },
+    {
+        'source_app': 'common_elements',
+        'target_app': 'delivery_page',
+        'model_name': 'RecommendedProductBlock',
+        'model_name_verbose': '3 - Рекомендуемые товары'
+    },
+    {
+        'source_app': 'common_elements',
+        'target_app': 'delivery_page',
+        'model_name': 'AddQuestionBlock',
+        'model_name_verbose': '4 - Блок "Остались вопросы?"'
+    },
+
+    # contacts_page
+    {
+        'source_app': 'main_page',
+        'target_app': 'contacts_page',
+        'model_name': 'ContactsBlock',
+        'model_name_verbose': '1 - Контакты'
+    },
+    {
+        'source_app': 'common_elements',
+        'target_app': 'contacts_page',
+        'model_name': 'AddQuestionBlock',
+        'model_name_verbose': '3 - Блок "Остались вопросы?"'
+    },
+
+    # about_page
+    {
+        'source_app': 'main_page',
+        'target_app': 'about_page',
+        'model_name': 'AdvantagesBlock',
+        'model_name_verbose': '1 - Преимущества компании'
+    },
+    {
+        'source_app': 'main_page',
+        'target_app': 'about_page',
+        'model_name': 'ServiceOptionsBlock',
+        'model_name_verbose': '2 - Услуги компании'
+    },
+    {
+        'source_app': 'main_page',
+        'target_app': 'about_page',
+        'model_name': 'CartonInfoBlock',
+        'model_name_verbose': '3 - Информация о картоне'
+    },
+    {
+        'source_app': 'main_page',
+        'target_app': 'about_page',
+        'model_name': 'ContactsBlock',
+        'model_name_verbose': '4 - Контакты'
+    },
+    {
+        'source_app': 'contacts_page',
+        'target_app': 'about_page',
+        'model_name': 'OutsideView',
+        'model_name_verbose': '5 - Блок местонахождения компании'
+    },
+    {
+        'source_app': 'common_elements',
+        'target_app': 'about_page',
+        'model_name': 'AddQuestionBlock',
+        'model_name_verbose': '6 - Блок "Остались вопросы?"'
+    },
+
+    # reviews_page
+    {
+        'source_app': 'common_elements',
+        'target_app': 'reviews_page',
+        'model_name': 'RecommendedProductBlock',
+        'model_name_verbose': '1 - Рекомендуемые товары'
+    },
+    {
+        'source_app': 'common_elements',
+        'target_app': 'reviews_page',
+        'model_name': 'AddQuestionBlock',
+        'model_name_verbose': '2 - Блок "Остались вопросы?"'
+    },
+]
 
 
 def get_app_list(self, request, app_label=None):
@@ -187,12 +337,35 @@ def get_app_list(self, request, app_label=None):
         key=lambda x: [ao[0] for ao in ADMIN_ORDERING].index(x['app_label'])
     )
 
-    for app, ao in zip(app_list, NEW_ADMIN_ORDERING or ADMIN_ORDERING):
-        if app['app_label'] == ao[0]:
-            for model in list(app['models']):
-                if not model['object_name'] in ao[1]:
-                    app['models'].remove(model)
-        app['models'].sort(key=lambda x: ao[1].index(x['object_name']))
+    # Обработка моделей и моделей-ссылок
+    # print(f"target_app:\t{link['target_app']}\tapp_label:\t{app['app_label']}")
+
+    for app in app_list:
+        if app['app_label'] in [ao[0] for ao in ADMIN_ORDERING]:
+            ao_models = next(ao[1] for ao in ADMIN_ORDERING if ao[0] == app['app_label'])
+            updated_models = []
+
+            for model_name in ao_models:
+                # Добавляем оригинальные модели
+                model = next((m for m in app['models'] if m['object_name'] == model_name), None)
+                if model:
+                    updated_models.append(model)
+
+                # Добавляем модели-ссылки, если они есть
+                link = next((link for link in LINKED_MODELS if
+                             link['model_name'] == model_name and link['target_app'] == app['app_label']), None)
+                if link:
+                    model_url = reverse(f'admin:{link["source_app"].lower()}_{model_name.lower()}_changelist')
+                    add_url = reverse(f'admin:{link["source_app"].lower()}_{model_name.lower()}_add')
+                    updated_models.append({
+                        'name': format_html('<a href="{}">{}</a>', model_url, link['model_name_verbose']),
+                        'object_name': f'{model_name}Link',
+                        'admin_url': model_url,
+                        'add_url': add_url,
+                    })
+
+            app['models'] = updated_models
+
     return app_list
 
 
