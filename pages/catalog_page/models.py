@@ -1,4 +1,5 @@
 from django.db import models
+from django_resized import ResizedImageField
 
 
 class AddQuestionBlock(models.Model):
@@ -11,7 +12,11 @@ class AddQuestionBlock(models.Model):
     whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255,
                                      help_text='Используется в кнопке')
 
-    image = models.FileField(verbose_name='Фото', upload_to='catalog_page/add_question/', max_length=500)
+    # image = models.FileField(verbose_name='Фото', upload_to='catalog_page/add_question/', max_length=500)
+    image = ResizedImageField(upload_to='catalog_page/add_question/',
+                              verbose_name='Фото',
+                              size=[1100, None],
+                              quality=80, )
 
     def __str__(self):
         return 'Блок "Не нашли нужный размер?"'

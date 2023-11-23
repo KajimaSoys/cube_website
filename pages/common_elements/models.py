@@ -55,7 +55,7 @@ class AddQuestionBlock(models.Model):
     # image = models.FileField(verbose_name='Фото', upload_to='common_elements/add_question/', max_length=500)
     image = ResizedImageField(upload_to='common_elements/add_question/',
                               verbose_name='Фото',
-                              size=[1260, None],
+                              size=[1100, None],
                               quality=80, )
 
     def __str__(self):
