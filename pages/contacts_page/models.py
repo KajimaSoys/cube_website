@@ -20,6 +20,12 @@ class OutsideView(models.Model):
                                      quality=80, )
     text_second = models.CharField(verbose_name='Описание', max_length=500)
 
+    image_third = ResizedImageField(upload_to='contacts_page/outside_view/',
+                                    verbose_name='Фото',
+                                    size=[610, None],
+                                    quality=80, )
+    text_third = models.CharField(verbose_name='Описание', max_length=500)
+
     def __str__(self):
         return 'Блок местонахождения компании'
 

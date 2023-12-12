@@ -27,6 +27,13 @@ class OutsideViewAdmin(admin.ModelAdmin):
                 'text_second',
             ],
         }),
+        ('Карточка №3', {
+            'fields': [
+                'image_third',
+                'thumbnail_third',
+                'text_third',
+            ],
+        }),
     ]
 
     def thumbnail_first(self, obj):
@@ -35,7 +42,10 @@ class OutsideViewAdmin(admin.ModelAdmin):
     def thumbnail_second(self, obj):
         return generate_thumbnail(obj, 'image_second')
 
+    def thumbnail_third(self, obj):
+        return generate_thumbnail(obj, 'image_third')
+
     thumbnails = [thumbnail_first, thumbnail_second]
     for thumbnail in thumbnails:
         thumbnail.short_description = "Предпросмотр фото"
-    readonly_fields = ['thumbnail_first', 'thumbnail_second']
+    readonly_fields = ['thumbnail_first', 'thumbnail_second', 'thumbnail_third']
