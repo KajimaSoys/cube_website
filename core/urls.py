@@ -11,6 +11,7 @@ from pages.delivery_page import views as delivery_page_views
 from pages.contacts_page import views as contacts_page_views
 from pages.about_page import views as about_page_views
 from pages.reviews_page import views as reviews_page_views
+from shop import views as shop_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,28 @@ urlpatterns = [
     path('api/v1/about_page/', about_page_views.aggregate_data, name='about_page'),
     path('api/v1/reviews_page/', reviews_page_views.aggregate_data, name='reviews_page'),
 
+
+    path(
+        'api/v1/category/',
+        shop_views.CategoryListView.as_view(),
+        name='category-list'
+    ),
+    path(
+        'api/v1/products/',
+        shop_views.ProductListView.as_view(),
+        name='product-list'
+    ),
+    path(
+        'api/v1/category/<slug:category_slug>/',
+        shop_views.CategoryProductListView.as_view(),
+        name='category-product-list'
+    ),
+
+    path(
+        'api/v1/products/<int:product_id>/',
+        shop_views.ProductView.as_view(),
+        name='product'
+    ),
 
 ]
 

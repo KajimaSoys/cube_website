@@ -21,8 +21,38 @@ from rest_framework import status
 ######################################################
 #                      New views                     #
 ######################################################
+from rest_framework import generics
+from shop.models import Product
+from shop.serializers import ProductListSerializer, CategorySerializer, ProductSerializer
 
 
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.select_related('category').prefetch_related('images', 'prices')
+    serializer_class = ProductListSerializer
+
+
+class CategoryProductListView(generics.ListAPIView):
+    serializer_class = ProductListSerializer
+
+    def get_queryset(self):
+        category_slug = self.kwargs['category_slug']
+        return Product.objects.filter(category__slug=category_slug).prefetch_related('images', 'prices')
+
+
+class ProductView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+        return Product.objects.filter(id=product_id).select_related('category').prefetch_related('images', 'prices')
+
+
+# TODO понять необходимость этого представления -> Удалить представление
 class GetProductPrice(APIView):
     queryset = ProductPrice.objects.all()
 
