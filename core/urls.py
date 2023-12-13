@@ -5,9 +5,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from pages.main_page import views as main_page_views
+from pages.catalog_page import views as catalog_page_views
+from pages.product_page import views as product_page_views
 from pages.delivery_page import views as delivery_page_views
 from pages.contacts_page import views as contacts_page_views
-
+from pages.about_page import views as about_page_views
+from pages.reviews_page import views as reviews_page_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,8 +22,13 @@ urlpatterns = [
     path('company/', include('news.urls')),
 
     path('api/v1/main_page/', main_page_views.aggregate_data, name='main_page'),
+    path('api/v1/catalog_page/', catalog_page_views.aggregate_data, name='catalog_page'),
+    path('api/v1/product_page/', product_page_views.aggregate_data, name='product_page'),
     path('api/v1/delivery_page/', delivery_page_views.aggregate_data, name='delivery_page'),
     path('api/v1/contacts_page/', contacts_page_views.aggregate_data, name='contacts_page'),
+    path('api/v1/about_page/', about_page_views.aggregate_data, name='about_page'),
+    path('api/v1/reviews_page/', reviews_page_views.aggregate_data, name='reviews_page'),
+
 
 ]
 
