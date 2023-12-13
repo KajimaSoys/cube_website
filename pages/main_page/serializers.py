@@ -33,36 +33,26 @@ class ServiceOptionsBlockSerializer(serializers.ModelSerializer):
 
 
 class NewProductBlockSerializer(serializers.ModelSerializer):
-    # TODO add representation method
-    # def to_representation(self, instance):
-    #
-    #     from core.catalog.serializers import SofaListSerializer
-    #
-    #     representation = super().to_representation(instance)
-    #     representation['sofa'] = SofaListSerializer(instance.sofa).data
-    #     return representation
-    #
-    # class Meta:
-    #     model = NewProductBlock
-    #     fields = ['order', 'product']
+    def to_representation(self, instance):
+        from shop.serializers import ProductSerializer
+
+        representation = super().to_representation(instance)
+        representation['product'] = ProductSerializer(instance.product).data
+        return representation
+
     class Meta:
         model = NewProductBlock
         fields = "__all__"
 
 
 class PopularProductBlockSerializer(serializers.ModelSerializer):
-    # TODO add representation method
-    # def to_representation(self, instance):
-    #
-    #     from core.catalog.serializers import SofaListSerializer
-    #
-    #     representation = super().to_representation(instance)
-    #     representation['sofa'] = SofaListSerializer(instance.sofa).data
-    #     return representation
-    #
-    # class Meta:
-    #     model = NewProductBlock
-    #     fields = ['order', 'product']
+    def to_representation(self, instance):
+        from shop.serializers import ProductSerializer
+
+        representation = super().to_representation(instance)
+        representation['product'] = ProductSerializer(instance.product).data
+        return representation
+
     class Meta:
         model = PopularProductBlock
         fields = "__all__"
