@@ -11,6 +11,8 @@ from pages.delivery_page import views as delivery_page_views
 from pages.contacts_page import views as contacts_page_views
 from pages.about_page import views as about_page_views
 from pages.reviews_page import views as reviews_page_views
+from pages.common_elements import views as common_elements_views
+
 from shop import views as shop_views
 
 urlpatterns = [
@@ -29,6 +31,7 @@ urlpatterns = [
     path('api/v1/contacts_page/', contacts_page_views.aggregate_data, name='contacts_page'),
     path('api/v1/about_page/', about_page_views.aggregate_data, name='about_page'),
     path('api/v1/reviews_page/', reviews_page_views.aggregate_data, name='reviews_page'),
+    path('api/v1/header_data/', common_elements_views.header_data, name='header_data'),
 
 
     path(

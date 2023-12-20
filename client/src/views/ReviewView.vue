@@ -1,13 +1,21 @@
 <template>
-  <Header/>
+  <Header
+    :header_block="header_block"
+  />
 
   <Reviews/>
 
-  <RecommendedProduct/>
+  <RecommendedProduct
+    :recommended_product_block="recommended_product_block"
+  />
 
-  <AddQuestion/>
+  <AddQuestion
+    :add_question_block="add_question_block"
+  />
 
-  <Footer/>
+  <Footer
+    :header_block="header_block"
+  />
 </template>
 
 <script>
@@ -16,9 +24,11 @@ import Reviews from "../components/ReviewPage/Reviews.vue";
 import RecommendedProduct from "../components/common/RecommendedProduct.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "ReviewView",
+  inject: ['backendURL'],
   components: {
     Header,
     Reviews,
@@ -27,13 +37,36 @@ export default {
     Footer
   },
   data() {
-    return {}
+    return {
+      header_block: {},
+      recommended_product_block: [],
+      add_question_block: {},
+    }
+  },
+  created() {
+    this.getPageData()
   },
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
   },
   methods: {
+    async getPageData() {
+      await axios
+          .get(`${this.backendURL}/api/v1/reviews_page/`)
+          .then(response => {
+            let receivedData = response.data
+
+            this.header_block = receivedData.header_block
+            this.recommended_product_block = receivedData.recommended_product_block
+            this.add_question_block = receivedData.add_question_block
+
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log('An error occurred: ', error)
+          })
+    },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
     }

@@ -1,29 +1,55 @@
 <template>
-  <Header/>
+  <Header
+    :header_block="header_block"
+  />
 
-  <Main/>
+  <Main
+    :main_block="main_block"
+  />
 
-  <CatalogTeaser/>
+  <CatalogTeaser
+    :catalog_teaser_block="catalog_teaser_block"
+  />
 
-  <ServiceOptions/>
+  <ServiceOptions
+    :service_options_block="service_options_block"
+  />
 
-  <NewProduct/>
+  <NewProduct
+    :new_product_block="new_product_block"
+  />
 
-  <PopularProduct/>
+  <PopularProduct
+    :popular_product_block="popular_product_block"
+  />
 
-  <Delivery/>
+  <Delivery
+    :delivery_block="delivery_block"
+  />
 
-  <Advantages/>
+  <Advantages
+    :advantages_block="advantages_block"
+  />
 
-  <CartonInfo/>
+  <CartonInfo
+    :carton_info_block="carton_info_block"
+  />
 
-  <Request/>
+  <Request
+    :request_block="request_block"
+  />
 
-  <Questions/>
+  <Questions
+    :questions_block="questions_block"
+  />
 
-  <Contacts/>
+  <Contacts
+    :contacts_block="contacts_block"
+  />
 
-  <Footer/>
+  <Footer
+    :header_block="header_block"
+  />
 </template>
 
 <script>
@@ -40,9 +66,11 @@ import Request from "../components/mainPage/Request.vue"
 import Questions from "../components/mainPage/Questions.vue"
 import Contacts from "../components/mainPage/Contacts.vue"
 import Footer from "../components/common/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "MainView",
+  inject: ['backendURL'],
   components: {
     Header,
     Main,
@@ -59,13 +87,56 @@ export default {
     Footer
   },
   data() {
-    return {}
+    return {
+      header_block: {},
+      main_block: {},
+      catalog_teaser_block: {},
+      service_options_block: {},
+      new_product_block: [],
+      popular_product_block: [],
+      delivery_block: {},
+      advantages_block: {},
+      carton_info_block: {},
+      request_block: {},
+      questions_block: {},
+      contacts_block: {},
+    }
+  },
+  created() {
+    this.getPageData()
   },
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
   },
   methods: {
+    async getPageData() {
+      await axios
+          .get(`${this.backendURL}/api/v1/main_page/`)
+          .then(response => {
+            let receivedData = response.data
+
+            this.header_block = receivedData.header_block
+            this.main_block = receivedData.main_block
+            this.catalog_teaser_block = receivedData.catalog_teaser_block
+            this.service_options_block = receivedData.service_options_block
+            this.new_product_block = receivedData.new_product_block
+            this.popular_product_block = receivedData.popular_product_block
+            this.delivery_block = receivedData.delivery_block
+            this.advantages_block = receivedData.advantages_block
+            this.carton_info_block = receivedData.carton_info_block
+            this.request_block = receivedData.request_block
+            this.questions_block = receivedData.questions_block
+            this.contacts_block = receivedData.contacts_block
+
+            // window.ym(95108306, 'hit', 'https://kamamebel.com/');
+
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log('An error occurred: ', error)
+          })
+    },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
     }

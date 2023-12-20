@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'phone_field',
     'adminsortable2',
     'imagekit',
-    # 'corsheaders',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
     # 3rd parties
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 REST_FRAMEWORK = {
