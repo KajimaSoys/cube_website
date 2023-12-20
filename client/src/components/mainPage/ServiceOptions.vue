@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "ServiceOptions",
+  props: {
+    service_options_block: Object,
+  },
   components: {},
   data() {
     return {}

@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Payment",
+  props: {
+    payment_block: Object,
+  },
   components: {},
   data() {
     return {}

@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "OutsideView",
+  props: {
+    outside_view: Array,
+  },
   components: {},
   data() {
     return {}

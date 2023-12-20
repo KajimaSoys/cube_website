@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "CatalogTeaser",
+  props: {
+    catalog_teaser_block: Object,
+  },
   components: {},
   data() {
     return {}

@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "NewProduct",
+  props: {
+    new_product_block: Array,
+  },
   components: {},
   data() {
     return {}

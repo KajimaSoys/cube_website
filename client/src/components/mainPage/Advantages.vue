@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: "Delivery",
+  name: "Advantages",
+  props: {
+    advantages_block: Object,
+  },
   components: {},
   data() {
     return {}

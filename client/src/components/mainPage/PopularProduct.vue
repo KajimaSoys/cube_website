@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "PopularProduct",
+  props: {
+    popular_product_block: Array,
+  },
   components: {},
   data() {
     return {}

@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: "Delivery",
+  name: "CartonInfo",
+  props: {
+    carton_info_block: Object,
+  },
   components: {},
   data() {
     return {}

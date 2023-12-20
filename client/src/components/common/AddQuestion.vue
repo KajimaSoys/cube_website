@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "AddQuestion",
+  props: {
+    add_question_block: Array,
+  },
   components: {},
   data() {
     return {}

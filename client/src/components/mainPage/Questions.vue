@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Questions",
+  props: {
+    questions_block: Object,
+  },
   components: {},
   data() {
     return {}

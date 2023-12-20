@@ -5,11 +5,15 @@
 <script>
 export default {
   name: "Main",
+  props: {
+    main_block: Object,
+  },
   components: {},
   data() {
     return {}
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {},
 }
 </script>

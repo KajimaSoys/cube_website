@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Contacts",
+  props: {
+    contacts_block: Object,
+  },
   components: {},
   data() {
     return {}

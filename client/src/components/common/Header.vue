@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Header",
+  props: {
+    header: Object,
+  },
   components: {},
   data() {
     return {}

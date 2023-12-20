@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Footer",
+  props: {
+    header_block: Object,
+  },
   components: {},
   data() {
     return {}

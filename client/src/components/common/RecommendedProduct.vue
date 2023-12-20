@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "RecommendedProduct",
+  props: {
+    recommended_product_block: Array,
+  },
   components: {},
   data() {
     return {}

@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Delivery",
+  props: {
+    delivery_block: Object,
+  },
   components: {},
   data() {
     return {}

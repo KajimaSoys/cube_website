@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "Request",
+  props: {
+    request_block: Object,
+  },
   components: {},
   data() {
     return {}

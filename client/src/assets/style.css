@@ -1,79 +1,282 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    --black: #212121;
+    --black-55: #737373;
+    --black-35: #B3B3B3;
+    --black-20: #CCC;
+    --green-primary: #289646;
+    --green-light: #40AB5E;
+    --stroke: #E5E2E1;
+    --background: #F5F2F1;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
+    color: var(--black);
+    background-color: var(--background);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/*@font-face {*/
+/*    font-family: 'Onest';*/
+/*    src: url('/fonts/OnestRegular1602-hint.ttf') format('truetype');*/
+/*    font-weight: 100 900;*/
+/*    font-style: normal;*/
+/*}*/
+
+html, body {
+    overflow-x: hidden;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    font-family: 'Onest', sans-serif;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    margin: 0;
+    overflow-x: hidden;
+    width: 100%;
+    /*scroll-margin-top: 7rem;*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+p {
+    text-align: justify;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Geologica', sans-serif;
+    font-size: inherit;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+    font-size: 3.1875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%;
+    letter-spacing: -0.06375rem;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+    font-size: 2.75rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.055rem;
 }
 
-.card {
-  padding: 2em;
+h3 {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+h4 {
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.subtitle {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+}
+
+.button {
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.small-text-1 {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.small-text-2 {
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+@media screen and (max-width: 960px) {
+    body {
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    h1 {
+        font-size: 2.625rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 3.15rem */
+        letter-spacing: -0.0525rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.04rem;
+    }
+
+    h3, h4 {
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+
+    .subtitle {
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 130%;
+    }
+
+    .button {
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .small-text-1, .small-text-2 {
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+}
+
+@media screen and (max-width: 640px) {
+    body {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    h1 {
+        font-size: 2.125rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 2.55rem */
+        letter-spacing: -0.0425rem;
+    }
+
+    h2, h3 {
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.03rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .button {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .small-text-1, .small-text-2 {
+        font-size: 0.75rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    body {
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    h1 {
+        font-size: 1.875rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 2.25rem */
+        letter-spacing: -0.0375rem;
+    }
+
+    h2, h3 {
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.025rem;
+    }
+
+    h4 {
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 130%;
+    }
+
+    .button {
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .small-text-1, .small-text-2 {
+        font-size: 0.75rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
 }
