@@ -9,6 +9,7 @@
 
   <CatalogTeaser
     :catalog_teaser_block="catalog_teaser_block"
+    :category_list="category_list"
   />
 
   <ServiceOptions
@@ -91,6 +92,7 @@ export default {
       header_block: {},
       main_block: {},
       catalog_teaser_block: {},
+      category_list: [],
       service_options_block: {},
       new_product_block: [],
       popular_product_block: [],
@@ -120,6 +122,7 @@ export default {
             this.main_block = receivedData.main_block
             this.catalog_teaser_block = receivedData.catalog_teaser_block
             this.service_options_block = receivedData.service_options_block
+            this.category_list = receivedData.category_list
             this.new_product_block = receivedData.new_product_block
             this.popular_product_block = receivedData.popular_product_block
             this.delivery_block = receivedData.delivery_block

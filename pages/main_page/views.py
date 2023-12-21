@@ -29,6 +29,9 @@ from pages.main_page.serializers import (
 from pages.common_elements.models import HeaderBlock
 from pages.common_elements.serializers import HeaderBlockSerializer
 
+from shop.models import Category
+from shop.serializers import CategorySerializer
+
 
 def aggregate_data(request):
     try:
@@ -38,6 +41,7 @@ def aggregate_data(request):
 
         main_block = MainBlock.objects.first()
         catalog_teaser_block = CatalogTeaserBlock.objects.first()
+        category_list = Category.objects.all()
         service_options_block = ServiceOptionsBlock.objects.first()
 
         new_product_block = NewProductBlock.objects.select_related("product").all()
@@ -56,6 +60,8 @@ def aggregate_data(request):
             response_data['main_block'] = MainBlockSerializer(main_block).data
         if catalog_teaser_block:
             response_data['catalog_teaser_block'] = CatalogTeaserBlockSerializer(catalog_teaser_block).data
+        if category_list:
+            response_data['category_list'] = CategorySerializer(category_list, many=True).data
         if service_options_block:
             response_data['service_options_block'] = ServiceOptionsBlockSerializer(service_options_block).data
         if new_product_block:

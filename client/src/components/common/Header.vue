@@ -122,9 +122,13 @@ export default {
     }
   },
   mounted() {
+    const debouncedScrollHandler = debounce.debounce(this.handleScroll, 50);
+
+    window.addEventListener('scroll', debouncedScrollHandler);
     window.addEventListener('resize', this.updateWindowWidth);
   },
   beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.updateWindowWidth);
   },
 
@@ -150,6 +154,16 @@ export default {
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "";
+      }
+    },
+
+    handleScroll() {
+      // Shadow on header-component on scroll
+      let header_component = document.getElementById("header-component")
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        header_component.style.boxShadow = "0px 5px 10px 0px rgba(0, 0, 0, 0.25), 0px 1px 5px 0px rgba(0, 0, 0, 0.25)";
+      } else {
+        header_component.style.boxShadow = "unset";
       }
     },
   },
@@ -378,6 +392,13 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+@media screen and (max-width: 1460px) {
+  .header-component {
+    margin-top: 0 !important;
+    border-radius: unset;
+  }
 }
 
 @media screen and (max-width: 1280px) {

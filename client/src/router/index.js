@@ -50,7 +50,7 @@ const router = createRouter({
             component: PolicyView
         },
         {
-            path: '/catalog/:id',
+            path: '/catalog/:slug',
             name: 'product',
             component: ProductView
         },
