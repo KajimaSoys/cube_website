@@ -63,15 +63,15 @@ export default {
 <style scoped>
 
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1280px) {
+
+}
+
+@media screen and (max-width: 1000px) {
 
 }
 
 @media screen and (max-width: 640px) {
-
-}
-
-@media screen and (max-width: 360px) {
 
 }
 </style>

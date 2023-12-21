@@ -40,8 +40,8 @@ const router = createRouter({
             component: MainView
         },
         {
-            path: '/order',
-            name: 'order',
+            path: '/cart',
+            name: 'cart',
             component: OrderView
         },
         {
