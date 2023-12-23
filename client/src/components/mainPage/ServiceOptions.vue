@@ -257,6 +257,11 @@ export default {
     padding-top: 5rem;
   }
 
+  .service-head svg {
+    width: 8.5rem;
+    height: 1.5rem;
+  }
+
   .card {
     min-height: 12.75rem;
   }
@@ -290,6 +295,11 @@ export default {
   .service-content {
     margin-top: 1.5rem;
     flex-wrap: wrap;
+  }
+
+  .service-head svg {
+    width: 5.625rem;
+    height: 1rem;
   }
 
   .card {

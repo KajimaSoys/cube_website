@@ -11,6 +11,7 @@ app.use(router, axios)
 // app.use(createMetaManager() )
 
 let backendURL = import.meta.env.VITE_BACKEND_HOST;
+let frontendURL = import.meta.env.VITE_FRONTEND_HOST;
 
 axios.defaults.baseURL = backendURL
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -19,3 +20,4 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 app.mount('#app')
 
 app.provide('backendURL', backendURL)
+app.provide('frontendURL', frontendURL)
