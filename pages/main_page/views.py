@@ -26,8 +26,14 @@ from pages.main_page.serializers import (
     QuestionsBlockSerializer,
     ContactsBlockSerializer,
 )
-from pages.common_elements.models import HeaderBlock
-from pages.common_elements.serializers import HeaderBlockSerializer
+from pages.common_elements.models import (
+    HeaderBlock,
+    AddQuestionBlock
+)
+from pages.common_elements.serializers import (
+    HeaderBlockSerializer,
+    AddQuestionBlockSerializer
+)
 
 from shop.models import Category
 from shop.serializers import CategorySerializer
@@ -51,8 +57,9 @@ def aggregate_data(request):
         advantages_block = AdvantagesBlock.objects.first()
         carton_info_block = CartonInfoBlock.objects.first()
         request_block = RequestBlock.objects.first()
-        questions_block = QuestionsBlock.objects.first()
+        questions_block = QuestionsBlock.objects.all()
         contacts_block = ContactsBlock.objects.first()
+        add_question_block = AddQuestionBlock.objects.first()
 
         if header_block:
             response_data['header_block'] = HeaderBlockSerializer(header_block).data
@@ -77,9 +84,11 @@ def aggregate_data(request):
         if request_block:
             response_data['request_block'] = RequestBlockSerializer(request_block).data
         if questions_block:
-            response_data['questions_block'] = QuestionsBlockSerializer(questions_block).data
+            response_data['questions_block'] = QuestionsBlockSerializer(questions_block, many=True).data
         if contacts_block:
             response_data['contacts_block'] = ContactsBlockSerializer(contacts_block).data
+        if add_question_block:
+            response_data['add_question_block'] = AddQuestionBlockSerializer(add_question_block).data
 
         return JsonResponse(response_data, safe=False)
 

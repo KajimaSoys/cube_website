@@ -10,6 +10,7 @@ const app = createApp(App)
 app.use(router, axios)
 // app.use(createMetaManager() )
 
+
 let backendURL = import.meta.env.VITE_BACKEND_HOST;
 let frontendURL = import.meta.env.VITE_FRONTEND_HOST;
 

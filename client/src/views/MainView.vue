@@ -48,6 +48,10 @@
     :contacts_block="contacts_block"
   />
 
+  <AddQuestion
+    :add_question_block="add_question_block"
+  />
+
   <Footer
     :header_block="header_block"
   />
@@ -66,6 +70,7 @@ import CartonInfo from "../components/mainPage/CartonInfo.vue"
 import Request from "../components/mainPage/Request.vue"
 import Questions from "../components/mainPage/Questions.vue"
 import Contacts from "../components/mainPage/Contacts.vue"
+import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
 import axios from "axios";
 
@@ -85,6 +90,7 @@ export default {
     Request,
     Questions,
     Contacts,
+    AddQuestion,
     Footer
   },
   data() {
@@ -100,7 +106,8 @@ export default {
       advantages_block: {},
       carton_info_block: {},
       request_block: {},
-      questions_block: {},
+      questions_block: [],
+      add_question_block: {},
       contacts_block: {},
     }
   },
@@ -131,6 +138,7 @@ export default {
             this.request_block = receivedData.request_block
             this.questions_block = receivedData.questions_block
             this.contacts_block = receivedData.contacts_block
+            this.add_question_block = receivedData.add_question_block
 
             // window.ym(95108306, 'hit', 'https://kamamebel.com/');
 
