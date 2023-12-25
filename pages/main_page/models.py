@@ -18,7 +18,6 @@ class MainBlock(models.Model):
     bar_third = models.CharField(verbose_name='Карточка №3', max_length=250)
     bar_fourth = models.CharField(verbose_name='Карточка №4', max_length=250)
 
-    # Todo replace with ResizedImageField
     image = models.FileField(verbose_name='Фото', upload_to='main_page/main/', max_length=500)
 
     def __str__(self):
@@ -52,25 +51,25 @@ class ServiceOptionsBlock(models.Model):
     title = models.CharField(verbose_name='Заголовок', max_length=500)
 
     option_first = models.CharField(verbose_name='Текст', max_length=50)
-    # image_first = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-    image_first = ResizedImageField(upload_to='main_page/service_options/',
-                                    verbose_name='Фото',
-                                    size=[300, None],
-                                    quality=80, )
+    image_first = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
+    # image_first = ResizedImageField(upload_to='main_page/service_options/',
+    #                                 verbose_name='Фото',
+    #                                 size=[300, None],
+    #                                 quality=80, )
 
     option_second = models.CharField(verbose_name='Текст', max_length=50)
-    # image_second = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-    image_second = ResizedImageField(upload_to='main_page/service_options/',
-                                     verbose_name='Фото',
-                                     size=[300, None],
-                                     quality=80, )
+    image_second = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
+#     image_second = ResizedImageField(upload_to='main_page/service_options/',
+#                                      verbose_name='Фото',
+#                                      size=[300, None],
+#                                      quality=80, )
 
     option_third = models.CharField(verbose_name='Текст', max_length=50)
-    # image_third = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-    image_third = ResizedImageField(upload_to='main_page/service_options/',
-                                    verbose_name='Фото',
-                                    size=[300, None],
-                                    quality=80, )
+    image_third = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
+#     image_third = ResizedImageField(upload_to='main_page/service_options/',
+#                                     verbose_name='Фото',
+#                                     size=[300, None],
+#                                     quality=80, )
 
     def __str__(self):
         return 'Услуги компании'
@@ -124,20 +123,20 @@ class DeliveryBlock(models.Model):
     subtitle_first = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_first = models.CharField(verbose_name='Описание', max_length=500)
     additional_first = models.CharField(verbose_name='Дополнительный текст', max_length=500, blank=True, null=True)
-    # image_first = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
-    image_first = ResizedImageField(upload_to='main_page/delivery/',
-                                    verbose_name='Фото',
-                                    size=[550, None],
-                                    quality=80, )
+    image_first = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
+    # image_first = ResizedImageField(upload_to='main_page/delivery/',
+    #                                 verbose_name='Фото',
+    #                                 size=[550, None],
+    #                                 quality=80, )
 
     subtitle_second = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_second = models.CharField(verbose_name='Описание', max_length=500)
     additional_second = models.CharField(verbose_name='Дополнительный текст', max_length=500, blank=True, null=True)
-    # image_second = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
-    image_second = ResizedImageField(upload_to='main_page/delivery/',
-                                     verbose_name='Фото',
-                                     size=[550, None],
-                                     quality=80, )
+    image_second = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
+#     image_second = ResizedImageField(upload_to='main_page/delivery/',
+#                                      verbose_name='Фото',
+#                                      size=[550, None],
+#                                      quality=80, )
 
     def __str__(self):
         return 'Доставка'
@@ -197,19 +196,19 @@ class CartonInfoBlock(models.Model):
 
     subtitle_first = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_first = models.CharField(verbose_name='Описание', max_length=500)
-    # image_first = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
-    image_first = ResizedImageField(upload_to='main_page/carton_info/',
-                                    verbose_name='Фото',
-                                    size=[250, None],
-                                    quality=80, )
+    image_first = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
+    # image_first = ResizedImageField(upload_to='main_page/carton_info/',
+    #                                 verbose_name='Фото',
+    #                                 size=[250, None],
+    #                                 quality=80, )
 
     subtitle_second = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_second = models.CharField(verbose_name='Описание', max_length=500)
-    # image_second = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
-    image_second = ResizedImageField(upload_to='main_page/carton_info/',
-                                     verbose_name='Фото',
-                                     size=[250, None],
-                                     quality=80, )
+    image_second = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
+    # image_second = ResizedImageField(upload_to='main_page/carton_info/',
+    #                                  verbose_name='Фото',
+    #                                  size=[250, None],
+    #                                  quality=80, )
 
     def __str__(self):
         return 'Информация о картоне'
@@ -229,11 +228,11 @@ class RequestBlock(models.Model):
     whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255,
                                      help_text='Используется в кнопке')
 
-    # image = models.FileField(verbose_name='Фото', upload_to='main_page/request/', max_length=500)
-    image = ResizedImageField(upload_to='main_page/request/',
-                              verbose_name='Фото',
-                              size=[550, None],
-                              quality=80, )
+    image = models.FileField(verbose_name='Фото', upload_to='main_page/request/', max_length=500)
+    # image = ResizedImageField(upload_to='main_page/request/',
+    #                           verbose_name='Фото',
+    #                           size=[550, None],
+    #                           quality=80, )
 
     def __str__(self):
         return 'Блок заявки в Whatsapp'

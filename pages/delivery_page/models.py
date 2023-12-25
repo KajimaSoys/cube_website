@@ -12,19 +12,19 @@ class PaymentBlock(models.Model):
 
     subtitle_first = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_first = models.CharField(verbose_name='Описание', max_length=500)
-    # image_first = models.FileField(verbose_name='Фото', upload_to='delivery_page/payment/', max_length=500)
-    image_first = ResizedImageField(upload_to='delivery_page/payment/',
-                                    verbose_name='Фото',
-                                    size=[300, None],
-                                    quality=80, )
+    image_first = models.FileField(verbose_name='Фото', upload_to='delivery_page/payment/', max_length=500)
+    # image_first = ResizedImageField(upload_to='delivery_page/payment/',
+    #                                 verbose_name='Фото',
+    #                                 size=[300, None],
+    #                                 quality=80, )
 
     subtitle_second = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_second = models.CharField(verbose_name='Описание', max_length=500)
-#     image_second = models.FileField(verbose_name='Фото', upload_to='delivery_page/payment/', max_length=500)
-    image_second = ResizedImageField(upload_to='delivery_page/payment/',
-                                     verbose_name='Фото',
-                                     size=[300, None],
-                                     quality=80, )
+    image_second = models.FileField(verbose_name='Фото', upload_to='delivery_page/payment/', max_length=500)
+#     image_second = ResizedImageField(upload_to='delivery_page/payment/',
+#                                      verbose_name='Фото',
+#                                      size=[300, None],
+#                                      quality=80, )
 
     def __str__(self):
         return 'Доставка'
