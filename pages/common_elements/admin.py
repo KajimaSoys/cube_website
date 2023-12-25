@@ -18,6 +18,7 @@ class HeaderBlockAdmin(admin.ModelAdmin):
                 'number',
                 'mail',
                 'address',
+                'yandex_map_link',
                 'tg_link',
                 'whatsapp_link',
             ],

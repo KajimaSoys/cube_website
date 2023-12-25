@@ -97,6 +97,14 @@ export default {
   color: white;
 }
 
+a {
+  transition: opacity 0.2s ease-in-out;
+}
+
+a:hover {
+  opacity: 0.5;
+}
+
 .svg-container {
   z-index: 1;
   position: absolute;

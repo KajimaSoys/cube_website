@@ -14,6 +14,8 @@ from pages.common_elements.serializers import (
     RecommendedProductBlockSerializer,
     AddQuestionBlockSerializer,
 )
+from shop.models import Category
+from shop.serializers import CategorySerializer
 
 
 def aggregate_data(request):
@@ -25,6 +27,7 @@ def aggregate_data(request):
         payment_block = PaymentBlock.objects.first()
         recommended_product_block = RecommendedProductBlock.objects.select_related("product").all()
         add_question_block = AddQuestionBlock.objects.first()
+        category_list = Category.objects.all()
 
         if header_block:
             response_data['header_block'] = HeaderBlockSerializer(header_block).data
@@ -36,6 +39,8 @@ def aggregate_data(request):
             response_data['recommended_product_block'] = RecommendedProductBlockSerializer(recommended_product_block, many=True).data
         if add_question_block:
             response_data['add_question_block'] = AddQuestionBlockSerializer(add_question_block).data
+        if category_list:
+            response_data['category_list'] = CategorySerializer(category_list, many=True).data
 
         return JsonResponse(response_data, safe=False)
 

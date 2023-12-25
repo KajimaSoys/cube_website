@@ -7,10 +7,12 @@
 
   <AddQuestion
     :add_question_block="add_question_block"
+    button_text="Связаться в What’s App"
   />
 
   <Footer
     :header_block="header_block"
+    :category_list="category_list"
   />
 </template>
 
@@ -34,6 +36,7 @@ export default {
     return {
       header_block: {},
       add_question_block: {},
+      category_list: [],
     }
   },
   created() {
@@ -52,6 +55,7 @@ export default {
 
             this.header_block = receivedData.header_block
             this.add_question_block = receivedData.add_question_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })
@@ -72,14 +76,18 @@ export default {
 
 
 <style scoped>
-
+:deep(.description) {
+    width: 75%;
+}
 
 @media screen and (max-width: 1280px) {
 
 }
 
 @media screen and (max-width: 1000px) {
-
+:deep(.description) {
+    width: 95%;
+}
 }
 
 @media screen and (max-width: 640px) {

@@ -54,6 +54,7 @@
 
   <Footer
     :header_block="header_block"
+    :category_list="category_list"
   />
 </template>
 

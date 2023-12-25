@@ -120,6 +120,14 @@ export default {
   gap: 1rem;
 }
 
+a {
+  transition: opacity 0.2s ease-in-out;
+}
+
+a:hover {
+  opacity: 0.5;
+}
+
 .category {
   flex: 1;
   display: flex;

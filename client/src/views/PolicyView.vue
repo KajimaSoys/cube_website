@@ -5,6 +5,7 @@
 
   <Footer
     :header_block="header_block"
+    :category_list="category_list"
   />
 </template>
 
@@ -24,6 +25,7 @@ export default {
   data() {
     return {
       header_block: {},
+      category_list: [],
     }
   },
   created() {
@@ -41,6 +43,7 @@ export default {
             let receivedData = response.data
 
             this.header_block = receivedData.header_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })

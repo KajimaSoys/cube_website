@@ -13,6 +13,7 @@ class HeaderBlock(models.Model):
     number = models.CharField(verbose_name='Номер компании', max_length=255)
     mail = models.CharField(verbose_name='Почта', max_length=255, help_text='Используется в футере')
     address = models.CharField(verbose_name='Адрес компании', max_length=255)
+    yandex_map_link = models.CharField(verbose_name='Ссылка на Яндекс Карты', max_length=500, default='')
 
     tg_link = models.CharField(verbose_name='Ссылка на Telegram', max_length=255, help_text='Используется в футере')
     whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255, help_text='Используется в футере')

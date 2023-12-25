@@ -15,6 +15,7 @@
 
   <Footer
     :header_block="header_block"
+    :category_list="category_list"
   />
 </template>
 
@@ -41,6 +42,7 @@ export default {
       header_block: {},
       recommended_product_block: [],
       add_question_block: {},
+      category_list: [],
     }
   },
   created() {
@@ -60,6 +62,7 @@ export default {
             this.header_block = receivedData.header_block
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })

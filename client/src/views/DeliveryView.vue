@@ -1,26 +1,27 @@
 <template>
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
   <Delivery
-    :delivery_block="delivery_block"
+      :delivery_block="delivery_block"
   />
 
   <Payment
-    :payment_block="payment_block"
+      :payment_block="payment_block"
   />
 
   <RecommendedProduct
-    :recommended_product_block="recommended_product_block"
+      :recommended_product_block="recommended_product_block"
   />
 
   <AddQuestion
-    :add_question_block="add_question_block"
+      :add_question_block="add_question_block"
   />
 
   <Footer
-    :header_block="header_block"
+      :header_block="header_block"
+      :category_list="category_list"
   />
 </template>
 
@@ -51,6 +52,7 @@ export default {
       payment_block: {},
       recommended_product_block: [],
       add_question_block: {},
+      category_list: [],
     }
   },
   created() {
@@ -72,6 +74,7 @@ export default {
             this.payment_block = receivedData.payment_block
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })

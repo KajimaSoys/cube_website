@@ -29,6 +29,7 @@
 
   <Footer
     :header_block="header_block"
+    :category_list="category_list"
   />
 </template>
 
@@ -65,6 +66,8 @@ export default {
       contacts_block: {},
       outside_view: {},
       add_question_block: {},
+      category_list: [],
+
     }
   },
   created() {
@@ -88,6 +91,7 @@ export default {
             this.contacts_block = receivedData.contacts_block
             this.outside_view = receivedData.outside_view
             this.add_question_block = receivedData.add_question_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })

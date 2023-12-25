@@ -20,7 +20,7 @@
 
         <div class="credentials">
           <a class="phone" :href="'tel:' + header_block.number">{{ header_block.number }}</a>
-          <div class="address small-text-1">{{ header_block.address }}</div>
+          <a class="address small-text-1" :href="header_block.yandex_map_link" target="_blank">{{ header_block.address }}</a>
         </div>
 
         <router-link class="cart-logo" :to="{ name: 'cart' }" title="Корзина">
@@ -65,7 +65,7 @@
                 <div class="credentials">
                   <a class="phone" :href="'tel:' + header_block.number">{{ header_block.number }}</a>
                   <a class="mail" :href="'mailto:' + header_block.mail">{{ header_block.mail }}</a>
-                  <div class="address">{{ header_block.address }}</div>
+                  <a class="address" :href="header_block.yandex_map_link" target="_blank">{{ header_block.address }}</a>
                 </div>
                 <div class="out-links">
                   <a :href="header_block.whatsapp_link" target="_blank" class="out-link">
@@ -91,7 +91,7 @@
                   </a>
                 </div>
                 <div class="copyright">
-                  © 2023 - cubekazan.ru
+                  © {{ new Date().getFullYear() }} - cubekazan.ru
                 </div>
               </div>
 

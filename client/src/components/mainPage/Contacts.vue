@@ -221,6 +221,13 @@ export default {
   color: var(--black);
 }
 
+a {
+  transition: opacity 0.2s ease-in-out;
+}
+
+a:hover {
+  opacity: 0.5;
+}
 
 @media screen and (max-width: 1280px) {
   .contacts-component {

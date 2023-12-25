@@ -4,14 +4,13 @@
       <div class="question-content">
         <h2 v-html="add_question_block.title"></h2>
         <div class="description">{{ add_question_block.description }}</div>
-        <a class="button" :href="add_question_block.whatsapp_link" target="_blank">Связаться</a>
+        <a class="button" :href="add_question_block.whatsapp_link" target="_blank">{{ button_text}}</a>
       </div>
       <div class="question-background"></div>
       <div class="image-container">
         <img :src="backendURL + add_question_block.image" alt="">
       </div>
     </div>
-
   </div>
 </template>
 
@@ -20,11 +19,16 @@ export default {
   name: "AddQuestion",
   inject: ['backendURL'],
   props: {
-    add_question_block: Array,
+    add_question_block: Object,
+    button_text: {
+      type: String,
+      default: 'Связаться'
+    }
   },
   components: {},
   data() {
-    return {}
+    return {
+    }
   },
   mounted() {
   },
@@ -94,6 +98,14 @@ export default {
   background: var(--green-light, #40AB5E);
   text-decoration: none;
   color: white;
+}
+
+a {
+  transition: opacity 0.2s ease-in-out;
+}
+
+a:hover {
+  opacity: 0.5;
 }
 
 .image-container {

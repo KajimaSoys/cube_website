@@ -154,6 +154,14 @@ export default {
   text-decoration: none;
 }
 
+a {
+  transition: opacity 0.2s ease-in-out;
+}
+
+a:hover {
+  opacity: 0.5;
+}
+
 .cards {
   display: flex;
   flex-direction: row;

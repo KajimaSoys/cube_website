@@ -3,12 +3,6 @@
     :header_block="header_block"
   />
 
-  <Product/>
-
-  <RecommendedProduct
-    :recommended_product_block="recommended_product_block"
-  />
-
   <Footer
     :header_block="header_block"
     :category_list="category_list"
@@ -17,44 +11,39 @@
 
 <script>
 import Header from "../components/common/Header.vue";
-import Product from "../components/productPage/Product.vue";
-import RecommendedProduct from "../components/common/RecommendedProduct.vue";
+
 import Footer from "../components/common/Footer.vue";
 import axios from "axios";
 
 export default {
-  name: "ProductView",
+  name: "TermsView",
   inject: ['backendURL'],
   components: {
     Header,
-    Product,
-    RecommendedProduct,
     Footer
   },
   data() {
     return {
       header_block: {},
-      recommended_product_block: [],
       category_list: [],
     }
+  },
+  created() {
+    this.getPageData()
   },
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
   },
-  created() {
-    this.getPageData()
-  },
   methods: {
     async getPageData() {
       await axios
-          .get(`${this.backendURL}/api/v1/product_page/`)
+          .get(`${this.backendURL}/api/v1/header_data/`)
           .then(response => {
             let receivedData = response.data
 
-                this.header_block = receivedData.header_block
-                this.recommended_product_block = receivedData.recommended_product_block
-                this.category_list = receivedData.category_list
+            this.header_block = receivedData.header_block
+            this.category_list = receivedData.category_list
 
             console.log(response.data)
           })

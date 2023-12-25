@@ -7,6 +7,7 @@ import MainView from "../views/MainView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import OrderView from "../views/OrderView.vue";
 import PolicyView from "../views/PolicyView.vue";
+import TermsView from "../views/TermsView.vue";
 import ProductView from "../views/ProductView.vue";
 import ReviewView from "../views/ReviewView.vue";
 
@@ -48,6 +49,11 @@ const router = createRouter({
             path: '/policy',
             name: 'policy',
             component: PolicyView
+        },
+        {
+            path: '/terms',
+            name: 'terms',
+            component: TermsView
         },
         {
             path: '/catalog/:slug',
