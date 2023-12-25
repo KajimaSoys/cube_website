@@ -13,7 +13,7 @@
             class="category"
             v-for="category in shown_category_list"
             :key="category.id"
-            :href="backendURL + '/catalog/category/' + category.slug"
+            :href="frontendURL + '/catalog/category/' + category.slug"
         >
           <div class="image-container">
             <img :src="backendURL + category.image_cat" :alt="'Категория ' + category.name">
@@ -46,7 +46,7 @@
 <script>
 export default {
   name: "CatalogTeaser",
-  inject: ['backendURL'],
+  inject: ['backendURL', 'frontendURL'],
   props: {
     catalog_teaser_block: Object,
     category_list: Array,

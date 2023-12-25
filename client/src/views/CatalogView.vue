@@ -3,6 +3,8 @@
     :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Catalog/>
 
   <AddQuestion
@@ -21,6 +23,7 @@ import Header from "../components/common/Header.vue";
 import Catalog from "../components/catalogPage/Catalog.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -30,7 +33,8 @@ export default {
     Header,
     Catalog,
     AddQuestion,
-    Footer
+    Footer,
+    Breadcrumbs
   },
   data() {
     return {

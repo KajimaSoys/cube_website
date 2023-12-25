@@ -1,5 +1,5 @@
 <template>
-  <div class="contacts-component">
+  <div class="contacts-component" :class="separate ? 'zero-padding': ''">
     <div class="contacts-max">
       <div class="map">
         <iframe
@@ -95,6 +95,10 @@ export default {
   name: "Contacts",
   props: {
     contacts_block: Object,
+    separate: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {},
   data() {
@@ -117,6 +121,10 @@ export default {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.zero-padding {
+  padding-top: 0!important;
 }
 
 .contacts-max {

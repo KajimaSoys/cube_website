@@ -3,6 +3,8 @@
     :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Footer
     :header_block="header_block"
     :category_list="category_list"
@@ -13,6 +15,7 @@
 import Header from "../components/common/Header.vue";
 
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -20,7 +23,8 @@ export default {
   inject: ['backendURL'],
   components: {
     Header,
-    Footer
+    Footer,
+    Breadcrumbs,
   },
   data() {
     return {

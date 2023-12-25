@@ -3,6 +3,8 @@
     :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Reviews/>
 
   <RecommendedProduct
@@ -25,6 +27,7 @@ import Reviews from "../components/ReviewPage/Reviews.vue";
 import RecommendedProduct from "../components/common/RecommendedProduct.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -35,7 +38,8 @@ export default {
     Reviews,
     RecommendedProduct,
     AddQuestion,
-    Footer
+    Footer,
+    Breadcrumbs,
   },
   data() {
     return {

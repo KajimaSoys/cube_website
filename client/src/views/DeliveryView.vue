@@ -3,8 +3,11 @@
       :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Delivery
       :delivery_block="delivery_block"
+      :separate="true"
   />
 
   <Payment
@@ -32,6 +35,7 @@ import Payment from "../components/deliveryPage/Payment.vue";
 import RecommendedProduct from "../components/common/RecommendedProduct.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -43,7 +47,8 @@ export default {
     Payment,
     RecommendedProduct,
     AddQuestion,
-    Footer
+    Footer,
+    Breadcrumbs,
   },
   data() {
     return {
@@ -95,7 +100,6 @@ export default {
 
 
 <style scoped>
-
 
 @media screen and (max-width: 1280px) {
 

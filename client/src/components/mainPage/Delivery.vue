@@ -1,10 +1,10 @@
 <template>
-  <div class="delivery-component">
+  <div class="delivery-component" :class="separate ? 'zero-padding': ''">
     <div class="delivery-max">
       <div class="delivery-content">
         <div class="left-side">
           <h2>{{ delivery_block.title }}</h2>
-          <svg xmlns="http://www.w3.org/2000/svg" width="193" height="34" viewBox="0 0 193 34" fill="none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="top" width="193" height="34" viewBox="0 0 193 34" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M0 1C0 0.447715 0.447716 0 1 0H6.81864C7.37092 0 7.81864 0.447714 7.81864 0.999999V2.86033C7.81864 3.41262 7.37092 3.86033 6.81864 3.86033H4.85266C4.30038 3.86033 3.85266 4.30805 3.85266 4.86033V14.2637C3.85266 14.8159 4.30038 15.2637 4.85266 15.2637H6.81864C7.37092 15.2637 7.81864 15.7114 7.81864 16.2637V17.6879C7.81864 18.2402 7.37092 18.6879 6.81864 18.6879H4.85266C4.30038 18.6879 3.85266 19.1356 3.85266 19.6879V29.1235C3.85266 29.6758 4.30038 30.1235 4.85266 30.1235H6.81864C7.37092 30.1235 7.81864 30.5712 7.81864 31.1235V33C7.81864 33.5523 7.37092 34 6.81864 34H1C0.447715 34 0 33.5523 0 33V1ZM22.7922 1C22.7922 0.447715 22.3445 0 21.7922 0H12.2342C11.6819 0 11.2342 0.447716 11.2342 1V33C11.2342 33.5523 11.6819 34 12.2342 34H13.6498C14.2021 34 14.6498 33.5523 14.6498 33V19.6879C14.6498 19.1356 15.0975 18.6879 15.6498 18.6879H18.3928C18.9451 18.6879 19.3928 19.1356 19.3928 19.6879V33C19.3928 33.5523 19.8405 34 20.3928 34H21.7922C22.3445 34 22.7922 33.5523 22.7922 33V1ZM26.3373 1C26.3373 0.447715 26.785 0 27.3373 0H33.0588C33.6111 0 34.0588 0.447714 34.0588 0.999999V2.86033C34.0588 3.41262 33.6111 3.86033 33.0588 3.86033H31.2062C30.6539 3.86033 30.2062 4.30805 30.2062 4.86033V29.1235C30.2062 29.6758 30.6539 30.1235 31.2062 30.1235H33.0588C33.6111 30.1235 34.0588 30.5712 34.0588 31.1235V33C34.0588 33.5523 33.6111 34 33.0588 34H27.3373C26.785 34 26.3373 33.5523 26.3373 33V1ZM15.6498 3.35962C15.0975 3.35962 14.6498 3.80733 14.6498 4.35962V14.2637C14.6498 14.8159 15.0975 15.2637 15.6498 15.2637H18.3928C18.9451 15.2637 19.3928 14.8159 19.3928 14.2637V4.35962C19.3928 3.80734 18.9451 3.35962 18.3928 3.35962H15.6498Z"
                   fill="#40AB5E"/>
@@ -198,6 +198,10 @@ export default {
   inject: ['backendURL'],
   props: {
     delivery_block: Object,
+    separate: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {},
   data() {
@@ -219,6 +223,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.zero-padding {
+  padding-top: 0!important;
 }
 
 .delivery-max {
@@ -245,17 +253,22 @@ export default {
 
   display: flex;
   flex-direction: row;
+  gap: 3rem;
 }
 
 .left-side {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: 0;
+  min-width: 22rem;
 }
 
 .right-side {
   display: flex;
   gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .card-first, .card-second {
@@ -273,6 +286,7 @@ export default {
   overflow: hidden;
 
   min-height: 14.8rem;
+  max-width: 20.8rem;
 }
 
 .card-title {
@@ -291,7 +305,7 @@ export default {
 }
 
 .card-description {
-  width: 67%;
+  width: 70%;
 }
 
 .card-additional {
@@ -307,12 +321,12 @@ export default {
 
 .card-first .image-container {
   right: -2rem;
-  bottom: 1rem;
+  bottom: 0;
 }
 
 .card-second .image-container {
   right: -6rem;
-  bottom: 4rem;
+  bottom: 3rem;
 }
 
 .image-container img {
@@ -320,7 +334,7 @@ export default {
   object-fit: cover;
 }
 
-.delivery-content svg {
+.bottom-container {
   display: none;
 }
 
@@ -331,6 +345,7 @@ export default {
 
   .delivery-content {
     padding: 3rem 2.25rem 3rem 2.25rem;
+    gap: 3.75rem;
   }
 
   .card-additional {
@@ -340,6 +355,10 @@ export default {
   .image-container {
     width: 10rem;
     height: 10rem;
+  }
+
+  .left-side {
+    min-width: 15.75rem;
   }
 
   .right-side {
@@ -384,6 +403,10 @@ export default {
     height: 1.5rem;
   }
 
+  .card-first, .card-second {
+    max-width: unset;
+  }
+
   .card-title {
     font-size: 1rem;
   }
@@ -426,6 +449,10 @@ export default {
 
   .left-side svg {
     display: none;
+  }
+
+  h2 {
+    width: 80%;
   }
 
   .right-side {

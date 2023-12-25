@@ -26,7 +26,7 @@
                 <a class="catalog-item"
                    v-for="category in category_list"
                    :key="category.id"
-                   :href="backendURL + '/catalog/category/' + category.slug"
+                   :href="frontendURL + '/catalog/category/' + category.slug"
                 >
                   {{ category.name }}
                 </a>
@@ -191,7 +191,7 @@
 <script>
 export default {
   name: "Footer",
-  inject: ['backendURL'],
+  inject: ['backendURL', 'frontendURL'],
   props: {
     header_block: Object,
     category_list: Array,

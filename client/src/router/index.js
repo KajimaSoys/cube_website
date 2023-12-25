@@ -18,22 +18,46 @@ const router = createRouter({
         {
             path: '/about',
             name: 'about',
-            component: AboutView
+            component: AboutView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'О магазине'}
+                ]
+            }
         },
         {
             path: '/catalog',
             name: 'catalog',
-            component: CatalogView
+            component: CatalogView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Каталог'}
+                ]
+            }
         },
         {
             path: '/contacts',
             name: 'contacts',
-            component: ContactsView
+            component: ContactsView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Контакты'}
+                ]
+            }
         },
         {
             path: '/delivery',
             name: 'delivery',
-            component: DeliveryView
+            component: DeliveryView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Доставка и оплата'}
+                ]
+            }
         },
         {
             path: '/',
@@ -48,12 +72,24 @@ const router = createRouter({
         {
             path: '/policy',
             name: 'policy',
-            component: PolicyView
+            component: PolicyView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Политика конфиденциальности'}
+                ]
+            }
         },
         {
             path: '/terms',
             name: 'terms',
-            component: TermsView
+            component: TermsView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Положения и условия'}
+                ]
+            }
         },
         {
             path: '/catalog/:slug',
@@ -63,7 +99,13 @@ const router = createRouter({
         {
             path: '/reviews',
             name: 'reviews',
-            component: ReviewView
+            component: ReviewView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Отзывы'}
+                ]
+            }
         },
         {
             path: '/:catchAll(.*)',
@@ -72,7 +114,7 @@ const router = createRouter({
                 to.fullPath = decodeURIComponent(to.fullPath);
                 next();
             },
-            component: NotFoundView
+            component: NotFoundView,
         },
     ]
 })

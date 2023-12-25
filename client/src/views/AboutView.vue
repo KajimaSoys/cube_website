@@ -3,8 +3,11 @@
     :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Advantages
     :advantages_block="advantages_block"
+    :separate="true"
   />
 
   <ServiceOptions
@@ -42,6 +45,7 @@ import Contacts from "../components/mainPage/Contacts.vue";
 import OutsideView from "../components/contactsPage/OutsideView.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -55,7 +59,8 @@ export default {
     Contacts,
     OutsideView,
     AddQuestion,
-    Footer
+    Footer,
+    Breadcrumbs
   },
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <div class="advantages-component">
+  <div class="advantages-component" :class="separate ? 'zero-padding': ''">
     <div class="advantages-max">
       <h2 class="advantages-head" v-html="advantages_block.title"></h2>
       <div class="advantages-content">
@@ -113,6 +113,10 @@ export default {
   inject: ['backendURL', 'frontendURL'],
   props: {
     advantages_block: Object,
+    separate: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {},
   data() {
@@ -150,6 +154,10 @@ export default {
   align-items: center;
 
   height: calc(100% + 10rem);
+}
+
+.zero-padding {
+  padding-top: 0!important;
 }
 
 .advantages-max {

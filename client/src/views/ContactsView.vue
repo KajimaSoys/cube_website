@@ -3,8 +3,11 @@
     :header_block="header_block"
   />
 
+  <Breadcrumbs />
+
   <Contacts
     :contacts_block="contacts_block"
+    :separate="true"
   />
 
   <OutsideView
@@ -27,17 +30,21 @@ import Contacts from "../components/mainPage/Contacts.vue";
 import OutsideView from "../components/contactsPage/OutsideView.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
+import Advantages from "../components/mainPage/Advantages.vue";
 
 export default {
   name: "ContactsView",
   inject: ['backendURL'],
   components: {
+    Advantages,
     Header,
     Contacts,
     OutsideView,
     AddQuestion,
-    Footer
+    Footer,
+    Breadcrumbs
   },
   data() {
     return {
