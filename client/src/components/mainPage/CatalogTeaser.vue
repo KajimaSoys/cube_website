@@ -9,11 +9,11 @@
       </div>
 
       <div class="teaser-content">
-        <a
+        <router-link
             class="category"
             v-for="category in shown_category_list"
             :key="category.id"
-            :href="frontendURL + '/catalog/category/' + category.slug"
+            :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
         >
           <div class="image-container">
             <img :src="backendURL + category.image_cat" :alt="'Категория ' + category.name">
@@ -21,7 +21,7 @@
           <div class="category-name">
             {{ category.name }}
           </div>
-        </a>
+        </router-link>
       </div>
 
       <div

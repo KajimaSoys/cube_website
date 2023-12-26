@@ -8,9 +8,7 @@
               :key="idx"
               @click="routeTo(idx)"
               :class="{'linked': !!breadcrumb.link}">
-
             {{ breadcrumb.name }}
-
           </li>
         </ul>
       </div>
@@ -32,14 +30,14 @@ export default {
   watch: {
     '$route'() {
       this.updateList()
-    }
+    },
   },
   methods: {
     routeTo(pRouteTo) {
       if (this.breadcrumbList[pRouteTo].link) this.$router.push(this.breadcrumbList[pRouteTo].link)
     },
     updateList() {
-      this.breadcrumbList = this.$route.meta.breadcrumb
+      this.breadcrumbList = JSON.parse(JSON.stringify(this.$route.meta.breadcrumb));
     }
   }
 }

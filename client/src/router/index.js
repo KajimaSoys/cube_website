@@ -38,6 +38,21 @@ const router = createRouter({
             }
         },
         {
+            path: '/catalog/:categorySlug',
+            name: 'catalog-category',
+            component: CatalogView,
+            // beforeEnter: (to, from, next) => {
+            //     next();
+            //   },
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Каталог', link: '/catalog'},
+                    {name: 'Категория'}
+                ]
+            }
+        },
+        {
             path: '/contacts',
             name: 'contacts',
             component: ContactsView,
@@ -92,7 +107,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/catalog/:slug',
+            path: '/catalog/:categorySlug/:productSlug',
             name: 'product',
             component: ProductView
         },

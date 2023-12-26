@@ -1,20 +1,23 @@
 <template>
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Breadcrumbs />
+  <Breadcrumbs v-if="category_list.length > 0"/>
 
-  <Catalog/>
+  <Catalog
+      :category_list="category_list"
+      :products="products"
+  />
 
   <AddQuestion
-    :add_question_block="add_question_block"
-    button_text="Связаться в What’s App"
+      :add_question_block="add_question_block"
+      button_text="Связаться в What’s App"
   />
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
 </template>
 
@@ -41,10 +44,31 @@ export default {
       header_block: {},
       add_question_block: {},
       category_list: [],
+
+      products: [],
+    }
+  },
+  watch: {
+    '$route.params.categorySlug': {
+      immediate: true,
+      handler(newSlug, oldSlug) {
+        if (newSlug !== oldSlug) {
+          this.updateBreadcrumb(newSlug);
+        }
+      }
     }
   },
   created() {
-    this.getPageData()
+    Promise.all([
+      this.getPageData(),
+      this.getProducts()
+    ])
+        .then(() => {
+          console.log("Оба запроса завершены");
+        })
+        .catch(error => {
+          console.log('Произошла ошибка при выполнении запросов: ', error);
+        });
   },
   mounted() {
     document.body.style.overflow = "";
@@ -52,20 +76,36 @@ export default {
   },
   methods: {
     async getPageData() {
-      await axios
-          .get(`${this.backendURL}/api/v1/catalog_page/`)
-          .then(response => {
-            let receivedData = response.data
+      try {
+        let response = await axios.get(`${this.backendURL}/api/v1/catalog_page/`);
+        let receivedData = response.data;
 
-            this.header_block = receivedData.header_block
-            this.add_question_block = receivedData.add_question_block
-            this.category_list = receivedData.category_list
+        this.header_block = receivedData.header_block;
+        this.add_question_block = receivedData.add_question_block;
+        this.category_list = receivedData.category_list;
 
-            console.log(response.data)
-          })
-          .catch(error => {
-            console.log('An error occurred: ', error)
-          })
+        let categorySlug = this.$route.params.categorySlug;
+        let currentCategory = this.category_list.find(cat => cat.slug === categorySlug);
+        if (currentCategory) {
+          this.$route.meta.breadcrumb[2].name = currentCategory.name;
+        }
+      } catch (error) {
+        console.error('Ошибка в getPageData: ', error);
+      }
+    },
+    async getProducts() {
+      try {
+        let response = await axios.get(`${this.backendURL}/api/v1/products/`);
+        this.products = response.data;
+      } catch (error) {
+        console.error('Ошибка в getProducts: ', error);
+      }
+    },
+    updateBreadcrumb(categorySlug) {
+      let currentCategory = this.category_list.find(cat => cat.slug === categorySlug);
+      if (currentCategory) {
+        this.$route.meta.breadcrumb[2].name = currentCategory.name;
+      }
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
@@ -81,7 +121,7 @@ export default {
 
 <style scoped>
 :deep(.description) {
-    width: 75%;
+  width: 75%;
 }
 
 @media screen and (max-width: 1280px) {
@@ -89,9 +129,9 @@ export default {
 }
 
 @media screen and (max-width: 1000px) {
-:deep(.description) {
+  :deep(.description) {
     width: 95%;
-}
+  }
 }
 
 @media screen and (max-width: 640px) {

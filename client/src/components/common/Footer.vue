@@ -19,17 +19,21 @@
           </div>
           <div class="right-side">
             <div class="catalog-block">
-              <router-link class="subtitle" :to="{ name: 'main' }">
+              <router-link class="subtitle"
+                 :to="{ name: 'catalog' }"
+                 @click="scrollToZero()"
+              >
                 Каталог
               </router-link>
               <div class="catalog-items">
-                <a class="catalog-item"
+                <router-link class="catalog-item"
                    v-for="category in category_list"
                    :key="category.id"
-                   :href="frontendURL + '/catalog/category/' + category.slug"
+                   :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
+                   @click="scrollToZero()"
                 >
                   {{ category.name }}
-                </a>
+                </router-link>
               </div>
             </div>
             <div class="info-block">
@@ -202,7 +206,11 @@ export default {
   },
   mounted() {
   },
-  methods: {},
+  methods: {
+    scrollToZero(){
+      document.documentElement.scrollTop = 0;
+    }
+  },
 }
 </script>
 
