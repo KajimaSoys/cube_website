@@ -3,17 +3,25 @@
       :header_block="header_block"
   />
 
-  <Breadcrumbs v-if="category_list.length > 0"/>
+  <div v-if="show">
 
-  <Catalog
-      :category_list="category_list"
-      :products="products"
-  />
 
-  <AddQuestion
-      :add_question_block="add_question_block"
-      button_text="Связаться в What’s App"
-  />
+    <Breadcrumbs v-if="category_list.length > 0"/>
+
+    <Catalog
+        :category_list="category_list"
+        :products="products"
+    />
+
+    <AddQuestion
+        :add_question_block="add_question_block"
+        button_text="Связаться в What’s App"
+    />
+
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
 
   <Footer
       :header_block="header_block"
@@ -46,6 +54,8 @@ export default {
       category_list: [],
 
       products: [],
+
+      show: false
     }
   },
   watch: {
@@ -65,6 +75,7 @@ export default {
     ])
         .then(() => {
           console.log("Оба запроса завершены");
+          this.show = true
         })
         .catch(error => {
           console.log('Произошла ошибка при выполнении запросов: ', error);

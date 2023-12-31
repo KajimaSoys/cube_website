@@ -1,17 +1,24 @@
 <template>
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Product/>
+  <div v-if="show">
 
-  <RecommendedProduct
-    :recommended_product_block="recommended_product_block"
-  />
+    <Product/>
+
+    <RecommendedProduct
+        :recommended_product_block="recommended_product_block"
+    />
+
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
 </template>
 
@@ -36,6 +43,8 @@ export default {
       header_block: {},
       recommended_product_block: [],
       category_list: [],
+
+      show: false
     }
   },
   mounted() {
@@ -52,9 +61,11 @@ export default {
           .then(response => {
             let receivedData = response.data
 
-                this.header_block = receivedData.header_block
-                this.recommended_product_block = receivedData.recommended_product_block
-                this.category_list = receivedData.category_list
+            this.header_block = receivedData.header_block
+            this.recommended_product_block = receivedData.recommended_product_block
+            this.category_list = receivedData.category_list
+
+            this.show = true
 
             console.log(response.data)
           })

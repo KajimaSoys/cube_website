@@ -1,39 +1,47 @@
 <template>
+
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Breadcrumbs />
+  <div v-if="show">
 
-  <Advantages
-    :advantages_block="advantages_block"
-    :separate="true"
-  />
+    <Breadcrumbs/>
 
-  <ServiceOptions
-    :service_options_block="service_options_block"
-  />
+    <Advantages
+        :advantages_block="advantages_block"
+        :separate="true"
+    />
 
-  <CartonInfo
-    :carton_info_block="carton_info_block"
-  />
+    <ServiceOptions
+        :service_options_block="service_options_block"
+    />
 
-  <Contacts
-    :contacts_block="contacts_block"
-  />
+    <CartonInfo
+        :carton_info_block="carton_info_block"
+    />
 
-  <OutsideView
-    :outside_view="outside_view"
-  />
+    <Contacts
+        :contacts_block="contacts_block"
+    />
 
-  <AddQuestion
-    :add_question_block="add_question_block"
-  />
+    <OutsideView
+        :outside_view="outside_view"
+    />
+
+    <AddQuestion
+        :add_question_block="add_question_block"
+    />
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
+
 </template>
 
 <script>
@@ -73,6 +81,7 @@ export default {
       add_question_block: {},
       category_list: [],
 
+      show: false
     }
   },
   created() {
@@ -97,6 +106,8 @@ export default {
             this.outside_view = receivedData.outside_view
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
+
+            this.show = true
 
             console.log(response.data)
           })

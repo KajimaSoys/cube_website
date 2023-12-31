@@ -3,24 +3,31 @@
       :header_block="header_block"
   />
 
-  <Breadcrumbs />
+  <div v-if="show">
 
-  <Delivery
-      :delivery_block="delivery_block"
-      :separate="true"
-  />
+    <Breadcrumbs/>
 
-  <Payment
-      :payment_block="payment_block"
-  />
+    <Delivery
+        :delivery_block="delivery_block"
+        :separate="true"
+    />
 
-  <RecommendedProduct
-      :recommended_product_block="recommended_product_block"
-  />
+    <Payment
+        :payment_block="payment_block"
+    />
 
-  <AddQuestion
-      :add_question_block="add_question_block"
-  />
+    <RecommendedProduct
+        :recommended_product_block="recommended_product_block"
+    />
+
+    <AddQuestion
+        :add_question_block="add_question_block"
+    />
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
+
 
   <Footer
       :header_block="header_block"
@@ -58,6 +65,8 @@ export default {
       recommended_product_block: [],
       add_question_block: {},
       category_list: [],
+
+      show: false
     }
   },
   created() {
@@ -80,6 +89,8 @@ export default {
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
+
+            this.show = true
 
             console.log(response.data)
           })

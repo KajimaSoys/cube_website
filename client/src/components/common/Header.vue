@@ -4,7 +4,7 @@
       <div class="flex-row">
         <div class="logo-container">
           <router-link class="logo" :to="{ name: 'main' }">
-            <img :src="backendURL + header_block.logo" alt="Логотип компании Cube"
+            <img :src="logo" alt="Логотип компании Cube"
                  width="64" height="64">
           </router-link>
         </div>
@@ -19,8 +19,8 @@
         </div>
 
         <div class="credentials">
-          <a class="phone" :href="'tel:' + header_block.number">{{ header_block.number }}</a>
-          <a class="address small-text-1" :href="header_block.yandex_map_link" target="_blank">{{ header_block.address }}</a>
+          <a class="phone" :href="'tel:' + header_block.number">{{ number }}</a>
+          <a class="address small-text-1" :href="header_block.yandex_map_link" target="_blank">{{ address }}</a>
         </div>
 
         <router-link class="cart-logo" :to="{ name: 'cart' }" title="Корзина">
@@ -113,12 +113,15 @@ export default {
   props: {
     header_block: Object,
   },
-  inject: ['backendURL'],
+  inject: ['backendURL', 'frontendURL'],
   components: {},
   data() {
     return {
       isHidden: false,
       isBurgerMenuOpen: false,
+      logo: this.frontendURL + '/images/cube_logo_crop.png',
+      number: '+7 995 007-16-54',
+      address: 'г. Казань, Чистопольская, 7'
     }
   },
   mounted() {
@@ -130,6 +133,14 @@ export default {
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.updateWindowWidth);
+  },
+
+  watch: {
+    header_block(newVal){
+      // this.logo = this.backendURL + newVal.logo
+      this.number = newVal.number
+      this.address = newVal.address
+    }
   },
 
   methods: {

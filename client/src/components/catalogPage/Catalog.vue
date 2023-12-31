@@ -54,8 +54,7 @@ export default {
     ProductCard
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     currentCategoryId() {
@@ -146,7 +145,7 @@ export default {
 
 .products-grid {
   display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1rem;
 }
 

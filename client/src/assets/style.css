@@ -125,6 +125,84 @@ h4 {
     color: var(--black-55)
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    padding-top: 15rem;
+    height: 15rem;
+    align-items: center;
+}
+
+.spinner {
+    position: relative;
+    width: 98px;
+    height: 98px;
+    /*margin-left: calc(50vw - 45px);*/
+    /*margin-top: calc(50vh - 45px);*/
+    overflow: hidden;
+
+    &:before, &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-width: 4px;
+        border-style: solid;
+        border-radius: 50%;
+    }
+}
+
+@keyframes rotate-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes anti-rotate-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+
+/* spinner-1 styles */
+.spinner.spinner-1 {
+    &:before {
+        width: 90px;
+        height: 90px;
+        border-bottom-color: var(--green-light);
+        border-right-color: var(--green-light);
+        border-top-color: rgba(33, 33, 33, 0);
+        border-left-color: rgba(33, 33, 33, 0);
+        top: 0px;
+        left: 0px;
+        -webkit-animation: rotate-animation 1s linear infinite;
+        -moz-animation: rotate-animation 1s linear infinite;
+        animation: rotate-animation 1s linear infinite;
+    }
+
+    &:after {
+        width: calc(90px * 0.8);
+        height: calc(90px * 0.8);
+        border-bottom-color: var(--green-light);
+        border-right-color: var(--green-light);
+        border-top-color: rgba(33, 33, 33, 0);
+        border-left-color: rgba(33, 33, 33, 0);
+        top: calc((90px - 90px * 0.8) / 2);
+        left: calc((90px - 90px * 0.8) / 2);
+        -webkit-animation: anti-rotate-animation 0.85s linear 0s infinite;
+        -moz-animation: anti-rotate-animation 0.85s linear 0s infinite;
+        animation: anti-rotate-animation 0.85s linear 0s infinite;
+    }
+}
+
 @media screen and (max-width: 1280px) {
     body {
         font-size: 1.125rem;
@@ -231,6 +309,10 @@ h4 {
         font-weight: 400;
         line-height: normal;
     }
+
+    .loading {
+        padding-top: 11rem;
+    }
 }
 
 @media screen and (max-width: 640px) {
@@ -283,5 +365,29 @@ h4 {
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+    }
+
+    .loading {
+        padding-top: 9rem;
+    }
+
+    .spinner {
+        width: 78px;
+        height: 78px;
+    }
+
+    /* spinner-1 styles */
+    .spinner.spinner-1 {
+        &:before {
+            width: 70px;
+            height: 70px;
+        }
+
+        &:after {
+            width: calc(70px * 0.8);
+            height: calc(70px * 0.8);
+            top: calc((70px - 70px * 0.8) / 2);
+            left: calc((70px - 70px * 0.8) / 2);
+        }
     }
 }

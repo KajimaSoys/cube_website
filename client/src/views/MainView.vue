@@ -1,61 +1,70 @@
 <template>
+
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Main
-    :main_block="main_block"
-  />
+  <div v-if="show">
 
-  <CatalogTeaser
-    :catalog_teaser_block="catalog_teaser_block"
-    :category_list="category_list"
-  />
+    <Main
+        :main_block="main_block"
+    />
 
-  <ServiceOptions
-    :service_options_block="service_options_block"
-  />
+    <CatalogTeaser
+        :catalog_teaser_block="catalog_teaser_block"
+        :category_list="category_list"
+    />
 
-  <NewProduct
-    :new_product_block="new_product_block"
-  />
+    <ServiceOptions
+        :service_options_block="service_options_block"
+    />
 
-  <PopularProduct
-    :popular_product_block="popular_product_block"
-  />
+    <NewProduct
+        :new_product_block="new_product_block"
+    />
 
-  <Delivery
-    :delivery_block="delivery_block"
-  />
+    <PopularProduct
+        :popular_product_block="popular_product_block"
+    />
 
-  <Advantages
-    :advantages_block="advantages_block"
-  />
+    <Delivery
+        :delivery_block="delivery_block"
+    />
 
-  <CartonInfo
-    :carton_info_block="carton_info_block"
-  />
+    <Advantages
+        :advantages_block="advantages_block"
+    />
 
-  <Request
-    :request_block="request_block"
-  />
+    <CartonInfo
+        :carton_info_block="carton_info_block"
+    />
 
-  <Questions
-    :questions_block="questions_block"
-  />
+    <Request
+        :request_block="request_block"
+    />
 
-  <Contacts
-    :contacts_block="contacts_block"
-  />
+    <Questions
+        :questions_block="questions_block"
+    />
 
-  <AddQuestion
-    :add_question_block="add_question_block"
-  />
+    <Contacts
+        :contacts_block="contacts_block"
+    />
+
+    <AddQuestion
+        :add_question_block="add_question_block"
+    />
+
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
+
 </template>
 
 <script>
@@ -110,6 +119,8 @@ export default {
       questions_block: [],
       add_question_block: {},
       contacts_block: {},
+
+      show: false
     }
   },
   created() {
@@ -142,6 +153,8 @@ export default {
             this.add_question_block = receivedData.add_question_block
 
             // window.ym(95108306, 'hit', 'https://kamamebel.com/');
+
+            this.show = true
 
             console.log(response.data)
           })

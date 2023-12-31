@@ -6,7 +6,7 @@
           <div class="left-side">
             <div class="logo-container">
               <router-link class="logo" :to="{ name: 'main' }">
-                <img :src="backendURL + header_block.logo" alt="Логотип компании Cube"
+                <img :src="logo" alt="Логотип компании Cube"
                      width="64" height="64">
               </router-link>
             </div>
@@ -202,7 +202,9 @@ export default {
   },
   components: {},
   data() {
-    return {}
+    return {
+      logo: this.frontendURL + '/images/cube_logo_crop.png'
+    }
   },
   mounted() {
   },

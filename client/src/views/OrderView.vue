@@ -1,9 +1,16 @@
 <template>
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Order/>
+  <div v-if="show">
+
+    <Order/>
+
+  </div>
+  <div v-else class="loading">
+    <div class="spinner spinner-1"></div>
+  </div>
 
   <Footer
     :header_block="header_block"
@@ -29,6 +36,8 @@ export default {
     return {
       header_block: {},
       category_list: [],
+
+      show: false
     }
   },
   created() {
@@ -47,6 +56,8 @@ export default {
 
             this.header_block = receivedData.header_block
             this.category_list = receivedData.category_list
+
+            this.show = true
 
             console.log(response.data)
           })
