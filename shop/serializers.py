@@ -13,6 +13,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CategorySlugSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['slug']
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
@@ -28,10 +34,11 @@ class ProductPriceSerializer(serializers.ModelSerializer):
 class ProductListSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True) # source='productimage_set'
     prices = ProductPriceSerializer(many=True, read_only=True) # source='prices'
+    category_slug = CategorySlugSerializer(source='category')
 
     class Meta:
         model = Product
-        fields = ['id', 'category', 'name', 'in_stock', 'size', 'material', 'order', 'images', 'prices']
+        fields = ['id', 'category', 'category_slug', 'name', 'in_stock', 'size', 'material', 'order', 'images', 'prices']
 
 
 class ProductSerializer(serializers.ModelSerializer):

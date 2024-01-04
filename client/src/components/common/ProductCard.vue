@@ -1,15 +1,26 @@
 <template>
   <div class="product-card">
     <div class="product-images">
-      <div class="image-container">
-        <img :src="product.images[0].image" loading="lazy" alt="">
-      </div>
+      <router-link
+          class="image-container"
+          :to="{ name: 'product', params: { categorySlug: product.category_slug.slug, productId: product.id } }"
+          @mouseenter="hover = true"
+          @mouseleave="hover = false">
+        <img
+            :src="hover && product.images[1] ? product.images[1].image : product.images[0].image"
+
+            loading="lazy"
+            alt="">
+      </router-link>
     </div>
     <div class="product-content">
       <div class="base-info">
-        <div class="title">
+        <router-link
+            class="title"
+            :to="{ name: 'product', params: { categorySlug: product.category_slug.slug, productId: product.id }}"
+        >
           {{ product.name }}
-        </div>
+        </router-link>
         <div class="material" v-if="product.material">
           {{ product.material }}
         </div>
@@ -20,13 +31,25 @@
           {{ product.prices[0].price }} ₽
         </div>
         <div class="price-wholesale" v-if="product.prices[1]">
-          {{ product.prices[0].price }} ₽ от {{ product.prices[1].count }} шт
+          {{ product.prices[1].price }} ₽ от {{ product.prices[1].count }} шт
         </div>
       </div>
 
       <div class="purchase-block">
         <div class="quantity-choice">
-          <div class="minus-button button">
+          <div
+              class="minus-button button"
+              :class="{
+                'disabled': count===min_value,
+                'scaling-svg': isScalingMinus,
+                'out-of-stock-svg': !product.in_stock
+              }"
+              @click="decreaseOnce"
+              @mousedown="startDecreasing"
+              @mouseup="stopDecreasing"
+              @mouseleave="stopDecreasing"
+              title="Удерживайте, чтобы быстрее уменьшить кол-во товара"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M5.77606 3.15396C7.05953 2.5 8.73969 2.5 12.1 2.5L35.9 2.5C39.2603 2.5 40.9405 2.5 42.2239 3.15396C43.3529 3.7292 44.2708 4.64709 44.846 5.77606C45.5 7.05953 45.5 8.73969 45.5 12.1V35.9C45.5 39.2603 45.5 40.9405 44.846 42.2239C44.2708 43.3529 43.3529 44.2708 42.2239 44.846C40.9405 45.5 39.2603 45.5 35.9 45.5H12.1C8.73969 45.5 7.05953 45.5 5.77606 44.846C4.64708 44.2708 3.7292 43.3529 3.15396 42.2239C2.5 40.9405 2.5 39.2603 2.5 35.9L2.5 12.1C2.5 8.73968 2.5 7.05953 3.15396 5.77606C3.7292 4.64708 4.64709 3.7292 5.77606 3.15396ZM16 23C15.4477 23 15 23.4477 15 24C15 24.5523 15.4477 25 16 25H32C32.5523 25 33 24.5523 33 24C33 23.4477 32.5523 23 32 23H16Z"
@@ -39,11 +62,22 @@
               {{ count }} шт
             </div>
             <div class="price">
-              150.00 ₽
+              {{ calculatedPrice }} ₽
             </div>
           </div>
 
-          <div class="plus-button button">
+          <div class="plus-button button"
+               :class="{
+                  'disabled': count===max_value,
+                  'scaling-svg': isScalingPlus,
+                  'out-of-stock-svg': !product.in_stock
+               }"
+               @click="increaseOnce"
+               @mousedown="startIncreasing"
+               @mouseup="stopIncreasing"
+               @mouseleave="stopIncreasing"
+               title="Удерживайте, чтобы быстрее увеличить кол-во товара"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
               <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M5.77606 3.15396C7.05953 2.5 8.73969 2.5 12.1 2.5L35.9 2.5C39.2603 2.5 40.9405 2.5 42.2239 3.15396C43.3529 3.7292 44.2708 4.64709 44.846 5.77606C45.5 7.05953 45.5 8.73969 45.5 12.1V35.9C45.5 39.2603 45.5 40.9405 44.846 42.2239C44.2708 43.3529 43.3529 44.2708 42.2239 44.846C40.9405 45.5 39.2603 45.5 35.9 45.5H12.1C8.73969 45.5 7.05953 45.5 5.77606 44.846C4.64708 44.2708 3.7292 43.3529 3.15396 42.2239C2.5 40.9405 2.5 39.2603 2.5 35.9L2.5 12.1C2.5 8.73968 2.5 7.05953 3.15396 5.77606C3.7292 4.64708 4.64709 3.7292 5.77606 3.15396ZM25 16C25 15.4477 24.5523 15 24 15C23.4477 15 23 15.4477 23 16V23H16C15.4477 23 15 23.4477 15 24C15 24.5523 15.4477 25 16 25H23V32C23 32.5523 23.4477 33 24 33C24.5523 33 25 32.5523 25 32V25H32C32.5523 25 33 24.5523 33 24C33 23.4477 32.5523 23 32 23H25V16Z"
@@ -51,17 +85,28 @@
             </svg>
           </div>
         </div>
-        <div class="purchase-button">
+        <div v-if="product.in_stock" @click="addToCart" class="purchase-button">
           В корзину
+        </div>
+        <div v-else class="purchase-button out-of-stock">
+          Нет в наличии
         </div>
       </div>
 
     </div>
 
   </div>
+
+  <cart-popup
+      :is-visible="showCartPopup"
+      @close="showCartPopup = false"
+      :product="product"
+  />
 </template>
 
 <script>
+import CartPopup from "./CartPopup.vue";
+
 export default {
   name: "ProductCard",
   inject: ['backendURL'],
@@ -70,15 +115,112 @@ export default {
       type: Object
     }
   },
-  components: {},
+  components: {
+    CartPopup
+  },
   data() {
     return {
-      count: 15,
+      hover: false,
+
+      count: 1,
+      interval: null,
+      increaseAmount: 1,
+
+      isScalingPlus: false,
+      isScalingMinus: false,
+
+      max_value: 9999,
+      min_value: 1,
+
+      showCartPopup: false,
     }
   },
+  // watch: {
+  //   product: {
+  //     handler(newProduct) {
+  //       newProduct.count = 15
+  //       // this.$set(newProduct, 'count', 15); // Добавляем count к продукту
+  //     },
+  //     deep: true // Включаем глубокое наблюдение
+  //   }
+  // },
   mounted() {
   },
-  methods: {},
+
+  computed: {
+    calculatedPrice() {
+      const basePrice = this.product.prices.find(price => price.count === 1).price;
+      let finalPrice = basePrice * this.count;
+
+      this.product.prices.forEach(priceInfo => {
+        if (this.count >= priceInfo.count) {
+          finalPrice = priceInfo.price * this.count;
+        }
+      });
+
+      return finalPrice.toFixed(2);
+    }
+  },
+  methods: {
+    increaseOnce() {
+      this.count++;
+      if (this.count > this.max_value) {
+        this.count = this.max_value
+      }
+    },
+    decreaseOnce() {
+      this.count--
+      if (this.count < this.min_value) {
+        this.count = this.min_value
+      }
+    },
+    startIncreasing() {
+      if (this.interval) return;
+
+      this.interval = setInterval(() => {
+        this.count += this.increaseAmount;
+        if (this.count > this.max_value) {
+          this.count = this.max_value
+          this.increaseAmount = 1
+        }
+        this.isScalingPlus = true;
+        this.increaseAmount++;
+      }, 200);
+    },
+    stopIncreasing() {
+      clearInterval(this.interval);
+      this.isScalingPlus = false;
+
+      this.interval = null;
+      this.increaseAmount = 1;
+    },
+    startDecreasing() {
+      if (this.interval) return;
+
+      this.interval = setInterval(() => {
+        this.count -= this.increaseAmount;
+        if (this.count < this.min_value) {
+          this.count = this.min_value
+          this.increaseAmount = 1
+        }
+        this.isScalingMinus = true;
+        this.increaseAmount++;
+      }, 200);
+    },
+    stopDecreasing() {
+      clearInterval(this.interval);
+      this.isScalingMinus = false;
+
+      this.interval = null;
+      this.increaseAmount = 1;
+    },
+
+    addToCart() {
+      this.$emit('add-to-cart', this.product.id, this.count);
+      this.showCartPopup = true;
+    }
+
+  },
 }
 </script>
 
@@ -99,7 +241,7 @@ export default {
 .product-images {
   display: flex;
   align-items: flex-start;
-  height: 12.5rem;
+  height: 9.375rem;
   overflow: hidden;
 }
 
@@ -112,6 +254,7 @@ export default {
 .image-container img {
   width: 100%;
   object-fit: cover;
+  height: 9.375rem;
 }
 
 .product-content {
@@ -133,6 +276,14 @@ export default {
 .title {
   text-align: center;
   width: 90%;
+  text-decoration: none;
+  color: var(--black);
+  font-size: 1.25rem;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.title:hover {
+  opacity: 0.5;
 }
 
 .material {
@@ -184,7 +335,7 @@ export default {
   align-items: center;
   cursor: pointer;
   user-select: none;
-  transition: opacity 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .button:hover {
@@ -216,6 +367,7 @@ export default {
   justify-content: center;
   align-items: center;
   align-self: stretch;
+  text-align: center;
 
   border-radius: 0.5rem;
   background: var(--green-light, #40AB5E);
@@ -230,16 +382,77 @@ export default {
   opacity: 0.5;
 }
 
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.scaling-svg {
+  transform: scale(1.2);
+}
+
+.out-of-stock {
+  pointer-events: none;
+  background-color: var(--black-35);
+}
+
+.out-of-stock-svg {
+  pointer-events: none;
+}
+
+.out-of-stock-svg svg path {
+  fill: var(--black-35);
+}
+
 
 @media screen and (max-width: 1280px) {
+  .product-images {
+    height: 7.5rem;
+  }
 
+  .image-container img {
+    height: 7.5rem;
+  }
 }
 
 @media screen and (max-width: 1000px) {
+  .product-images {
+    height: 5rem;
+  }
 
+  .image-container img {
+    height: 5rem;
+  }
+
+  .title, .price-one, .quantity  {
+    font-size: 1rem;
+  }
+
+  .material, .price-wholesale, .price {
+    font-size: 0.75rem;
+  }
+
+  .button svg {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .purchase-button {
+    padding: 1rem 0.5rem;
+  }
 }
 
 @media screen and (max-width: 640px) {
+  .product-card {
+    padding: 1.5rem 0.5rem 0.5rem 0.5rem;
+  }
 
+  .product-content {
+    gap: 1rem;
+  }
+
+  .quantity {
+    font-size: 0.875rem;
+  }
 }
 </style>

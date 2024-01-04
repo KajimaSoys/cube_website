@@ -7,7 +7,7 @@
           <router-link class="category-item"
                        v-for="category in category_list"
                        :key="category.id"
-                       :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
+                       :to="getRoute(category)"
                        :class="{'active': isActive(category.slug)}"
           >
             {{ category.name }}
@@ -16,9 +16,10 @@
 
         <div class="products-grid">
           <ProductCard
-              v-for="(product, idx) in productsSorted"
-              :key="idx"
+              v-for="product in productsSorted"
+              :key="product.id"
               :product="product"
+              @add-to-cart="addToCart"
           />
         </div>
 
@@ -54,7 +55,9 @@ export default {
     ProductCard
   },
   data() {
-    return {}
+    return {
+      cart: []
+    }
   },
   computed: {
     currentCategoryId() {
@@ -71,13 +74,51 @@ export default {
       return this.products.filter(product => product.category === this.currentCategoryId);
     }
   },
+  created() {
+    this.loadCart();
+  },
   mounted() {
   },
   methods: {
+    handleClick(category) {
+      if (this.isActive(category.slug)) {
+        this.$router.push({name: 'catalog'});
+      }
+    },
+    getRoute(category) {
+      return this.isActive(category.slug) ? {name: 'catalog'} : {
+        name: 'catalog-category',
+        params: {categorySlug: category.slug}
+      };
+    },
     isActive(slug) {
       if (slug === this.$route.params.categorySlug) {
         return true
       }
+    },
+    addToCart(productId, quantity) {
+      const cartItem = this.cart.find(item => item.id === productId);
+
+      if (cartItem) {
+        cartItem.quantity += quantity;
+      } else {
+        this.cart.push({id: productId, quantity});
+      }
+
+      this.saveCart();
+    },
+    loadCart() {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        this.cart = JSON.parse(cartData);
+      }
+    },
+    saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+    },
+    clearCart() {
+      this.cart = [];
+      this.saveCart();
     }
   },
 }
@@ -156,6 +197,14 @@ export default {
   .catalog-max {
     padding: 0 2.25rem;
   }
+
+  .catalog-content {
+    gap: 4rem;
+  }
+
+  .products-grid {
+    gap: 0.5rem;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -165,6 +214,15 @@ export default {
   .catalog-max {
     padding: 0 2.25rem;
   }
+
+  .catalog-content {
+    margin-top: 1.5rem;
+    gap: 2rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 @media screen and (max-width: 640px) {
@@ -173,6 +231,14 @@ export default {
 
   .catalog-max {
     padding: 0 1rem;
+  }
+
+  .catalog-content {
+    margin-top: 1rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 </style>

@@ -107,9 +107,17 @@ const router = createRouter({
             }
         },
         {
-            path: '/catalog/:categorySlug/:productSlug',
+            path: '/catalog/:categorySlug/:productId',
             name: 'product',
-            component: ProductView
+            component: ProductView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Каталог', link: '/catalog'},
+                    {name: 'Категория', link: '/catalog/:categorySlug'},
+                    {name: 'Товар'}
+                ]
+            }
         },
         {
             path: '/reviews',
