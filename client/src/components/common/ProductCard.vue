@@ -106,6 +106,7 @@
 
 <script>
 import CartPopup from "./CartPopup.vue";
+import {ElNotification} from 'element-plus'
 
 export default {
   name: "ProductCard",
@@ -116,7 +117,7 @@ export default {
     }
   },
   emits: [
-      'add-to-cart'
+    'add-to-cart'
   ],
   components: {
     CartPopup
@@ -224,7 +225,15 @@ export default {
 
     addToCart() {
       this.$emit('add-to-cart', this.product.id, this.count);
-      this.showCartPopup = true;
+      // this.showCartPopup = true;
+      ElNotification({
+        title: 'Товар добавлен в корзину!',
+        type: 'success',
+        duration: 2500,
+        position: 'bottom-right',
+        dangerouslyUseHTMLString: true,
+        message: '<a class="button notification" href="/cart">Перейти в корзину</a>',
+      })
     }
 
   },

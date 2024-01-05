@@ -146,4 +146,38 @@ h2, p {
   color: var(--green-light);
 }
 
+
+@media screen and (max-width: 1280px) {
+
+}
+
+@media screen and (max-width: 1000px) {
+  .popup {
+    max-width: 26rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .popup {
+    max-width: 18rem;
+    padding: 4rem 3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .button {
+    align-items: center;
+  }
+}
+
 </style>
