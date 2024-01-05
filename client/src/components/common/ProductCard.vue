@@ -3,11 +3,11 @@
     <div class="product-images">
       <router-link
           class="image-container"
-          :to="{ name: 'product', params: { categorySlug: product.category_slug.slug, productId: product.id } }"
+          :to="{ name: 'product', params: { categorySlug: product.category_info.slug, productId: product.id } }"
           @mouseenter="hover = true"
           @mouseleave="hover = false">
         <img
-            :src="hover && product.images[1] ? product.images[1].image : product.images[0].image"
+            :src="computedSrc"
 
             loading="lazy"
             alt="">
@@ -17,7 +17,7 @@
       <div class="base-info">
         <router-link
             class="title"
-            :to="{ name: 'product', params: { categorySlug: product.category_slug.slug, productId: product.id }}"
+            :to="{ name: 'product', params: { categorySlug: product.category_info.slug, productId: product.id }}"
         >
           {{ product.name }}
         </router-link>
@@ -115,6 +115,9 @@ export default {
       type: Object
     }
   },
+  emits: [
+      'add-to-cart'
+  ],
   components: {
     CartPopup
   },
@@ -159,6 +162,10 @@ export default {
       });
 
       return finalPrice.toFixed(2);
+    },
+    computedSrc() {
+      let src = this.hover && this.product.images[1] ? this.product.images[1].image : this.product.images[0].image
+      return this.backendURL + '/media' + src.split('/media')[1]
     }
   },
   methods: {
@@ -424,7 +431,7 @@ export default {
     height: 5rem;
   }
 
-  .title, .price-one, .quantity  {
+  .title, .price-one, .quantity {
     font-size: 1rem;
   }
 
@@ -453,6 +460,10 @@ export default {
 
   .quantity {
     font-size: 0.875rem;
+  }
+
+  .purchase-button {
+    padding: 0.75rem 0.5rem;
   }
 }
 </style>

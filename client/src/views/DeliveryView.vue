@@ -16,8 +16,9 @@
         :payment_block="payment_block"
     />
 
-    <RecommendedProduct
-        :recommended_product_block="recommended_product_block"
+    <ProductSlider
+        :product_list="recommended_product_block"
+        title="Рекомендуем посмотреть"
     />
 
     <AddQuestion
@@ -39,7 +40,7 @@
 import Header from "../components/common/Header.vue";
 import Delivery from "../components/mainPage/Delivery.vue";
 import Payment from "../components/deliveryPage/Payment.vue";
-import RecommendedProduct from "../components/common/RecommendedProduct.vue";
+import ProductSlider from "../components/common/ProductSlider.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
 import Breadcrumbs from "../components/common/Breadcrumbs.vue";
@@ -52,7 +53,7 @@ export default {
     Header,
     Delivery,
     Payment,
-    RecommendedProduct,
+    ProductSlider,
     AddQuestion,
     Footer,
     Breadcrumbs,

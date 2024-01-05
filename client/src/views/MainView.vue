@@ -19,12 +19,14 @@
         :service_options_block="service_options_block"
     />
 
-    <NewProduct
-        :new_product_block="new_product_block"
+    <ProductSlider
+        :product_list="new_product_block"
+        title="Новинки"
     />
 
-    <PopularProduct
-        :popular_product_block="popular_product_block"
+    <ProductSlider
+        :product_list="popular_product_block"
+        title="Популярные товары"
     />
 
     <Delivery
@@ -72,8 +74,7 @@ import Header from "../components/common/Header.vue";
 import Main from "../components/mainPage/Main.vue"
 import CatalogTeaser from "../components/mainPage/CatalogTeaser.vue"
 import ServiceOptions from "../components/mainPage/ServiceOptions.vue"
-import NewProduct from "../components/mainPage/NewProduct.vue"
-import PopularProduct from "../components/mainPage/PopularProduct.vue"
+import ProductSlider from "../components/common/ProductSlider.vue";
 import Delivery from "../components/mainPage/Delivery.vue"
 import Advantages from "../components/mainPage/Advantages.vue"
 import CartonInfo from "../components/mainPage/CartonInfo.vue"
@@ -92,8 +93,7 @@ export default {
     Main,
     CatalogTeaser,
     ServiceOptions,
-    NewProduct,
-    PopularProduct,
+    ProductSlider,
     Delivery,
     Advantages,
     CartonInfo,

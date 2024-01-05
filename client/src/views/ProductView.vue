@@ -7,8 +7,9 @@
 
     <Product/>
 
-    <RecommendedProduct
-        :recommended_product_block="recommended_product_block"
+    <ProductSlider
+        :product_list="recommended_product_block"
+        title="Рекомендуем посмотреть"
     />
 
   </div>
@@ -25,7 +26,7 @@
 <script>
 import Header from "../components/common/Header.vue";
 import Product from "../components/productPage/Product.vue";
-import RecommendedProduct from "../components/common/RecommendedProduct.vue";
+import ProductSlider from "../components/common/ProductSlider.vue";
 import Footer from "../components/common/Footer.vue";
 import axios from "axios";
 
@@ -35,7 +36,7 @@ export default {
   components: {
     Header,
     Product,
-    RecommendedProduct,
+    ProductSlider,
     Footer
   },
   data() {

@@ -9,8 +9,9 @@
 
     <Reviews/>
 
-    <RecommendedProduct
-        :recommended_product_block="recommended_product_block"
+    <ProductSlider
+        :product_list="recommended_product_block"
+        title="Рекомендуем посмотреть"
     />
 
     <AddQuestion
@@ -31,7 +32,7 @@
 <script>
 import Header from "../components/common/Header.vue";
 import Reviews from "../components/ReviewPage/Reviews.vue";
-import RecommendedProduct from "../components/common/RecommendedProduct.vue";
+import ProductSlider from "../components/common/ProductSlider.vue";
 import AddQuestion from "../components/common/AddQuestion.vue";
 import Footer from "../components/common/Footer.vue";
 import Breadcrumbs from "../components/common/Breadcrumbs.vue";
@@ -43,7 +44,7 @@ export default {
   components: {
     Header,
     Reviews,
-    RecommendedProduct,
+    ProductSlider,
     AddQuestion,
     Footer,
     Breadcrumbs,
