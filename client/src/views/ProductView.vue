@@ -5,7 +5,11 @@
 
   <div v-if="show">
 
-    <Product/>
+    <Breadcrumbs ref="breadcrumbs" v-if="category_list.length > 0"/>
+
+    <Product
+        :product="product"
+    />
 
     <ProductSlider
         :product_list="recommended_product_block"
@@ -28,6 +32,7 @@ import Header from "../components/common/Header.vue";
 import Product from "../components/productPage/Product.vue";
 import ProductSlider from "../components/common/ProductSlider.vue";
 import Footer from "../components/common/Footer.vue";
+import Breadcrumbs from "../components/common/Breadcrumbs.vue";
 import axios from "axios";
 
 export default {
@@ -37,6 +42,7 @@ export default {
     Header,
     Product,
     ProductSlider,
+    Breadcrumbs,
     Footer
   },
   data() {
@@ -45,34 +51,72 @@ export default {
       recommended_product_block: [],
       category_list: [],
 
+      product: {},
+
       show: false
     }
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      handler() {
+        this.getProduct();
+      }
+    }
+  },
+  created() {
+    Promise.all([
+      this.getPageData(),
+      this.getProduct()
+    ])
+        .then(() => {
+          console.log("Оба запроса завершены");
+          this.show = true
+        })
+        .catch(error => {
+          console.log('Произошла ошибка при выполнении запросов: ', error);
+        });
   },
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
   },
-  created() {
-    this.getPageData()
-  },
   methods: {
     async getPageData() {
-      await axios
-          .get(`${this.backendURL}/api/v1/product_page/`)
-          .then(response => {
-            let receivedData = response.data
+      try {
+        let response = await axios.get(`${this.backendURL}/api/v1/product_page/`);
+        let receivedData = response.data;
 
-            this.header_block = receivedData.header_block
-            this.recommended_product_block = receivedData.recommended_product_block
-            this.category_list = receivedData.category_list
+        this.header_block = receivedData.header_block;
+        this.recommended_product_block = receivedData.recommended_product_block
+        this.category_list = receivedData.category_list;
+      } catch (error) {
+        console.error('Ошибка в getPageData: ', error);
+      }
+    },
+    async getProduct() {
+      this.show = false
+      try {
+        let productId = this.$route.params.productId;
+        let response = await axios.get(`${this.backendURL}/api/v1/products/${productId}/`);
+        this.product = response.data[0];
+        console.log(this.product)
 
-            this.show = true
+        this.updateBreadcrumb()
+        if (this.$refs.breadcrumbs) {
+          this.$refs.breadcrumbs.updateList();
+        }
 
-            console.log(response.data)
-          })
-          .catch(error => {
-            console.log('An error occurred: ', error)
-          })
+        this.show = true
+      } catch (error) {
+        console.error('Ошибка в getProduct: ', error);
+        this.show = true
+      }
+    },
+    updateBreadcrumb() {
+      this.$route.meta.breadcrumb[2].name = this.product.category_info.name;
+      this.$route.meta.breadcrumb[2].link = `/catalog/${this.product.category_info.slug}`
+      this.$route.meta.breadcrumb[3].name = this.product.name;
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
