@@ -75,6 +75,8 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
+  gap: 1rem 0;
 }
 
 ul > li {

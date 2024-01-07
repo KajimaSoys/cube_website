@@ -9,13 +9,15 @@
 
           <div class="image-slider" v-if="product.images.length > 1">
             <swiper
-                :navigation="true"
                 :modules="modules"
                 :slides-per-view="1"
                 :initial-slide="this.currentImageIndex"
                 :space-between="32"
+                :navigation="{ nextEl: `.swiper-button-next`, prevEl: `.swiper-button-prev` }"
                 :onSwiper="getSwiperInstance"
+                @slideChange="onSlideChange"
             >
+
               <swiper-slide
                   v-for="(image, index) in product.images"
                   :key="index"
@@ -25,6 +27,26 @@
                 </div>
               </swiper-slide>
             </swiper>
+            <div class="swiper-controls">
+              <div class="swiper-button-prev">
+                <div class="swiper-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M2.5 24C2.5 12.1259 12.1259 2.5 24 2.5C35.8741 2.5 45.5 12.1259 45.5 24C45.5 35.8741 35.8741 45.5 24 45.5C12.1259 45.5 2.5 35.8741 2.5 24ZM22.5303 18.5303C22.8232 18.2374 22.8232 17.7626 22.5303 17.4697C22.2374 17.1768 21.7626 17.1768 21.4697 17.4697L15.4697 23.4696C15.329 23.6103 15.25 23.801 15.25 23.9999C15.25 24.1988 15.329 24.3896 15.4697 24.5303L21.4697 30.5303C21.7626 30.8232 22.2374 30.8232 22.5303 30.5303C22.8232 30.2374 22.8232 29.7625 22.5303 29.4696L17.8107 24.7499H32C32.4142 24.7499 32.75 24.4141 32.75 23.9999C32.75 23.5857 32.4142 23.2499 32 23.2499H17.8107L22.5303 18.5303Z"
+                          fill="#40AB5E"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="swiper-button-next">
+                <div class="swiper-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M2.5 24C2.5 12.1259 12.1259 2.5 24 2.5C35.8741 2.5 45.5 12.1259 45.5 24C45.5 35.8741 35.8741 45.5 24 45.5C12.1259 45.5 2.5 35.8741 2.5 24ZM26.5303 17.4697C26.2374 17.1768 25.7626 17.1768 25.4697 17.4697C25.1768 17.7626 25.1768 18.2374 25.4697 18.5303L30.1893 23.25H16C15.5858 23.25 15.25 23.5858 15.25 24C15.25 24.4142 15.5858 24.75 16 24.75H30.1893L25.4697 29.4697C25.1768 29.7626 25.1768 30.2374 25.4697 30.5303C25.7626 30.8232 26.2374 30.8232 26.5303 30.5303L32.5303 24.5303C32.8232 24.2374 32.8232 23.7626 32.5303 23.4697L26.5303 17.4697Z"
+                          fill="#40AB5E"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="image-container" v-else>
@@ -34,11 +56,35 @@
           <div class="images-navigation" v-if="product.images.length > 1">
             <div class="image-thumb"
                  :class="{'active': isActive(index)}"
-                 v-for="(image, index) in product.images"
+                 v-for="(image, index) in product.images.slice(0, slice_count)"
                  :key="index"
                  @click="switchImage(index)"
             >
               <img :src="strippedSrc(image.image)" loading="lazy" alt="">
+            </div>
+          </div>
+
+          <div class="characteristics tablet">
+
+            <div class="characteristics-subtitle" v-if="product.size">
+              Внутренний размер
+            </div>
+            <div class="characteristics-value" v-if="product.size">
+              {{ product.size }}
+            </div>
+
+            <div class="characteristics-subtitle" v-if="product.material">
+              Материал
+            </div>
+            <div class="characteristics-value" v-if="product.material">
+              {{ product.material }}
+            </div>
+
+            <div class="characteristics-subtitle" v-if="product.color">
+              Цвет
+            </div>
+            <div class="characteristics-value" v-if="product.color">
+              {{ product.color }}
             </div>
           </div>
 
@@ -53,7 +99,7 @@
               {{ product.prices[0].price }} ₽ / шт
             </div>
             <div class="description" v-html="product.description"></div>
-            <div class="characteristics">
+            <div class="characteristics desktop">
 
               <div class="characteristics-subtitle" v-if="product.size">
                 Внутренний размер
@@ -146,14 +192,11 @@
 import CartPopup from "../common/CartPopup.vue";
 import {ElNotification} from "element-plus";
 
-import {Navigation, Pagination, Scrollbar, A11y} from 'swiper/modules';
-import {Swiper, SwiperSlide, useSwiper} from 'swiper/vue';
+import {Navigation} from 'swiper/modules';
+import {Swiper, SwiperSlide} from 'swiper/vue';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import 'swiper/css/keyboard'
 
 export default {
   name: "Product",
@@ -176,6 +219,8 @@ export default {
       currentImageIndex: 0,
       swiperInstance: null,
 
+      slice_count: 5,
+
       count: 1,
       interval: null,
       increaseAmount: 1,
@@ -189,15 +234,14 @@ export default {
       showCartPopup: false,
     }
   },
-  mounted() {
+  created() {
+    this.updateWindowWidth()
   },
-  watch: {
-    currentImageIndex: {
-      immediate: true,
-      handler(newVal) {
-        console.log(newVal)
-      }
-    }
+  mounted() {
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
   computed: {
     calculatedPrice() {
@@ -214,9 +258,12 @@ export default {
     },
   },
   methods: {
-
     getSwiperInstance(swiper) {
       this.swiperInstance = swiper;
+    },
+
+    onSlideChange(swiper) {
+      this.currentImageIndex = swiper.activeIndex
     },
 
     switchImage(index) {
@@ -228,6 +275,14 @@ export default {
 
     isActive(index) {
       return index === this.currentImageIndex
+    },
+
+    updateWindowWidth() {
+      if (window.innerWidth > 425) {
+        this.slice_count = 5
+      } else {
+        this.slice_count = 4
+      }
     },
 
     increaseOnce() {
@@ -301,10 +356,7 @@ export default {
     }
   },
   setup() {
-    // const swiper = useSwiper();
-
     return {
-      // swiper,
       modules: [Navigation],
     };
   },
@@ -440,6 +492,10 @@ export default {
   gap: 0.5rem 4rem;
 }
 
+.characteristics.tablet {
+  display: none;
+}
+
 .characteristics-subtitle {
   color: var(--black-55);
 }
@@ -539,20 +595,180 @@ export default {
   fill: var(--black-35);
 }
 
+.image-slider {
+  position: relative;
+}
+
+.swiper-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  user-select: none;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  height: 2.85rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-button-prev {
+  left: -0.85rem;
+}
+
+.swiper-button-next {
+  right: -0.85rem;
+}
+
+
+.swiper-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button svg {
+  height: 2.85rem;
+  width: 2.85rem;
+
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 45%, rgba(64, 171, 94, 1) 50%, rgba(64, 171, 94) 100%);
+  border-radius: 50%;
+}
+
+.swiper-button-prev svg, .swiper-button-next svg {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome, Safari, Opera */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Нестандартное свойство */
+}
+
+svg path {
+  transition: fill 0.2s ease-in-out;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  content: none;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  font-family: none;
+  font-size: none;
+  text-transform: none !important;
+  letter-spacing: 0;
+  font-variant: initial;
+  line-height: 1;
+}
+
+@media screen and (max-width: 1400px) {
+  .product-content {
+    gap: 5.4rem;
+  }
+
+  .image-container {
+    width: 32.625rem;
+    height: 24.375rem;
+  }
+
+  .image-container img {
+    width: 32.625rem;
+    height: 24.375rem;
+  }
+
+  :deep(.swiper-wrapper) {
+    width: 32.625rem !important;
+  }
+
+  .slider-image-container {
+    width: 32.625rem;
+    height: 26.375rem;
+  }
+
+  .slider-image-container img {
+    width: 32.625rem;
+    height: 24.375rem;
+    scale: 0.9;
+  }
+}
+
 @media screen and (max-width: 1280px) {
   .product-component {
   }
 
   .product-max {
-    padding: 0 2.25rem;
+    padding: unset;
   }
 
   .product-content {
-    gap: 4rem;
+    padding: 0 2.25rem;
+  }
+
+  .left-side {
+    flex: 1;
+    width: 45%;
+  }
+
+  .image-container {
+    width: unset;
+    height: 20.875rem;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 20.875rem;
+  }
+
+  :deep(.swiper-wrapper) {
+    width: unset !important;
+  }
+
+  .slider-image-container {
+    width: unset;
+    height: 22.875rem;
+  }
+
+  .slider-image-container img {
+    width: unset;
+    height: 22.875rem;
+    scale: 0.9;
+  }
+
+  .swiper-button-prev {
+    left: 1.2rem;
+  }
+
+  .swiper-button-next {
+    right: 1.2rem;
+  }
+
+  .images-navigation {
+    gap: 0.5rem;
+  }
+
+  .characteristics.tablet {
+    display: grid;
+    margin-top: 3rem;
+  }
+
+  .characteristics.desktop {
+    display: none;
   }
 
   .title {
     font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .description-block {
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
@@ -561,11 +777,99 @@ export default {
   }
 
   .product-max {
-    padding: 0 2.25rem;
   }
 
   .product-content {
     gap: 2rem;
+    flex-direction: column;
+  }
+
+  .left-side {
+    width: unset;
+    gap: 0.5rem;
+  }
+
+  .image-container, .image-slider {
+    max-width: 34.5rem;
+  }
+
+  .swiper-button svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .swiper-button-prev {
+    height: 2.5rem;
+    left: 0.65rem;
+  }
+
+  .swiper-button-next {
+    height: 2.5rem;
+    right: 0.65rem;
+  }
+
+  /*  .image-thumb {
+      width: 4rem;
+      height: 3.5rem;
+    }
+
+    .image-thumb img {
+      width: 4rem;
+      height: 3.5rem;
+    }*/
+  .right-side {
+
+  }
+
+  .title.tablet {
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .title.desktop, .characteristics.tablet {
+    display: none;
+  }
+
+  .characteristics.desktop {
+    display: grid;
+    margin-top: 1rem;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5rem 1rem;
+  }
+
+  .description-block {
+    order: 2;
+    margin-bottom: unset;
+    margin-top: 3rem;
+  }
+
+  .purchase-block {
+    order: 1;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .quantity-choice {
+    flex: 1;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    border-radius: 0.5rem;
+    padding: unset;
+  }
+
+  .purchase-button {
+    flex: 1;
+    padding: unset;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+
+  .button svg {
+    width: 3rem;
+    height: 3rem;
+    padding: 0.5rem;
   }
 }
 
@@ -574,15 +878,72 @@ export default {
   }
 
   .product-max {
-    padding: 0 1rem;
+
   }
 
   .product-content {
+    padding: 0 1rem;
   }
 
-  .title {
+  .title.tablet {
     font-size: 1.25rem;
+    margin-bottom: 0.5rem;
   }
 
+  .image-slider {
+    max-width: unset;
+  }
+
+  .slider-image-container {
+    height: 18.25rem;
+    overflow: hidden;
+
+  }
+
+  .slider-image-container img {
+    height: 18.25rem;
+    scale: 0.85;
+  }
+
+  .image-container {
+    max-width: unset;
+    height: 16.25rem;
+  }
+
+  .image-container img {
+    height: 16.25rem;
+  }
+
+  .image-thumb {
+    width: 3.75rem;
+    height: 3rem;
+    padding: 0.25rem;
+  }
+
+  .image-thumb img {
+    width: 3.75rem;
+    height: 3rem;
+  }
+
+  .purchase-block {
+    flex-direction: column;
+  }
+
+  .purchase-button {
+    padding: 1rem 2rem;
+  }
+
+  .price {
+    font-size: 0.75rem;
+  }
+
+  .description-block {
+    margin-top: 2rem;
+  }
+
+  .characteristics.desktop {
+    gap: 0.5rem 1rem;
+    grid-template-columns: 2fr 2fr;
+  }
 }
 </style>
