@@ -13,7 +13,7 @@ app.use(router, axios)
 app.use(ElementPlus)
 // app.use(createMetaManager() )
 
-
+let hmac_key = import.meta.env.VITE_HMAC_SECRET_KEY;
 let backendURL = import.meta.env.VITE_BACKEND_HOST;
 let frontendURL = import.meta.env.VITE_FRONTEND_HOST;
 
@@ -23,5 +23,6 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 app.mount('#app')
 
+app.provide('hmac_key', hmac_key)
 app.provide('backendURL', backendURL)
 app.provide('frontendURL', frontendURL)

@@ -5,7 +5,13 @@
 
   <div v-if="show">
 
-    <Order/>
+    <Order
+        :products="products"
+        @update-cart="updateCart"
+        @remove-from-cart="removeFromCart"
+        @clear-cart="clearCart"
+        @scroll-to-zero="scrollToZero"
+    />
 
   </div>
   <div v-else class="loading">
@@ -13,8 +19,8 @@
   </div>
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
 </template>
 
@@ -37,33 +43,100 @@ export default {
       header_block: {},
       category_list: [],
 
+      cart: [],
+      products: [],
+
       show: false
     }
   },
   created() {
-    this.getPageData()
+    this.loadCart();
+
+    Promise.all([
+      this.getPageData(),
+      this.getProducts()
+    ])
+        .then(() => {
+          this.show = true
+        })
+        .catch(error => {
+          console.log('An error occurred: ', error);
+        });
   },
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
   },
   methods: {
+    loadCart() {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        this.cart = JSON.parse(cartData);
+      }
+    },
+    saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+    },
+    updateCart(productId, count) {
+      const cartItem = this.cart.find(item => item.id === productId);
+      cartItem.quantity = count;
+
+      this.saveCart();
+    },
+    removeFromCart(productId) {
+      this.cart = this.cart.filter(item => item.id !== productId);
+      this.saveCart();
+
+      this.products = this.products.filter(item => item.id !== productId);
+    },
+    clearCart() {
+      this.cart = [];
+      this.saveCart();
+
+      this.products = []
+    },
+
     async getPageData() {
-      await axios
-          .get(`${this.backendURL}/api/v1/header_data/`)
-          .then(response => {
-            let receivedData = response.data
+      try {
+        let response = await axios.get(`${this.backendURL}/api/v1/header_data/`);
+        let receivedData = response.data;
 
-            this.header_block = receivedData.header_block
-            this.category_list = receivedData.category_list
+        this.header_block = receivedData.header_block
+        this.category_list = receivedData.category_list
+      } catch (error) {
+        console.error('Ошибка в getPageData: ', error);
+      }
+    },
+    async getProducts() {
+      try {
+        let response = await axios.post(`${this.backendURL}/api/v1/products/`, this.cart);
+        let fetchedProducts = response.data;
 
-            this.show = true
+        this.products = fetchedProducts.map(product => {
+          // count calculation
+          let cartItem = this.cart.find(item => item.id === product.id);
+          let count = cartItem ? cartItem.quantity : 0;
 
-            console.log(response.data)
-          })
-          .catch(error => {
-            console.log('An error occurred: ', error)
-          })
+          // price calculation
+          const basePrice = product.prices.find(price => price.count === 1).price;
+          let finalPrice = basePrice * count;
+          product.prices.forEach(priceInfo => {
+            if (count >= priceInfo.count) {
+              finalPrice = priceInfo.price * count;
+            }
+          });
+
+          return {
+            ...product,
+            count: count,
+            finalPrice: finalPrice,
+            isScalingPlus: false,
+            isScalingMinus: false,
+          };
+        });
+      } catch (error) {
+        console.error('Ошибка в getProducts: ', error);
+      }
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;

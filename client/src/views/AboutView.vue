@@ -108,11 +108,9 @@ export default {
             this.category_list = receivedData.category_list
 
             this.show = true
-
-            console.log(response.data)
           })
           .catch(error => {
-            console.log('An error occurred: ', error)
+            console.log('An error occurred: ', error);
           })
     },
     scrollToZero() {

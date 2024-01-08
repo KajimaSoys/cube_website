@@ -95,13 +95,6 @@ export default {
 
     const spaceBetween = computed(() => windowWidth.value >= 1280 ? 16 : 8);
 
-    const onSwiper = (swiper) => {
-      console.log(swiper);
-    };
-    const onSlideChange = () => {
-      console.log('slide change');
-    };
-
     const updateWindowWidth = () => {
       windowWidth.value = window.innerWidth;
     };

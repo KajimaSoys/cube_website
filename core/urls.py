@@ -33,7 +33,6 @@ urlpatterns = [
     path('api/v1/reviews_page/', reviews_page_views.aggregate_data, name='reviews_page'),
     path('api/v1/header_data/', common_elements_views.header_data, name='header_data'),
 
-
     path(
         'api/v1/category/',
         shop_views.CategoryListView.as_view(),
@@ -54,6 +53,11 @@ urlpatterns = [
         'api/v1/products/<int:product_id>/',
         shop_views.ProductView.as_view(),
         name='product'
+    ),
+    path(
+        'api/v1/create_order/',
+        shop_views.create_order,
+        name='create_order'
     ),
 
 ]

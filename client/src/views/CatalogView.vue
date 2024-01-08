@@ -74,11 +74,10 @@ export default {
       this.getProducts()
     ])
         .then(() => {
-          console.log("Оба запроса завершены");
           this.show = true
         })
         .catch(error => {
-          console.log('Произошла ошибка при выполнении запросов: ', error);
+          console.log('An error occurred: ', error);
         });
   },
   mounted() {

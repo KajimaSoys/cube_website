@@ -70,11 +70,10 @@ export default {
       this.getProduct()
     ])
         .then(() => {
-          console.log("Оба запроса завершены");
           this.show = true
         })
         .catch(error => {
-          console.log('Произошла ошибка при выполнении запросов: ', error);
+          console.log('An error occurred: ', error);
         });
   },
   mounted() {
@@ -100,7 +99,6 @@ export default {
         let productId = this.$route.params.productId;
         let response = await axios.get(`${this.backendURL}/api/v1/products/${productId}/`);
         this.product = response.data[0];
-        console.log(this.product)
 
         this.updateBreadcrumb()
         if (this.$refs.breadcrumbs) {

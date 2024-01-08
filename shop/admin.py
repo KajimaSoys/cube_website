@@ -10,7 +10,7 @@ from django.urls import path, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from urllib.parse import urlparse, parse_qs
 
-from .models import Category, Product, Orders, ProductPrice, ProductImage, ProductList
+from .models import Category, Product, Orders, ProductPrice, ProductImage, ProductInfo
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -69,8 +69,8 @@ class ProductImageInline(SortableInlineAdminMixin, admin.TabularInline):
     readonly_fields = ['thumbnail']
 
 
-class ProductListInline(admin.StackedInline):
-    model = ProductList
+class ProductInfoInline(admin.StackedInline):
+    model = ProductInfo
     extra = 1
     autocomplete_fields = ('product',)
 
@@ -104,17 +104,41 @@ class ProductAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ['name', 'get_orders', 'total', 'order_status', 'whatsapp_link_tag', 'comment', ]
+    list_display = ['name', 'id', 'get_orders', 'total', 'order_status', 'whatsapp_link_tag', 'comment', ]
     list_display_links = ['name']
     readonly_fields = ['whatsapp_link']
-
     list_editable = ['comment', 'order_status', ]
+    list_filter = ['order_status']
+
+    # def get_search_results(self, request, queryset, search_term):
+    #     # Стандартный поиск по полям
+    #     queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+    #
+    #     if search_term:
+    #         status_choices = dict(Orders.order_status_choices)
+    #         status_values = [key for key, value in status_choices.items() if search_term.lower() in value.lower()]
+    #
+    #         if status_values:
+    #             status_queryset = self.model.objects.filter(order_status__in=status_values)
+    #             queryset = queryset.union(status_queryset)
+    #
+    #     return queryset, use_distinct
+
+    search_fields = (
+        'name',
+        'id',
+        'productinfo__product__name',
+        'phone_number',
+        'comment'
+    )
+
+    search_help_text = 'Доступные для поиска поля: ФИО, номер заказа, заказ, номер телефона, комментарий к заказу'
 
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
     }
 
-    inlines = [ProductListInline]
+    inlines = [ProductInfoInline]
 
     fieldsets = [
         (None, {

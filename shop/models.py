@@ -3,6 +3,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from django_resized import ResizedImageField
 import uuid
+import re
 from datetime import datetime
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -161,13 +162,13 @@ class Orders(models.Model):
     id = models.BigIntegerField(verbose_name='Номер заказа', default=default_id)
 
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=30)
-    name = models.CharField( verbose_name='ФИО', max_length=30)
+    name = models.CharField(verbose_name='ФИО', max_length=30)
     pickup = models.BooleanField(verbose_name='Самовывоз', default=True)
     address = models.CharField(verbose_name='Адрес доставки', max_length=70, default='', blank=True)
 
     whatsapp_link = models.URLField(verbose_name='Ссылка на WhatsApp', max_length=100, blank=True)
     comment = models.TextField(verbose_name='Комментарий к заказу', blank=True)
-    order_status_choices = [
+    order_status_choices = (
         ('created', 'Заказ создан'),
         ('material_purchase', 'Закупка сырья'),
         ('felling', 'Вырубка'),
@@ -177,7 +178,7 @@ class Orders(models.Model):
         ('completed', 'Сдан'),
         ('unknown', 'Неизвестно'),
         ('return', 'Возврат'),
-    ]
+    )
 
     order_status = models.CharField(verbose_name="Статус заказа", choices=order_status_choices,
                                        default='created', max_length=20)
@@ -188,27 +189,28 @@ class Orders(models.Model):
     total = models.DecimalField(verbose_name='Итоговая стоимость, руб.', default=0, decimal_places=2, max_digits=10)
 
     def get_orders(self):
-        return ", ".join([f'{o.product.name} - {o.count}шт, {o.price} руб.' for o in ProductList.objects.filter(order_id=self.uuid)])
+        return ", ".join([f'{o.product.name} - {o.count}шт, {o.price} руб.' for o in ProductInfo.objects.filter(order_id=self.uuid)])
 
     get_orders.short_description = "Заказ"
 
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
+        ordering = ('-id', )
 
     def __str__(self):
         return f'{self.id} - {self.name} - {self.total} рублей'
 
     def save(self, *args, **kwargs):
         """Создание ссылки на whatsapp"""
-        clean_phone = self.phone_number.replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
-        self.whatsapp_link = f'https://wa.me/7{clean_phone[1:]}'
+        clean_phone = re.sub(r'\D', '', self.phone_number)
+        self.whatsapp_link = f'https://wa.me/{clean_phone}'
         super(Orders, self).save(*args, **kwargs)
 
 
-class ProductList(models.Model):
+class ProductInfo(models.Model):
     """
-    Model ProductList of Shop App
+    Model ProductInfo of Shop App
     """
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name='Заказ')
     product = models.ForeignKey(Product, on_delete=models.RESTRICT, verbose_name='Товар')

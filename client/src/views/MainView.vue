@@ -155,11 +155,9 @@ export default {
             // window.ym(95108306, 'hit', 'https://kamamebel.com/');
 
             this.show = true
-
-            console.log(response.data)
           })
           .catch(error => {
-            console.log('An error occurred: ', error)
+            console.log('An error occurred: ', error);
           })
     },
     scrollToZero() {

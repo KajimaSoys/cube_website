@@ -25,5 +25,5 @@ urlpatterns = [
     path('delete_product/<int:product_pk>', views.delete_product, name='delete_product'),
     path('test/', views.ImagesListView.as_view(), name='test'),
 
-    path('create_order', views.create_order, name='create_order'),
+    # path('create_order', views.create_order, name='create_order'),
 ]

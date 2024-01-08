@@ -3,7 +3,7 @@ if (window.jQuery) {
         jQuery(function ($) {
             if (window.location.href.indexOf("/change/") !== -1 || window.location.href.indexOf("/add/") !== -1) {
                 // masking для полей номера и даты
-                $('#id_phone_number').mask("8 (999) 999-99-99", {autoclear: false});
+                $('#id_phone_number').mask("+7 (999) 999-99-99", {autoclear: false});
                 $('#id_created_at_0').mask("99.99.9999", {autoclear: false});
 
                 // Ссылка на whatsapp
@@ -104,11 +104,11 @@ if (window.jQuery) {
 
 
                 function listenersInit() {
-                    let inlines = $('.inline-related.dynamic-productlist_set').toArray()
+                    let inlines = $('.inline-related.dynamic-productinfo_set').toArray()
                     inlines.forEach(element => {
                         element = element['id']
                         // Берем только существующие инлайны
-                        if (element !== 'productlist_set-empty') {
+                        if (element !== 'productinfo_set-empty') {
                             // Вешаем листенеры на каждый существующий инлайн
                             activateListener(element, 'product')
                         }
@@ -117,7 +117,7 @@ if (window.jQuery) {
 
 
                 function newListenerInit(type) {
-                    let inlines = $(`.inline-related.dynamic-${type}list_set`).toArray()
+                    let inlines = $(`.inline-related.dynamic-${type}info_set`).toArray()
                     let element = inlines.at(-1)['id']
                     activateListener(element, type)
                 }
@@ -132,12 +132,12 @@ if (window.jQuery) {
 
                 function calculateTotal() {
                     console.log('calcultaing')
-                    var inlines = $('.inline-related.dynamic-productlist_set').toArray()
+                    var inlines = $('.inline-related.dynamic-productinfo_set').toArray()
                     let total = 0
                     inlines.forEach(element => {
                         element = element['id']
 
-                        if (element !== 'productlist_set-empty') {
+                        if (element !== 'productinfo_set-empty') {
                             let price = $(`#id_${element}-price`).val()
                             total = total + parseFloat(price)
                         }
