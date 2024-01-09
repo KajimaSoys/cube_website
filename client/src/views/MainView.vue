@@ -129,6 +129,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Магазин упаковки КУБ в Казани предлагает качественные картонные коробки и упаковки для ваших товаров. Производство по индивидуальным размерам с печатью логотипа. Доставка по России.');
+    this.setMetaTag('keywords', 'картонные коробки Казань, упаковка для маркетплейсов, коробки для OZON, коробки Wildberries, индивидуальная упаковка, печать на коробках, производство упаковки');
   },
   methods: {
     async getPageData() {
@@ -162,6 +166,15 @@ export default {
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

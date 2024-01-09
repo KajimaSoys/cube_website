@@ -69,6 +69,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Контакты | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Свяжитесь с магазином упаковки КУБ в Казани для заказа картонных коробок и упаковок. Телефон, адрес, электронная почта для удобства клиентов.');
+    this.setMetaTag('keywords', 'контакты КУБ, упаковка Казань, заказ коробок, адрес магазина, телефон магазина упаковки');
   },
   methods: {
     async getPageData() {
@@ -91,6 +95,15 @@ export default {
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

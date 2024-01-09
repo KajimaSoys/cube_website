@@ -82,6 +82,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Качественные картонные коробки и упаковки | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Высокое качество, надежность, доступная цена. Идеально подходят для маркетплейсов вроде OZON и Wildberries.');
+    this.setMetaTag('keywords', 'картонные коробки, упаковка для продаж, магазин упаковки Казань, коробки на заказ');
   },
   methods: {
     addToCart(productId, quantity) {
@@ -139,12 +143,27 @@ export default {
       }
     },
     updateBreadcrumb() {
+      let productName = this.product.name;
+
       this.$route.meta.breadcrumb[2].name = this.product.category_info.name;
       this.$route.meta.breadcrumb[2].link = `/catalog/${this.product.category_info.slug}`
-      this.$route.meta.breadcrumb[3].name = this.product.name;
+      this.$route.meta.breadcrumb[3].name = productName;
+
+      document.title = `${productName} - Качественные картонные коробки и упаковки | Магазин упаковки КУБ в Казани`;
+      this.setMetaTag('description', `Получите ${productName} в магазине упаковки КУБ. Высокое качество, надежность, доступная цена. Идеально подходят для маркетплейсов вроде OZON и Wildberries.`);
+      this.setMetaTag('keywords', `${productName}, картонные коробки, упаковка для продаж, магазин упаковки Казань, коробки на заказ`);
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

@@ -66,6 +66,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Корзина | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Оформите заказ на индивидуальные картонные коробки в магазине упаковки КУБ. Простой процесс, быстрая обработка и доставка в Казани и по России.');
+    this.setMetaTag('keywords', 'оформление заказа, индивидуальные коробки, магазин упаковки Казань, заказ коробок онлайн');
   },
   methods: {
     loadCart() {
@@ -143,6 +147,15 @@ export default {
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

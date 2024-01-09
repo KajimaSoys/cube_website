@@ -38,6 +38,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Положения и условия | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', '');
+    this.setMetaTag('keywords', '');
   },
   methods: {
     async getPageData() {
@@ -55,6 +59,15 @@ export default {
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

@@ -83,6 +83,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Каталог | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Магазин упаковки КУБ предлагает широкий ассортимент картонных коробок и упаковки для любых нужд. Качественный материал, доступные цены.');
+    this.setMetaTag('keywords', 'картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка');
   },
   methods: {
     async getPageData() {
@@ -97,7 +101,11 @@ export default {
         let categorySlug = this.$route.params.categorySlug;
         let currentCategory = this.category_list.find(cat => cat.slug === categorySlug);
         if (currentCategory) {
-          this.$route.meta.breadcrumb[2].name = currentCategory.name;
+          let category = currentCategory.name
+          this.$route.meta.breadcrumb[2].name = category;
+          document.title = `${category} | Магазин упаковки КУБ в Казани`;
+          this.setMetaTag('description', `"Ищете ${category} в Казани? Магазин упаковки КУБ предлагает широкий ассортимент картонных коробок и упаковки для любых нужд. Качественный материал, доступные цены.`);
+          this.setMetaTag('keywords', `${category}, картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка`);
         }
       } catch (error) {
         console.error('Ошибка в getPageData: ', error);
@@ -114,11 +122,24 @@ export default {
     updateBreadcrumb(categorySlug) {
       let currentCategory = this.category_list.find(cat => cat.slug === categorySlug);
       if (currentCategory) {
-        this.$route.meta.breadcrumb[2].name = currentCategory.name;
+        let category = currentCategory.name
+        this.$route.meta.breadcrumb[2].name = category;
+        document.title = `${category} | Магазин упаковки КУБ в Казани`;
+        this.setMetaTag('description', `"Ищете ${category} в Казани? Магазин упаковки КУБ предлагает широкий ассортимент картонных коробок и упаковки для любых нужд. Качественный материал, доступные цены.`);
+        this.setMetaTag('keywords', `${category}, картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка`);
       }
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {

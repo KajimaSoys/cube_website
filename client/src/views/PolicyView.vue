@@ -38,6 +38,10 @@ export default {
   mounted() {
     document.body.style.overflow = "";
     this.scrollToZero();
+
+    document.title = 'Политика конфиденциальности | Магазин упаковки КУБ в Казани';
+    this.setMetaTag('description', 'Ознакомьтесь с политикой конфиденциальности магазина упаковки КУБ. Мы уважаем и защищаем личные данные наших клиентов.');
+    this.setMetaTag('keywords', 'политика конфиденциальности, защита данных, магазин упаковки Казань, безопасность клиентов');
   },
   methods: {
     async getPageData() {
@@ -55,6 +59,15 @@ export default {
     },
     scrollToZero() {
       document.documentElement.scrollTop = 0;
+    },
+    setMetaTag(name, content) {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
     }
   },
   setup() {
