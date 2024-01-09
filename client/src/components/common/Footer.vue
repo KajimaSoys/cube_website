@@ -7,7 +7,7 @@
             <div class="logo-container">
               <router-link class="logo" :to="{ name: 'main' }">
                 <img :src="logo" alt="Логотип компании Cube"
-                     width="64" height="64">
+                     width="64" height="64" loading="lazy">
               </router-link>
             </div>
             <div class="title">

@@ -91,10 +91,10 @@
             {{ service_options_block.option_first }}
           </div>
           <div class="image-container first">
-            <img :src="backendURL + service_options_block.image_first" :alt="'Услуга №1'">
+            <img :src="backendURL + service_options_block.image_first" :alt="'Услуга №1'" loading="lazy">
           </div>
           <div class="image-container second">
-            <img :src="backendURL + service_options_block.image_first" :alt="'Услуга №1'">
+            <img :src="backendURL + service_options_block.image_first" :alt="'Услуга №1'" loading="lazy">
           </div>
         </div>
         <div class="card">
@@ -102,7 +102,7 @@
             {{ service_options_block.option_second }}
           </div>
           <div class="image-container third">
-            <img :src="backendURL + service_options_block.image_second" :alt="'Услуга №2'">
+            <img :src="backendURL + service_options_block.image_second" :alt="'Услуга №2'" loading="lazy">
           </div>
         </div>
         <div class="card">
@@ -110,7 +110,7 @@
             {{ service_options_block.option_third }}
           </div>
           <div class="image-container fourth">
-            <img :src="backendURL + service_options_block.image_third" :alt="'Услуга №3'">
+            <img :src="backendURL + service_options_block.image_third" :alt="'Услуга №3'" loading="lazy">
           </div>
         </div>
       </div>

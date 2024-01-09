@@ -4,7 +4,7 @@
       <div class="outside-content">
         <div class="card">
           <div class="image-container">
-            <img :src="backendURL + outside_view.image_first" alt="">
+            <img :src="backendURL + outside_view.image_first" alt="" loading="lazy">
           </div>
           <div class="title">
             {{ outside_view.text_first }}
@@ -13,7 +13,7 @@
 
         <div class="card">
           <div class="image-container">
-            <img :src="backendURL + outside_view.image_second" alt="">
+            <img :src="backendURL + outside_view.image_second" alt="" loading="lazy">
           </div>
           <div class="title">
             {{ outside_view.text_second }}
@@ -22,7 +22,7 @@
 
         <div class="card">
           <div class="image-container">
-            <img :src="backendURL + outside_view.image_third" alt="">
+            <img :src="backendURL + outside_view.image_third" alt="" loading="lazy">
           </div>
           <div class="title">
             {{ outside_view.text_third }}

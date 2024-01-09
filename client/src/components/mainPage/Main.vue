@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="image-container">
-        <img :src="backendURL + main_block.image" alt="Изображение главного блока компании Cube">
+        <img :src="backendURL + main_block.image" alt="Изображение главного блока компании Cube" loading="lazy">
       </div>
       <div class="main-background"></div>
     </div>

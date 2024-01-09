@@ -75,7 +75,7 @@
           <h3 class="card-title" v-html="advantages_block.subtitle_fifth"></h3>
           <div class="card-bottom-container">
             <div class="svg-container">
-              <img :src="frontendURL + '/images/icons/whatsapp.png'" alt="">
+              <img :src="frontendURL + '/images/icons/whatsapp.png'" alt="" loading="lazy">
             </div>
             <div class="card-description">{{ advantages_block.text_fifth }}</div>
             <div class="card-additional small-text-2" v-if="advantages_block.additional_fifth">

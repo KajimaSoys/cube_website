@@ -91,7 +91,7 @@
             <div class="card-description">{{ delivery_block.text_first }}</div>
             <div class="card-additional">{{ delivery_block.additional_first }}</div>
             <div class="image-container">
-              <img :src="backendURL + delivery_block.image_first" alt="Блок доставки. Изображение №1">
+              <img :src="backendURL + delivery_block.image_first" alt="Блок доставки. Изображение №1" loading="lazy">
             </div>
           </div>
 
@@ -100,7 +100,7 @@
             <div class="card-description">{{ delivery_block.text_second }}</div>
             <div class="card-additional">{{ delivery_block.additional_second }}</div>
             <div class="image-container">
-              <img :src="backendURL + delivery_block.image_second" alt="Блок доставки. Изображение №1">
+              <img :src="backendURL + delivery_block.image_second" alt="Блок доставки. Изображение №1" loading="lazy">
             </div>
           </div>
         </div>

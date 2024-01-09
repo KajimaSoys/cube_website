@@ -277,7 +277,7 @@ class ContactsBlock(models.Model):
 
     monday_friday_schedule = models.CharField(verbose_name='Расписание (понедельник-пятница)', max_length=255, help_text='чч:мм-чч:мм')
     sunday_schedule = models.CharField(verbose_name='Расписание (суббота)', max_length=255, help_text='чч:мм-чч:мм')
-    dinner_schedule = models.CharField(verbose_name='Расписание (обед)', max_length=255, help_text='чч:мм-чч:мм')
+    dinner_schedule = models.CharField(verbose_name='Расписание (воскресенье)', max_length=255, help_text='чч:мм-чч:мм')
 
     number = models.CharField(verbose_name='Номер телефона', max_length=255)
     mail = models.CharField(verbose_name='Почта', max_length=255)

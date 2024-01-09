@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="image-container first">
-              <img :src="backendURL + carton_info_block.image_first" alt="">
+              <img :src="backendURL + carton_info_block.image_first" alt="" loading="lazy">
             </div>
           </div>
 
@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="image-container second">
-              <img :src="backendURL + carton_info_block.image_second" alt="">
+              <img :src="backendURL + carton_info_block.image_second" alt="" loading="lazy">
             </div>
           </div>
         </div>

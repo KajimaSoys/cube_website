@@ -45,7 +45,7 @@
               <div class="schedule-item">{{ contacts_block.monday_friday_schedule }}</div>
               <div class="subtitle">СБ</div>
               <div class="schedule-item">{{ contacts_block.sunday_schedule }}</div>
-              <div class="subtitle">Обед</div>
+              <div class="subtitle">ВС</div>
               <div class="schedule-item">{{ contacts_block.dinner_schedule }}</div>
             </div>
           </div>

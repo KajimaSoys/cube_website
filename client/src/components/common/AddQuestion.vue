@@ -8,7 +8,7 @@
       </div>
       <div class="question-background"></div>
       <div class="image-container">
-        <img :src="backendURL + add_question_block.image" alt="">
+        <img :src="backendURL + add_question_block.image" alt="" loading="lazy">
       </div>
     </div>
   </div>

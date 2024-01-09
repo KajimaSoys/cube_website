@@ -8,7 +8,6 @@
           @mouseleave="hover = false">
         <img
             :src="computedSrc"
-
             loading="lazy"
             alt="">
       </router-link>

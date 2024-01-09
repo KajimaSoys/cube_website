@@ -15,7 +15,7 @@
         </svg>
       </div>
       <div class="image-container">
-        <img :src="backendURL + request_block.image" alt="">
+        <img :src="backendURL + request_block.image" alt="" loading="lazy">
       </div>
     </div>
 

@@ -16,7 +16,7 @@
             :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
         >
           <div class="image-container">
-            <img :src="backendURL + category.image_cat" :alt="'Категория ' + category.name">
+            <img :src="backendURL + category.image_cat" :alt="'Категория ' + category.name" loading="lazy">
           </div>
           <div class="category-name">
             {{ category.name }}
