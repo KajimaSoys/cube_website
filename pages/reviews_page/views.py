@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from news.models import Reviews
-from news.serializers import ReviewsSerializer
+from service.models import Reviews
+from service.serializers import ReviewsSerializer
 from pages.common_elements.models import RecommendedProductBlock
 from pages.common_elements.serializers import RecommendedProductBlockSerializer
 from pages.common_elements.models import (
@@ -21,7 +21,7 @@ def aggregate_data(request):
         response_data = {}
 
         header_block = HeaderBlock.objects.first()
-        reviews = Reviews.objects.all()
+        reviews = Reviews.objects.filter(published=True)
         recommended_product_block = RecommendedProductBlock.objects.select_related("product").all()
         add_question_block = AddQuestionBlock.objects.first()
         category_list = Category.objects.all()

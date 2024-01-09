@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "SuccessPopUp",
+  name: "CartPopup",
   props: {
     isVisible: Boolean,
     product: {

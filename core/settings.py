@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     # project apps
     'shop.apps.ShopConfig',
     'news.apps.NewsConfig',
+    'service.apps.ServiceConfig',
     'pages.common_elements.apps.CommonElementsConfig',
     'pages.main_page.apps.MainPageConfig',
     'pages.catalog_page.apps.CatalogPageConfig',
@@ -133,7 +134,7 @@ except ImportError:
 
 ADMIN_ORDERING = (
     ('shop', ('Category', 'Product', 'Orders')),
-    ('news', ('News', 'Reviews')),
+    ('service', ('Reviews', )),
     (
         'common_elements',
         (

@@ -7,7 +7,9 @@
 
     <Breadcrumbs/>
 
-    <Reviews/>
+    <Reviews
+      :reviews="reviews"
+    />
 
     <ProductSlider
         :product_list="recommended_product_block"
@@ -52,6 +54,7 @@ export default {
   data() {
     return {
       header_block: {},
+      reviews: [],
       recommended_product_block: [],
       add_question_block: {},
       category_list: [],
@@ -74,6 +77,7 @@ export default {
             let receivedData = response.data
 
             this.header_block = receivedData.header_block
+            this.reviews = receivedData.reviews
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
