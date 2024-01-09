@@ -11,7 +11,7 @@
 
       <h1><span>Оформление</span> заказа</h1>
 
-      <div class="order-content" v-if="!successfulSend && !errorSend">
+      <div class="order-content" v-if="!successfulSend && !errorSend && products.length > 0">
         <div class="products-block">
           <h2>Выбранные товары</h2>
           <div class="product-list">
@@ -38,7 +38,7 @@
                   >
                     {{ product.name }}
                   </router-link>
-                  <div class="quantity-choice">
+                  <div class="quantity-choice" v-if="product.in_stock">
                     <div
                         class="minus-button button"
                         :class="{
@@ -87,15 +87,18 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="current-price small-text-1">
+                  <div class="current-price small-text-1" v-if="product.in_stock">
                     {{ currentPriceOne(product) }} ₽ / шт
                   </div>
                 </div>
 
               </div>
               <div class="card-right-side">
-                <div class="product-price">
+                <div class="product-price" v-if="product.in_stock">
                   {{ product.finalPrice.toFixed(2) }} ₽
+                </div>
+                <div class="product-price" v-else>
+                  Нет в наличии
                 </div>
                 <div class="delete-button" @click="deleteProduct(product.id)">
                   Удалить
@@ -133,7 +136,11 @@
               >
             </div>
           </form>
-          <div class="submit-button button tablet" @click="checkForm">
+          <div
+              class="submit-button button tablet"
+              :class="{'out-of-stock': calculatedTotalPrice === 0 }"
+              @click="checkForm"
+          >
             {{ sendButton }}
           </div>
           <div class="privacy-info small-text-2">
@@ -155,9 +162,24 @@
             </div>
           </div>
 
-          <div class="submit-button button desktop" @click="checkForm">
+          <div
+              class="submit-button button desktop"
+              :class="{'out-of-stock': calculatedTotalPrice === 0 }"
+              @click="checkForm"
+          >
             {{ sendButton }}
           </div>
+        </div>
+      </div>
+      <div class="order-content" v-if="!successfulSend && !errorSend && products.length === 0">
+        <div class="response empty-cart">
+          <h2>Ваша корзина пока пуста!</h2>
+          <span>
+            Перейдите в наш каталог, чтобы открыть для себя множество качественных картонных коробок и упаковок, способных удовлетворить любые ваши потребности.
+          </span>
+          <router-link :to="{ name: 'catalog' }" class="catalog-button">
+            Перейти в каталог
+          </router-link>
         </div>
       </div>
       <div class="order-content" v-if="successfulSend">
@@ -225,13 +247,13 @@ export default {
   },
   mounted() {
   },
-  watch: {
-  },
+  watch: {},
   computed: {
     calculatedTotalPrice() {
       let totalPrice = 0
+      const inStockProducts = this.products.filter(product => product.in_stock === true);
 
-      return this.products.reduce(
+      return inStockProducts.reduce(
           (accumulator, currentValue) => {
             return accumulator + currentValue.finalPrice
           },
@@ -335,7 +357,9 @@ export default {
     },
 
     getProductSummary() {
-      const totalQuantity = this.products.length
+      const inStockProducts = this.products.filter(product => product.in_stock === true);
+      const totalQuantity = inStockProducts.length
+
       const wordForm = this.getWordForm(totalQuantity);
       return `${totalQuantity} ${wordForm} на сумму`;
     },
@@ -387,11 +411,13 @@ export default {
           name: this.name,
           phone_number: this.phone,
           total: this.calculatedTotalPrice,
-          products: this.products.map(product => ({
-            product_id: product.id,
-            count: product.count,
-            price: product.finalPrice
-          })),
+          products: this.products
+              .filter(product => product.in_stock === true)
+              .map(product => ({
+                product_id: product.id,
+                count: product.count,
+                price: product.finalPrice
+              })),
         }
       }
       const payloadString = JSON.stringify(body);
@@ -620,7 +646,7 @@ h2 {
 
 .out-of-stock {
   pointer-events: none;
-  background-color: var(--black-35);
+  background-color: var(--black-35) !important;
 }
 
 .out-of-stock-svg {
@@ -791,7 +817,7 @@ h2 {
   margin-top: 2rem;
 }
 
-.response span {
+.response:not(.empty-cart) span {
   margin-bottom: 10rem;
 }
 
@@ -803,6 +829,21 @@ h2 {
 
 .response a:hover {
   opacity: 0.5;
+}
+
+.catalog-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /*  margin-top: 3rem;*/
+  padding: 1.5rem 2rem;
+  width: 50%;
+
+  color: white !important;
+  border-radius: 0.5rem;
+  background: var(--green-light, #40AB5E);
+  text-decoration: none;
 }
 
 
@@ -941,8 +982,16 @@ h2 {
     gap: 1rem;
   }
 
-  .response span {
+  .response:not(.empty-cart) span {
     margin-bottom: 7rem;
+  }
+
+  .catalog-button {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    padding: 1rem 2rem;
+    width: 20.75rem;
+    height: 1.25rem;
   }
 }
 
@@ -986,7 +1035,7 @@ h2 {
     justify-content: flex-end;
     gap: 2.1rem;
   }
-  
+
   .base-info {
     gap: 0.5rem;
   }
@@ -1021,6 +1070,12 @@ h2 {
 
   .form-block h2 {
     width: 70%;
+  }
+
+  .catalog-button {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    width: -webkit-fill-available;
   }
 }
 </style>

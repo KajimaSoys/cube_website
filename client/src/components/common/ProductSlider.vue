@@ -107,8 +107,6 @@ export default {
       window.removeEventListener('resize', updateWindowWidth);
     });
     return {
-      onSwiper,
-      onSlideChange,
       slidesPerView,
       spaceBetween,
       modules: [Autoplay]

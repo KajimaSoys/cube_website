@@ -9,6 +9,7 @@
 
     <Product
         :product="product"
+        @add-to-cart="addToCart"
     />
 
     <ProductSlider
@@ -52,6 +53,7 @@ export default {
       category_list: [],
 
       product: {},
+      cart: [],
 
       show: false
     }
@@ -65,6 +67,7 @@ export default {
     }
   },
   created() {
+    this.loadCart();
     Promise.all([
       this.getPageData(),
       this.getProduct()
@@ -81,6 +84,30 @@ export default {
     this.scrollToZero();
   },
   methods: {
+    addToCart(productId, quantity) {
+      const cartItem = this.cart.find(item => item.id === productId);
+
+      if (cartItem) {
+        cartItem.quantity += quantity;
+      } else {
+        this.cart.push({id: productId, quantity});
+      }
+
+      this.saveCart();
+    },
+    loadCart() {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        this.cart = JSON.parse(cartData);
+      }
+    },
+    saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+    },
+    clearCart() {
+      this.cart = [];
+      this.saveCart();
+    },
     async getPageData() {
       try {
         let response = await axios.get(`${this.backendURL}/api/v1/product_page/`);

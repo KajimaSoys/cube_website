@@ -155,6 +155,7 @@ h3 {
 
 :deep(.answer p) {
   opacity: 0;
+  pointer-events: none;
   transition: all 0.2s ease;
 }
 
@@ -166,6 +167,7 @@ h3 {
 
 :deep(.answer-visible p) {
   opacity: 1;
+  pointer-events: unset;
 }
 
 @media screen and (max-width: 1280px) {

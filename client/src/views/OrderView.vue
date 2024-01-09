@@ -90,10 +90,13 @@ export default {
       this.products = this.products.filter(item => item.id !== productId);
     },
     clearCart() {
-      this.cart = [];
-      this.saveCart();
+      this.products = this.products.filter(product => product.in_stock === false);
 
-      this.products = []
+      this.cart = this.cart.filter(cartItem =>
+          this.products.some(product => product.id === cartItem.id)
+      );
+
+      this.saveCart();
     },
 
     async getPageData() {

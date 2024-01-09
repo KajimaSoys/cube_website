@@ -222,7 +222,7 @@ class ProductInfo(models.Model):
         return self.count * self.price
 
     def __str__(self):
-        return f"{self.product.name}, {self.price} руб. * {self.count} = {self.total()} руб."
+        return f"{self.product.name} - {self.count}шт, {self.price} руб."
 
     class Meta:
         verbose_name = 'товар'
