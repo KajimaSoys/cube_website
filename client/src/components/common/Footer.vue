@@ -177,7 +177,7 @@
               Политика конфиденциальности
             </router-link>
             <router-link class="service-item" :to="{ name: 'terms' }">
-              Положения и условия
+              Договор оферты
             </router-link>
           </div>
           <div class="developers bottom">

@@ -102,7 +102,7 @@ const router = createRouter({
             meta: {
                 breadcrumb: [
                     {name: 'Главная', link: '/'},
-                    {name: 'Положения и условия'}
+                    {name: 'Договор оферты'}
                 ]
             }
         },

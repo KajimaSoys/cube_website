@@ -39,7 +39,7 @@ export default {
     document.body.style.overflow = "";
     this.scrollToZero();
 
-    document.title = 'Положения и условия | Магазин упаковки КУБ в Казани';
+    document.title = 'Договор оферты | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', '');
     this.setMetaTag('keywords', '');
   },
