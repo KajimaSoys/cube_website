@@ -1,13 +1,13 @@
 <template>
   <Header
-    :header_block="header_block"
+      :header_block="header_block"
   />
 
-  <Breadcrumbs />
+  <Breadcrumbs/>
 
   <Footer
-    :header_block="header_block"
-    :category_list="category_list"
+      :header_block="header_block"
+      :category_list="category_list"
   />
 </template>
 
@@ -42,6 +42,9 @@ export default {
     document.title = 'Договор оферты | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', '');
     this.setMetaTag('keywords', '');
+
+
+    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {

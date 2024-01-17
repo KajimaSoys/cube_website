@@ -430,7 +430,7 @@ export default {
           })
           .then(response => {
             this.sending = false
-            // window.ym(95108306, 'reachGoal', 'request_calculate_success')
+            window.ym(96164548, 'reachGoal', 'request_success')
             this.$emit('clear-cart');
 
             this.successfulSend = true
@@ -439,7 +439,7 @@ export default {
           })
           .catch(error => {
             console.log('An error occurred: ', error);
-            // window.ym(95108306, 'reachGoal', 'request_calculate_error')
+            window.ym(96164548, 'reachGoal', 'request_error')
 
             this.errorSend = true
             this.$emit('scroll-to-zero');

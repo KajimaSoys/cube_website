@@ -486,6 +486,10 @@ export default {
   margin-bottom: 4rem;
 }
 
+:deep(.description ul) {
+  padding-inline-start: 1.125rem;
+}
+
 .characteristics {
   display: grid;
   grid-template-columns: 2fr 2fr;
