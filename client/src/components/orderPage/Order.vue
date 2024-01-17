@@ -1064,7 +1064,7 @@ h2 {
     width: 100%;
   }
 
-  .submit-button {
+  .submit-button.tablet {
     width: -webkit-fill-available;
   }
 

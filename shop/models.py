@@ -64,9 +64,6 @@ class Product(models.Model):
         db_index=True,
         verbose_name="Порядок")
 
-    # TODO delete image, image_thumbnail, price_1 fields from model
-    image = models.ImageField(verbose_name='Фотография товара (deprecated)', upload_to='shop/images')
-    image_thumbnail = ImageSpecField(source='image', processors=ResizeToFill(220, 310), format='jpeg')
     price_1 = models.FloatField(verbose_name='Цена от 1 шт', blank=False)
 
     def price_at_count_100(self):
