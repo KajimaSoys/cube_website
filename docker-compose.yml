@@ -1,0 +1,59 @@
+  version: '3.8'
+
+  services:
+    django:
+      build:
+        context: .
+        dockerfile: ./Dockerfile.backend
+      container_name: django-cube
+      environment:
+        - DEBUG=${DEBUG}
+        - SECRET_KEY=${SECRET_KEY}
+        - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_HOST=${DB_HOST}
+        - DB_PORT=${DB_PORT}
+        - CSRF_TRUSTED=${CSRF_TRUSTED}
+        - HMAC_KEY=${HMAC_KEY}
+        - CSRF_COOKIE_SECURE=${CSRF_COOKIE_SECURE}
+        - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE}
+      volumes:
+        - ./:/app
+        - ./media:/app/media
+      depends_on:
+        - db
+
+    nginx:
+      build:
+        context: .
+        dockerfile: ./Dockerfile.frontend
+      container_name: nginx-cube
+      ports:
+        - "8081:80"
+      depends_on:
+        - django
+      volumes:
+        - ./static:/app/static
+        - ./media:/app/media
+
+    db:
+      image: postgres:16
+      container_name: db-cube
+      restart: always
+      environment:
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - db_data:/var/lib/postgresql/data
+        - ./postgresql:/docker-entrypoint-initdb.d
+
+  volumes:
+    db_data:
+
+  networks:
+    default:
+        name: cube_network
+        external: true

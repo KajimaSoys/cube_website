@@ -81,14 +81,15 @@ class Product(models.Model):
         return self.name
 
 
-@receiver(post_save, sender=Product)
-def update_product_price(sender, instance, **kwargs):
-    print('Product change')
-    ProductPrice.objects.update_or_create(
-        product=instance,
-        count=1,
-        defaults={'price': instance.price_1}
-    )
+# TODO uncomment after initial migration
+# @receiver(post_save, sender=Product)
+# def update_product_price(sender, instance, **kwargs):
+#     print('Product change')
+#     ProductPrice.objects.update_or_create(
+#         product=instance,
+#         count=1,
+#         defaults={'price': instance.price_1}
+#     )
 
 
 class ProductPrice(models.Model):
@@ -118,17 +119,18 @@ class ProductPrice(models.Model):
         return f'При заказе от {self.count}шт. стоимость за ед. {self.price}руб.'
 
 
-@receiver(pre_save, sender=ProductPrice)
-def update_product_price_1(sender, instance, **kwargs):
-    print('ProductPrice change')
-    if instance.count == 1:
-        try:
-            target_product = Product.objects.get(pk=instance.product.pk)
-            if target_product.price_1 != instance.price:
-                target_product.price_1 = instance.price
-                target_product.save(update_fields=['price_1'])
-        except Product.DoesNotExist:
-            pass
+# TODO uncomment after initial migration
+# @receiver(pre_save, sender=ProductPrice)
+# def update_product_price_1(sender, instance, **kwargs):
+#     print('ProductPrice change')
+#     if instance.count == 1:
+#         try:
+#             target_product = Product.objects.get(pk=instance.product.pk)
+#             if target_product.price_1 != instance.price:
+#                 target_product.price_1 = instance.price
+#                 target_product.save(update_fields=['price_1'])
+#         except Product.DoesNotExist:
+#             pass
 
 
 class ProductImage(models.Model):

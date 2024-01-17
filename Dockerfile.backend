@@ -1,0 +1,21 @@
+FROM python:3.8
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+COPY req.txt /app/
+RUN pip install -r req.txt
+
+COPY core/ /app/core/
+COPY media/ /app/media/
+COPY pages/ /app/pages/
+COPY service/ /app/service/
+COPY shop/ /app/shop/
+COPY static/ /app/static/
+COPY manage.py /app/
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
