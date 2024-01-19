@@ -72,9 +72,6 @@ export default {
     document.title = 'Отзывы | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Прочитайте отзывы клиентов о магазине упаковки КУБ. Узнайте, почему наши картонные коробки - выбор многих людей и предприятий в Казани.');
     this.setMetaTag('keywords', 'отзывы упаковка Казань, магазин картонных коробок, клиентские отзывы КУБ, качество упаковочных материалов');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {
@@ -88,6 +85,8 @@ export default {
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
           })

@@ -86,9 +86,6 @@ export default {
     document.title = 'Качественные картонные коробки и упаковки | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Высокое качество, надежность, доступная цена. Идеально подходят для маркетплейсов вроде OZON и Wildberries.');
     this.setMetaTag('keywords', 'картонные коробки, упаковка для продаж, магазин упаковки Казань, коробки на заказ');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     addToCart(productId, quantity) {
@@ -123,6 +120,9 @@ export default {
         this.header_block = receivedData.header_block;
         this.recommended_product_block = receivedData.recommended_product_block
         this.category_list = receivedData.category_list;
+
+        window.ym(96164548, 'hit', window.location.href);
+
       } catch (error) {
         console.error('Ошибка в getPageData: ', error);
       }

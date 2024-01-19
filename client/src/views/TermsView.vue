@@ -42,9 +42,6 @@ export default {
     document.title = 'Договор оферты | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', '');
     this.setMetaTag('keywords', '');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {
@@ -55,6 +52,8 @@ export default {
 
             this.header_block = receivedData.header_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
           })
           .catch(error => {
             console.log('An error occurred: ', error);

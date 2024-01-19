@@ -45,6 +45,8 @@ DATABASES = {
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 HMAC_KEY = os.environ.get("HMAC_KEY")
+SMSRU_APIKEY = os.environ.get('SMSRU_APIKEY')
+SMSRU_CLIENT = os.environ.get('SMSRU_CLIENT')
 CSRF_COOKIE_SECURE = (os.environ.get('CSRF_COOKIE_SECURE', False) == 'True')
 SESSION_COOKIE_SECURE = (os.environ.get('SESSION_COOKIE_SECURE', False) == 'True')
 

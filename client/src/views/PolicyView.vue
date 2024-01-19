@@ -361,8 +361,8 @@ export default {
 
       domain: this.frontendURL,
       policy_page: this.frontendURL + '/policy',
-      ip: 'ИП Гришиным Вадимом Вячеславовичем',
-      mail: 'cubekazan@mail.ru'
+      ip: 'ИП Скоромновым Даниилом Александровичем',
+      mail: 'cubekazan@gmail.com'
     }
   },
   created() {
@@ -375,9 +375,6 @@ export default {
     document.title = 'Политика конфиденциальности | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Ознакомьтесь с политикой конфиденциальности магазина упаковки КУБ. Мы уважаем и защищаем личные данные наших клиентов.');
     this.setMetaTag('keywords', 'политика конфиденциальности, защита данных, магазин упаковки Казань, безопасность клиентов');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {
@@ -388,6 +385,8 @@ export default {
 
             this.header_block = receivedData.header_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
           })
           .catch(error => {
             console.log('An error occurred: ', error);

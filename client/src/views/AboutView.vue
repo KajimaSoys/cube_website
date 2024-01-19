@@ -94,9 +94,8 @@ export default {
     document.title = 'О магазине | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Узнайте больше о магазине упаковки КУБ, ведущем производителе картонных коробок и упаковок в Казани.');
     this.setMetaTag('keywords', 'о компании КУБ, производитель картонных коробок, упаковка Казань, история магазина, качество упаковки');
-
-    window.ym(96164548, 'hit', window.location.href);
   },
+
   methods: {
     async getPageData() {
       await axios
@@ -112,6 +111,8 @@ export default {
             this.outside_view = receivedData.outside_view
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
           })

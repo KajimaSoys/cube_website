@@ -226,19 +226,3 @@ class ProductInfo(models.Model):
     class Meta:
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
-
-
-class Basket(models.Model):
-    """
-    Model Basket of Shop App (DISABLED)
-    """
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, verbose_name='Пользователь')
-    products = models.ManyToManyField(Product, related_name='product_basket',
-                                      verbose_name='Товары добавленные в корзину')
-
-    class Meta:
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-
-    def __str__(self):
-        return f'{self.user}'

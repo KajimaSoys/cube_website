@@ -20,9 +20,6 @@ urlpatterns = [
     path('', include('shop.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('api-auth/', include('rest_framework.urls')),
-    # path('api/v1/', include('DEPRECATED_api.urls')),
-    path('company/', include('news.urls')),
 
     path('api/v1/main_page/', main_page_views.aggregate_data, name='main_page'),
     path('api/v1/catalog_page/', catalog_page_views.aggregate_data, name='catalog_page'),
@@ -70,5 +67,3 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #         re_path(f'^{settings.STATIC_URL.lstrip("/")}(?P<path>.*)$',
 #             mediaserve, {'document_root': settings.STATIC_ROOT}),
 #     ]
-handler404 = 'shop.utils.handle_non_found'
-handler500 = 'shop.utils.handle_error'

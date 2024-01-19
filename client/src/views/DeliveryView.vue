@@ -80,9 +80,6 @@ export default {
     document.title = 'Доставка и оплата | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Узнайте о вариантах доставки и способах оплаты в магазине упаковки КУБ. Быстрая и надежная доставка картонных коробок по Казани и всей России.');
     this.setMetaTag('keywords', 'доставка упаковки, оплата картонных коробок, магазин упаковки Казань, упаковка для маркетплейсов, удобная доставка');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {
@@ -97,6 +94,8 @@ export default {
             this.recommended_product_block = receivedData.recommended_product_block
             this.add_question_block = receivedData.add_question_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
           })

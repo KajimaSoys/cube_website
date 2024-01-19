@@ -6,11 +6,14 @@ from django.utils.html import mark_safe, format_html
 from django.forms import Textarea
 from django.forms.models import BaseInlineFormSet
 from django.db import models
-from django.urls import path, reverse
-from django.shortcuts import render, redirect, get_object_or_404
-from urllib.parse import urlparse, parse_qs
-
-from .models import Category, Product, Orders, ProductPrice, ProductImage, ProductInfo
+from shop.models import (
+    Category,
+    Product,
+    Orders,
+    ProductPrice,
+    ProductImage,
+    ProductInfo
+)
 
 
 class ProductAdminForm(forms.ModelForm):

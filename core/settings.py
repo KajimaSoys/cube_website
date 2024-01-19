@@ -12,7 +12,6 @@ USE_DJANGO_JQUERY = True
 INSTALLED_APPS = [
     # project apps
     'shop.apps.ShopConfig',
-    'news.apps.NewsConfig',
     'service.apps.ServiceConfig',
     'pages.common_elements.apps.CommonElementsConfig',
     'pages.main_page.apps.MainPageConfig',

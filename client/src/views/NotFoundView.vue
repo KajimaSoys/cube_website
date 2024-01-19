@@ -38,9 +38,6 @@ export default {
     document.title = 'Страница не найдена | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Страница не найдена. Вернитесь на главную страницу магазина упаковки КУБ для поиска картонных коробок и упаковок в Казани.');
     this.setMetaTag('keywords', 'страница не найдена, ошибка 404, магазин упаковки Казань, навигация по сайту');
-
-
-    window.ym(96164548, 'hit', window.location.href);
   },
   methods: {
     async getPageData() {
@@ -51,6 +48,8 @@ export default {
 
             this.header_block = receivedData.header_block
             this.category_list = receivedData.category_list
+
+            window.ym(96164548, 'hit', window.location.href);
           })
           .catch(error => {
             console.log('An error occurred: ', error);
