@@ -20,9 +20,9 @@
         >
           {{ product.name }}
         </router-link>
-        <div class="material" v-if="product.material">
-          {{ product.material }}
-        </div>
+<!--        <div class="material" v-if="product.material">-->
+<!--          {{ product.material }}-->
+<!--        </div>-->
       </div>
 
       <div class="prices">
