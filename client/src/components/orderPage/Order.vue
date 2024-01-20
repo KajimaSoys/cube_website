@@ -46,10 +46,13 @@
                             'scaling-svg': product.isScalingMinus,
                             'out-of-stock-svg': !product.in_stock
                           }"
-                        @click="decreaseOnce(product)"
+                        @click="handleClick(product, 'decreaseOnce')"
                         @mousedown="startDecreasing(product)"
-                        @mouseup="stopDecreasing(product)"
-                        @mouseleave="stopDecreasing(product)"
+                        @mouseup="stopAutoChange(product)"
+                        @mouseleave="stopAutoChange(product)"
+                        @touchstart.prevent="handleTouchStart(product, 'startDecreasing')"
+                        @touchend="handleTouchEnd(product, 'decreaseOnce')"
+                        @touchcancel="handleTouchCancel(product)"
                         title="Удерживайте, чтобы быстрее уменьшить кол-во товара"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -74,10 +77,13 @@
                               'scaling-svg': product.isScalingPlus,
                               'out-of-stock-svg': !product.in_stock
                            }"
-                         @click="increaseOnce(product)"
+                         @click="handleClick(product, 'increaseOnce')"
                          @mousedown="startIncreasing(product)"
-                         @mouseup="stopIncreasing(product)"
-                         @mouseleave="stopIncreasing(product)"
+                         @mouseup="stopAutoChange(product)"
+                         @mouseleave="stopAutoChange(product)"
+                         @touchstart.prevent="handleTouchStart(product, 'startIncreasing')"
+                         @touchend="handleTouchEnd(product, 'increaseOnce')"
+                         @touchcancel="handleTouchCancel(product)"
                          title="Удерживайте, чтобы быстрее увеличить кол-во товара"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -292,6 +298,28 @@ export default {
       this.updateCart(product)
     },
 
+    handleClick(product, action) {
+      if (!this.touchEventTriggered) {
+        this[action](product);
+      }
+    },
+    handleTouchStart(product, action) {
+      this.touchEventTriggered = true;
+      this[action](product);
+      setTimeout(() => {
+        this.touchEventTriggered = false;
+      }, 500);
+    },
+    handleTouchEnd(product, action) {
+      if (!this.touchEventTriggered) {
+        this[action](product);
+      }
+      this.stopAutoChange(product);
+    },
+    handleTouchCancel(product) {
+      this.stopAutoChange(product);
+    },
+
     increaseOnce(product) {
       product.count++;
       if (product.count > this.max_value) {
@@ -308,43 +336,40 @@ export default {
     },
     startIncreasing(product) {
       if (this.interval) return;
-
-      this.interval = setInterval(() => {
-        product.count += this.increaseAmount;
-        if (product.count > this.max_value) {
-          product.count = this.max_value
-          this.increaseAmount = 1
-        }
-        this.calculatePrice(product)
-        product.isScalingPlus = true;
-        this.increaseAmount++;
-      }, 200);
-    },
-    stopIncreasing(product) {
-      clearInterval(this.interval);
-      product.isScalingPlus = false;
-
-      this.interval = null;
+      this.stopAutoChange(product);
       this.increaseAmount = 1;
+      product.isScalingPlus = true;
+      this.interval = setInterval(() => {
+        if (product.count < this.max_value) {
+          product.count += this.increaseAmount;
+          if (product.count > this.max_value) {
+            product.count = this.max_value;
+          }
+          this.calculatePrice(product);
+          this.increaseAmount++;
+        }
+      }, 200);
     },
     startDecreasing(product) {
       if (this.interval) return;
-
+      this.stopAutoChange(product);
+      this.increaseAmount = 1;
+      product.isScalingMinus = true;
       this.interval = setInterval(() => {
-        product.count -= this.increaseAmount;
-        if (product.count < this.min_value) {
-          product.count = this.min_value
-          this.increaseAmount = 1
+        if (product.count > this.min_value) {
+          product.count -= this.increaseAmount;
+          if (product.count < this.min_value) {
+            product.count = this.min_value;
+          }
+          this.calculatePrice(product);
+          this.increaseAmount++;
         }
-        this.calculatePrice(product)
-        product.isScalingMinus = true;
-        this.increaseAmount++;
       }, 200);
     },
-    stopDecreasing(product) {
+    stopAutoChange(product) {
       clearInterval(this.interval);
+      product.isScalingPlus = false;
       product.isScalingMinus = false;
-
       this.interval = null;
       this.increaseAmount = 1;
     },

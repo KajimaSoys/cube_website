@@ -20,9 +20,9 @@
         >
           {{ product.name }}
         </router-link>
-<!--        <div class="material" v-if="product.material">-->
-<!--          {{ product.material }}-->
-<!--        </div>-->
+        <!--        <div class="material" v-if="product.material">-->
+        <!--          {{ product.material }}-->
+        <!--        </div>-->
       </div>
 
       <div class="prices">
@@ -43,10 +43,13 @@
                 'scaling-svg': isScalingMinus,
                 'out-of-stock-svg': !product.in_stock
               }"
-              @click="decreaseOnce"
+              @click="handleClick('decreaseOnce')"
               @mousedown="startDecreasing"
-              @mouseup="stopDecreasing"
-              @mouseleave="stopDecreasing"
+              @mouseup="stopAutoChange"
+              @mouseleave="stopAutoChange"
+              @touchstart.prevent="handleTouchStart('startDecreasing')"
+              @touchend="handleTouchEnd('decreaseOnce')"
+              @touchcancel="handleTouchCancel"
               title="Удерживайте, чтобы быстрее уменьшить кол-во товара"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -71,10 +74,13 @@
                   'scaling-svg': isScalingPlus,
                   'out-of-stock-svg': !product.in_stock
                }"
-               @click="increaseOnce"
+               @click="handleClick('increaseOnce')"
                @mousedown="startIncreasing"
-               @mouseup="stopIncreasing"
-               @mouseleave="stopIncreasing"
+               @mouseup="stopAutoChange"
+               @mouseleave="stopAutoChange"
+               @touchstart.prevent="handleTouchStart('startIncreasing')"
+               @touchend="handleTouchEnd('increaseOnce')"
+               @touchcancel="handleTouchCancel"
                title="Удерживайте, чтобы быстрее увеличить кол-во товара"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -126,14 +132,15 @@ export default {
       hover: false,
 
       count: 1,
+      min_value: 1,
+      max_value: 9999,
+
+      touchEventTriggered: false,
       interval: null,
       increaseAmount: 1,
 
       isScalingPlus: false,
       isScalingMinus: false,
-
-      max_value: 9999,
-      min_value: 1,
 
       showCartPopup: false,
     }
@@ -169,6 +176,26 @@ export default {
     }
   },
   methods: {
+    handleClick(action) {
+      if (!this.touchEventTriggered) {
+        this[action]();
+      }
+    },
+    handleTouchStart(action) {
+      this.touchEventTriggered = true;
+      this[action]();
+      setTimeout(() => {
+        this.touchEventTriggered = false;
+      }, 500);
+    },
+    handleTouchEnd(action) {
+      this[action]();
+      this.stopAutoChange();
+    },
+    handleTouchCancel() {
+      this.stopAutoChange();
+    },
+
     increaseOnce() {
       this.count++;
       if (this.count > this.max_value) {
@@ -183,41 +210,42 @@ export default {
     },
     startIncreasing() {
       if (this.interval) return;
-
-      this.interval = setInterval(() => {
-        this.count += this.increaseAmount;
-        if (this.count > this.max_value) {
-          this.count = this.max_value
-          this.increaseAmount = 1
-        }
-        this.isScalingPlus = true;
-        this.increaseAmount++;
-      }, 200);
-    },
-    stopIncreasing() {
-      clearInterval(this.interval);
-      this.isScalingPlus = false;
-
-      this.interval = null;
+      this.stopAutoChange();
       this.increaseAmount = 1;
+      this.isScalingPlus = true;
+      this.interval = setInterval(() => {
+        if (this.count < this.max_value) {
+          this.count += this.increaseAmount;
+          if (this.count > this.max_value) {
+            this.count = this.max_value;
+          }
+          this.increaseAmount++;
+        } else {
+          this.stopAutoChange();
+        }
+      }, 200);
     },
     startDecreasing() {
       if (this.interval) return;
-
+      this.stopAutoChange();
+      this.increaseAmount = 1;
+      this.isScalingMinus = true;
       this.interval = setInterval(() => {
-        this.count -= this.increaseAmount;
-        if (this.count < this.min_value) {
-          this.count = this.min_value
-          this.increaseAmount = 1
+        if (this.count > this.min_value) {
+          this.count -= this.increaseAmount;
+          if (this.count < this.min_value) {
+            this.count = this.min_value;
+          }
+          this.increaseAmount++;
+        } else {
+          this.stopAutoChange();
         }
-        this.isScalingMinus = true;
-        this.increaseAmount++;
       }, 200);
     },
-    stopDecreasing() {
+    stopAutoChange() {
       clearInterval(this.interval);
+      this.isScalingPlus = false;
       this.isScalingMinus = false;
-
       this.interval = null;
       this.increaseAmount = 1;
     },
