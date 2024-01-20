@@ -149,8 +149,7 @@ a:hover {
 .image-container img {
   width: 100%;
   height: 7.5rem;
-  object-fit: cover;
-  max-width: fit-content;
+  object-fit: contain;
 }
 
 .category-name {

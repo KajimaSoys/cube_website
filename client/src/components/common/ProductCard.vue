@@ -296,7 +296,7 @@ export default {
 
 .image-container img {
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
   height: 9.375rem;
 }
 

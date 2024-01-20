@@ -311,9 +311,7 @@ export default {
       }, 500);
     },
     handleTouchEnd(product, action) {
-      if (!this.touchEventTriggered) {
-        this[action](product);
-      }
+      this[action](product);
       this.stopAutoChange(product);
     },
     handleTouchCancel(product) {
@@ -336,35 +334,31 @@ export default {
     },
     startIncreasing(product) {
       if (this.interval) return;
-      this.stopAutoChange(product);
-      this.increaseAmount = 1;
-      product.isScalingPlus = true;
       this.interval = setInterval(() => {
         if (product.count < this.max_value) {
           product.count += this.increaseAmount;
           if (product.count > this.max_value) {
             product.count = this.max_value;
           }
-          this.calculatePrice(product);
           this.increaseAmount++;
+          this.calculatePrice(product);
         }
       }, 200);
+      product.isScalingPlus = true;
     },
     startDecreasing(product) {
       if (this.interval) return;
-      this.stopAutoChange(product);
-      this.increaseAmount = 1;
-      product.isScalingMinus = true;
       this.interval = setInterval(() => {
         if (product.count > this.min_value) {
           product.count -= this.increaseAmount;
           if (product.count < this.min_value) {
             product.count = this.min_value;
           }
-          this.calculatePrice(product);
           this.increaseAmount++;
+          this.calculatePrice(product);
         }
       }, 200);
+      product.isScalingMinus = true;
     },
     stopAutoChange(product) {
       clearInterval(this.interval);
@@ -611,6 +605,7 @@ h2 {
   height: 2.25rem;
   transition: all 0.2s ease-in-out;
   user-select: none;
+  cursor: pointer;
 }
 
 .minus-button:hover, .plus-button:hover {
