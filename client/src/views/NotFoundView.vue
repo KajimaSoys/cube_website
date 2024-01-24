@@ -1,12 +1,21 @@
 <template>
-  <Header
-      :header_block="header_block"
-  />
 
-  <Footer
-      :header_block="header_block"
-      :category_list="category_list"
-  />
+  <div class="not-found-container">
+    <Header
+        :header_block="header_block"
+    />
+
+    <div class="not-found-view">
+      <div class="not-found-max">
+        <h1>Страница не найдена</h1>
+      </div>
+    </div>
+
+    <Footer
+        :header_block="header_block"
+        :category_list="category_list"
+    />
+  </div>
 </template>
 
 <script>
@@ -77,6 +86,25 @@ export default {
 
 
 <style scoped>
+.not-found-container {
+  height: 100vh;
+
+}
+
+.not-found-view {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 15.375rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-bottom: 12.5rem;
+  flex: 1;
+}
+
+.not-found-max {
+  width: 100%;
+}
 
 
 @media screen and (max-width: 1280px) {
