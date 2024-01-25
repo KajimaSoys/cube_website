@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.db.utils import IntegrityError
 
 
 def default_id():
@@ -64,7 +65,7 @@ class Product(models.Model):
         db_index=True,
         verbose_name="Порядок")
 
-    price_1 = models.FloatField(verbose_name='Цена от 1 шт', blank=False)
+    price_1 = models.FloatField(verbose_name='Цена от 1 шт', blank=False, null=True)
 
     def price_at_count_100(self):
         price_obj = self.prices.filter(count=100).first()
@@ -81,15 +82,6 @@ class Product(models.Model):
         return self.name
 
 
-# TODO uncomment after initial migration
-@receiver(post_save, sender=Product)
-def update_product_price(sender, instance, **kwargs):
-    print('Product change')
-    ProductPrice.objects.update_or_create(
-        product=instance,
-        count=1,
-        defaults={'price': instance.price_1}
-    )
 
 
 class ProductPrice(models.Model):
@@ -119,18 +111,37 @@ class ProductPrice(models.Model):
         return f'При заказе от {self.count}шт. стоимость за ед. {self.price}руб.'
 
 
-# TODO uncomment after initial migration
+# Глобальная переменная для отслеживания состояния обновления
+is_updating_from_product_price = False
+
+
+@receiver(post_save, sender=Product)
+def update_product_price(sender, instance, **kwargs):
+    global is_updating_from_product_price
+
+    if is_updating_from_product_price:
+        return
+
+    if instance.price_1 is not None:
+        existing_price = ProductPrice.objects.filter(product=instance, count=1).first()
+        if existing_price:
+            existing_price.price = instance.price_1
+            existing_price.save()
+        else:
+            ProductPrice.objects.create(product=instance, count=1, price=instance.price_1)
+
+
 @receiver(pre_save, sender=ProductPrice)
 def update_product_price_1(sender, instance, **kwargs):
-    print('ProductPrice change')
+    global is_updating_from_product_price
+
     if instance.count == 1:
-        try:
-            target_product = Product.objects.get(pk=instance.product.pk)
-            if target_product.price_1 != instance.price:
-                target_product.price_1 = instance.price
-                target_product.save(update_fields=['price_1'])
-        except Product.DoesNotExist:
-            pass
+        target_product = Product.objects.get(pk=instance.product.pk)
+        if target_product.price_1 != instance.price:
+            is_updating_from_product_price = True
+            target_product.price_1 = instance.price
+            target_product.save(update_fields=['price_1'])
+            is_updating_from_product_price = False
 
 
 class ProductImage(models.Model):

@@ -49,14 +49,14 @@ class ProductPriceInlineFormSet(BaseInlineFormSet):
             form.fields['count'].initial = initial_count_value
 
 
-class ProductPriceInline(admin.TabularInline):
+class ProductPriceInline(SortableInlineAdminMixin, admin.TabularInline):
     model = ProductPrice
     extra = 1
-    formset = ProductPriceInlineFormSet
+    # formset = ProductPriceInlineFormSet
 
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super(ProductPriceInline, self).get_formset(request, obj, **kwargs)
-        return formset
+    # def get_formset(self, request, obj=None, **kwargs):
+    #     formset = super(ProductPriceInline, self).get_formset(request, obj, **kwargs)
+    #     return formset
 
 
 class ProductImageInline(SortableInlineAdminMixin, admin.TabularInline):
