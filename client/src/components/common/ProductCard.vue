@@ -7,6 +7,7 @@
           @mouseenter="hover = true"
           @mouseleave="hover = false">
         <img
+            v-if="product.images.length > 0"
             :src="computedSrc"
             loading="lazy"
             alt="">

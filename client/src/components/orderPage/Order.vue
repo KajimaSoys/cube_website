@@ -26,6 +26,7 @@
                     :to="{ name: 'product', params: { categorySlug: product.category_info.slug, productId: product.id } }"
                 >
                   <img
+                      v-if="product.images.length > 0"
                       :src="computedSrc(product)"
                       loading="lazy"
                       alt="">

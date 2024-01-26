@@ -75,6 +75,13 @@ export default {
     ])
         .then(() => {
           this.show = true
+          const savedPosition = localStorage.getItem('catalogScrollPosition');
+          if (savedPosition !== null) {
+            this.$nextTick(() => {
+              window.scrollTo(0, parseInt(savedPosition, 10));
+              localStorage.removeItem('catalogScrollPosition');
+            });
+          }
         })
         .catch(error => {
           console.log('An error occurred: ', error);
@@ -87,6 +94,11 @@ export default {
     document.title = 'Каталог | Магазин упаковки КУБ в Казани';
     this.setMetaTag('description', 'Магазин упаковки КУБ предлагает широкий ассортимент картонных коробок и упаковки для любых нужд. Качественный материал, доступные цены.');
     this.setMetaTag('keywords', 'картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка');
+  },
+  beforeRouteLeave(to, from, next) {
+    const scrollPosition = window.scrollY;
+    localStorage.setItem('catalogScrollPosition', scrollPosition);
+    next();
   },
   methods: {
     async getPageData() {
