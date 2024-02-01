@@ -10,7 +10,14 @@
             v-if="product.images.length > 0"
             :src="computedSrc"
             loading="lazy"
-            alt="">
+            alt=""
+        >
+        <img
+            v-else
+            :src="frontendURL + '/images/no-image.png'"
+            loading="lazy"
+            alt=""
+        >
       </router-link>
     </div>
     <div class="product-content">
@@ -116,7 +123,7 @@ import {ElNotification} from 'element-plus'
 
 export default {
   name: "ProductCard",
-  inject: ['backendURL'],
+  inject: ['backendURL', 'frontendURL'],
   props: {
     product: {
       type: Object

@@ -15,7 +15,7 @@
             :grabCursor="true"
         >
           <swiper-slide
-              v-for="product in product_list"
+              v-for="product in productsSorted"
               :key="product.product.id"
           >
             <ProductCard
@@ -59,6 +59,11 @@ export default {
     this.loadCart();
   },
   mounted() {
+  },
+  computed: {
+    productsSorted() {
+      return this.product_list.sort((a, b) => a.order - b.order);
+    }
   },
   methods: {
     addToCart(productId, quantity) {

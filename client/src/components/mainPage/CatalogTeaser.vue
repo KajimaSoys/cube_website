@@ -59,7 +59,8 @@ export default {
   },
   computed: {
     shown_category_list() {
-      return this.showAll ? this.category_list : this.category_list.slice(0, 10);
+      let sorted_categories = this.category_list.sort((a, b) => a.order - b.order);
+      return this.showAll ? sorted_categories : sorted_categories.slice(0, 10);
     },
   },
   mounted() {

@@ -159,6 +159,7 @@ export default {
             window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
+            this.scrollToZero();
           })
           .catch(error => {
             console.log('An error occurred: ', error);

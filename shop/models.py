@@ -5,7 +5,7 @@ from django_resized import ResizedImageField
 import uuid
 import re
 from datetime import datetime
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from django.db.utils import IntegrityError
 
@@ -82,6 +82,15 @@ class Product(models.Model):
         return self.name
 
 
+@receiver(post_delete, sender=Product)
+def delete_post_session_files(sender, instance, **kwargs):
+    """
+    Signal handler to delete associated files on PostSession deletion.
+    """
+    images = ProductImage.objects.filter(product=instance)
+    for image in images:
+        if image.image:
+            image.image.delete(save=False)
 
 
 class ProductPrice(models.Model):
@@ -151,8 +160,8 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='Товар')
     image = ResizedImageField(upload_to='shop/images',
                               verbose_name='Фотография товара',
-                              size=[1260, 945],
-                              quality=85, )
+                              size=[570, 470],
+                              quality=75, )
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
 
     class Meta:
@@ -162,6 +171,28 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+@receiver(post_delete, sender=ProductImage)
+def delete_image_file(sender, instance, **kwargs):
+    """
+    Signal handler to delete image file on ProductImage deletion.
+    """
+    if instance.image:
+        instance.image.delete(save=False)
+
+
+@receiver(pre_save, sender=ProductImage)
+def delete_old_image_file(sender, instance, **kwargs):
+    """
+    Signal handler to delete old image file on ProductImage update.
+    """
+    if instance.pk:
+        # Получаем предыдущий объект из базы данных
+        old_instance = sender.objects.get(pk=instance.pk)
+        # Проверяем, изменилось ли изображение
+        if old_instance.image and old_instance.image != instance.image:
+            old_instance.image.delete(save=False)
 
 
 class Orders(models.Model):

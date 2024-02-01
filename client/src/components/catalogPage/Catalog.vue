@@ -5,7 +5,7 @@
       <div class="catalog-content">
         <div class="category-grid top">
           <router-link class="category-item"
-                       v-for="category in category_list"
+                       v-for="category in categoriesSorted"
                        :key="category.id"
                        :to="getRoute(category)"
                        :class="{'active': isActive(category.slug)}"
@@ -25,7 +25,7 @@
 
         <div class="category-grid top">
           <router-link class="category-item"
-                       v-for="category in category_list"
+                       v-for="category in categoriesSorted"
                        :key="category.id"
                        :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
                        :class="{'active': isActive(category.slug)}"
@@ -68,10 +68,15 @@ export default {
 
     productsSorted() {
       if (!this.currentCategoryId) {
-        return this.products;
+        return this.products.sort((a, b) => a.order - b.order);
       }
+      return this.products
+          .filter(product => product.category === this.currentCategoryId)
+          .sort((a, b) => a.order - b.order);
 
-      return this.products.filter(product => product.category === this.currentCategoryId);
+    },
+    categoriesSorted() {
+      return this.category_list.sort((a, b) => a.order - b.order);
     }
   },
   created() {

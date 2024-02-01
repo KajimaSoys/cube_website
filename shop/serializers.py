@@ -42,6 +42,12 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'category', 'category_info', 'name', 'in_stock', 'size', 'material', 'order', 'images', 'prices']
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Сортировка prices по полю count
+        representation['prices'] = sorted(representation['prices'], key=lambda x: x['count'])
+        return representation
+
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
@@ -51,6 +57,12 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'category_info', 'name', 'description', 'in_stock', 'size', 'material', 'images', 'prices']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Сортировка prices по полю count
+        representation['prices'] = sorted(representation['prices'], key=lambda x: x['count'])
+        return representation
 
 
 class ProductInfoSerializer(serializers.ModelSerializer):

@@ -50,7 +50,18 @@
           </div>
 
           <div class="image-container" v-else>
-            <img :src="strippedSrc(product.images[0].image)" loading="lazy" alt=""/>
+            <img
+                v-if="product.images.length > 0"
+                :src="strippedSrc(product.images[0].image)"
+                loading="lazy"
+                alt=""
+            />
+            <img
+                v-else
+                :src="frontendURL + '/images/no-image.png'"
+                loading="lazy"
+                alt=""
+            />
           </div>
 
           <div class="images-navigation" v-if="product.images.length > 1">
@@ -200,7 +211,7 @@ import 'swiper/css/navigation';
 
 export default {
   name: "Product",
-  inject: ['backendURL'],
+  inject: ['backendURL', 'frontendURL'],
   props: {
     product: {
       type: Object

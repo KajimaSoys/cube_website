@@ -29,7 +29,14 @@
                       v-if="product.images.length > 0"
                       :src="computedSrc(product)"
                       loading="lazy"
-                      alt="">
+                      alt=""
+                  >
+                  <img
+                      v-else
+                      :src="frontendURL + '/images/no-image.png'"
+                      loading="lazy"
+                      alt=""
+                  >
                 </router-link>
 
                 <div class="base-info">
@@ -217,7 +224,7 @@ import crypto from 'crypto-js';
 export default {
   name: "Order",
   components: {},
-  inject: ['backendURL', 'hmac_key'],
+  inject: ['backendURL', 'frontendURL', 'hmac_key'],
   directives: {mask},
   props: {
     products: Array,
