@@ -86,6 +86,8 @@ export default {
         .catch(error => {
           console.log('An error occurred: ', error);
         });
+
+    window.addEventListener('beforeunload', this.saveScrollPosition);
   },
   mounted() {
     document.body.style.overflow = "";
@@ -95,9 +97,12 @@ export default {
     this.setMetaTag('description', 'Магазин упаковки КУБ предлагает широкий ассортимент картонных коробок и упаковки для любых нужд. Качественный материал, доступные цены.');
     this.setMetaTag('keywords', 'картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка');
   },
+  destroyed() {
+    window.removeEventListener('beforeunload', this.saveScrollPosition);
+  },
+
   beforeRouteLeave(to, from, next) {
-    const scrollPosition = window.scrollY;
-    localStorage.setItem('catalogScrollPosition', scrollPosition);
+    this.saveScrollPosition()
     next();
   },
   methods: {
@@ -143,6 +148,12 @@ export default {
         this.setMetaTag('keywords', `${category}, картонные коробки, упаковка Казань, коробки для бизнеса, оптовая упаковка, розничная упаковка`);
       }
     },
+
+    saveScrollPosition() {
+      const scrollPosition = window.scrollY;
+      localStorage.setItem('catalogScrollPosition', scrollPosition);
+    },
+
     scrollToZero() {
       document.documentElement.scrollTop = 0;
     },
