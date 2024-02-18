@@ -33,7 +33,7 @@
         dockerfile: ./Dockerfile.frontend
       container_name: nginx-cube
       ports:
-        - "8081:80"
+        - "127.0.0.1:8081:80"
       depends_on:
         - django
       volumes:
