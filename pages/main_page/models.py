@@ -1,12 +1,21 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from shop.models import Product
-from django_resized import ResizedImageField
 
 
 class MainBlock(models.Model):
     """
-    Description of MainBlock Model of Main Page App
+    Description of MainBlock Model of Main Page App.
+
+    Fields:
+    - company_name: Name of the company;
+    - title: Title;
+    - description: Description;
+    - bar_first: First card;
+    - bar_second: Second card;
+    - bar_third: Third card;
+    - bar_fourth: Fourth card;
+    - image: Image.
     """
 
     company_name = models.CharField(verbose_name='Название компании', max_length=250)
@@ -30,7 +39,10 @@ class MainBlock(models.Model):
 
 class CatalogTeaserBlock(models.Model):
     """
-    Description of CatalogTeaserBlock Model of Main Page App
+    Description of CatalogTeaserBlock Model of Main Page App.
+
+    Fields:
+    - title: Title.
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
@@ -45,31 +57,28 @@ class CatalogTeaserBlock(models.Model):
 
 class ServiceOptionsBlock(models.Model):
     """
-    Description of ServiceOptionsBlock Model of Main Page App
+    Description of ServiceOptionsBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - option_first: First text;
+    - image_first: First image;
+    - option_second: Second text;
+    - image_second: Second image;
+    - option_third: Third text;
+    - image_third: Third image.
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
 
     option_first = models.CharField(verbose_name='Текст', max_length=50)
     image_first = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-    # image_first = ResizedImageField(upload_to='main_page/service_options/',
-    #                                 verbose_name='Фото',
-    #                                 size=[300, None],
-    #                                 quality=80, )
 
     option_second = models.CharField(verbose_name='Текст', max_length=50)
     image_second = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-#     image_second = ResizedImageField(upload_to='main_page/service_options/',
-#                                      verbose_name='Фото',
-#                                      size=[300, None],
-#                                      quality=80, )
 
     option_third = models.CharField(verbose_name='Текст', max_length=50)
     image_third = models.FileField(verbose_name='Фото', upload_to='main_page/service_options/', max_length=500)
-#     image_third = ResizedImageField(upload_to='main_page/service_options/',
-#                                     verbose_name='Фото',
-#                                     size=[300, None],
-#                                     quality=80, )
 
     def __str__(self):
         return 'Услуги компании'
@@ -81,7 +90,11 @@ class ServiceOptionsBlock(models.Model):
 
 class NewProductBlock(models.Model):
     """
-    Description of NewProductBlock Model of Main Page App
+    Description of NewProductBlock Model of Main Page App.
+
+    Fields:
+    - order: Order of the product;
+    - product: Product.
     """
 
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
@@ -98,7 +111,11 @@ class NewProductBlock(models.Model):
 
 class PopularProductBlock(models.Model):
     """
-    Description of PopularProductBlock Model of Main Page App
+    Description of PopularProductBlock Model of Main Page App.
+
+    Fields:
+    - order: Order of the product;
+    - product: Product.
     """
 
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
@@ -115,7 +132,18 @@ class PopularProductBlock(models.Model):
 
 class DeliveryBlock(models.Model):
     """
-    Description of DeliveryBlock Model of Main Page App
+    Description of DeliveryBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - subtitle_first: First subtitle;
+    - text_first: First description;
+    - additional_first: Additional first text;
+    - image_first: First image;
+    - subtitle_second: Second subtitle;
+    - text_second: Second description;
+    - additional_second: Additional second text;
+    - image_second: Second image.
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
@@ -124,19 +152,11 @@ class DeliveryBlock(models.Model):
     text_first = models.CharField(verbose_name='Описание', max_length=500)
     additional_first = models.CharField(verbose_name='Дополнительный текст', max_length=500, blank=True, null=True)
     image_first = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
-    # image_first = ResizedImageField(upload_to='main_page/delivery/',
-    #                                 verbose_name='Фото',
-    #                                 size=[550, None],
-    #                                 quality=80, )
 
     subtitle_second = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_second = models.CharField(verbose_name='Описание', max_length=500)
     additional_second = models.CharField(verbose_name='Дополнительный текст', max_length=500, blank=True, null=True)
     image_second = models.FileField(verbose_name='Фото', upload_to='main_page/delivery/', max_length=500)
-#     image_second = ResizedImageField(upload_to='main_page/delivery/',
-#                                      verbose_name='Фото',
-#                                      size=[550, None],
-#                                      quality=80, )
 
     def __str__(self):
         return 'Доставка'
@@ -148,7 +168,28 @@ class DeliveryBlock(models.Model):
 
 class AdvantagesBlock(models.Model):
     """
-    Description of AdvantagesBlock Model of Main Page App
+    Description of AdvantagesBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - subtitle_first: First subtitle;
+    - text_first: First description;
+    - additional_first: Additional first text;
+    - subtitle_second: Second subtitle;
+    - text_second: Second description;
+    - additional_second: Additional second text;
+    - subtitle_third: Third subtitle;
+    - text_third: Third description;
+    - additional_third: Additional third text;
+    - subtitle_fourth: Fourth subtitle;
+    - text_fourth: Fourth description;
+    - additional_fourth: Additional fourth text;
+    - subtitle_fifth: Fifth subtitle;
+    - text_fifth: Fifth description;
+    - additional_fifth: Additional fifth text;
+    - subtitle_sixth: Sixth subtitle;
+    - text_sixth: Sixth description;
+    - additional_sixth: Additional sixth text.
     """
 
     title = RichTextField(verbose_name='Заголовок')
@@ -187,7 +228,18 @@ class AdvantagesBlock(models.Model):
 
 class CartonInfoBlock(models.Model):
     """
-    Description of CartonInfoBlock Model of Main Page App
+    Description of CartonInfoBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - quality_block: Quality text;
+    - subtitle_first: First subtitle;
+    - text_first: First description;
+    - image_first: First image;
+    - subtitle_second: Second subtitle;
+    - text_second: Second description;
+    - image_second: Second image.
     """
 
     title = RichTextField(verbose_name='Заголовок')
@@ -197,18 +249,10 @@ class CartonInfoBlock(models.Model):
     subtitle_first = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_first = models.CharField(verbose_name='Описание', max_length=500)
     image_first = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
-    # image_first = ResizedImageField(upload_to='main_page/carton_info/',
-    #                                 verbose_name='Фото',
-    #                                 size=[250, None],
-    #                                 quality=80, )
 
     subtitle_second = models.CharField(verbose_name='Подзаголовок', max_length=500)
     text_second = models.CharField(verbose_name='Описание', max_length=500)
     image_second = models.FileField(verbose_name='Фото', upload_to='main_page/carton_info/', max_length=500)
-    # image_second = ResizedImageField(upload_to='main_page/carton_info/',
-    #                                  verbose_name='Фото',
-    #                                  size=[250, None],
-    #                                  quality=80, )
 
     def __str__(self):
         return 'Информация о картоне'
@@ -220,7 +264,13 @@ class CartonInfoBlock(models.Model):
 
 class RequestBlock(models.Model):
     """
-    Description of RequestBlock Model of Main Page App
+    Description of RequestBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - whatsapp_link: WhatsApp link;
+    - image: Image.
     """
 
     title = RichTextField(verbose_name='Заголовок')
@@ -229,10 +279,6 @@ class RequestBlock(models.Model):
                                      help_text='Используется в кнопке')
 
     image = models.FileField(verbose_name='Фото', upload_to='main_page/request/', max_length=500)
-    # image = ResizedImageField(upload_to='main_page/request/',
-    #                           verbose_name='Фото',
-    #                           size=[550, None],
-    #                           quality=80, )
 
     def __str__(self):
         return 'Блок заявки в Whatsapp'
@@ -244,7 +290,12 @@ class RequestBlock(models.Model):
 
 class QuestionsBlock(models.Model):
     """
-    Description of QuestionsBlock Model of Main Page App
+    Description of QuestionsBlock Model of Main Page App.
+
+    Fields:
+    - question: Question;
+    - answer: Answer;
+    - order: Order of the question.
     """
 
     question = models.CharField(verbose_name='Вопрос', max_length=500)
@@ -268,7 +319,17 @@ class QuestionsBlock(models.Model):
 
 class ContactsBlock(models.Model):
     """
-    Description of ContactsBlock Model of Main Page App
+    Description of ContactsBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - tg_link: Telegram link;
+    - whatsapp_link: WhatsApp link;
+    - monday_friday_schedule: Schedule for Monday to Friday;
+    - sunday_schedule: Schedule for Saturday;
+    - dinner_schedule: Schedule for Sunday;
+    - number: Phone number;
+    - mail: Email address.
     """
 
     title = RichTextField(verbose_name='Заголовок')

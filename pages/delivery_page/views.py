@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import JsonResponse
+
 from pages.delivery_page.models import PaymentBlock
 from pages.delivery_page.serializers import PaymentBlockSerializer
 from pages.main_page.models import DeliveryBlock
@@ -14,11 +14,12 @@ from pages.common_elements.serializers import (
     RecommendedProductBlockSerializer,
     AddQuestionBlockSerializer,
 )
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
 
-def aggregate_data(request):
+def aggregate_data(request) -> JsonResponse:
     try:
         response_data = {}
 
@@ -46,4 +47,3 @@ def aggregate_data(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-

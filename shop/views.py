@@ -1,12 +1,10 @@
 from django.http import JsonResponse, HttpResponse
-from django.conf import settings
 
 from shop.models import (
     Category,
     Product,
     ProductPrice
 )
-
 from shop.serializers import (
     ProductListSerializer,
     CategorySerializer,
@@ -25,11 +23,6 @@ import hashlib
 import json
 import requests
 from django.conf import settings
-
-
-######################################################
-#                      New views                     #
-######################################################
 
 
 class CategoryListView(generics.ListAPIView):

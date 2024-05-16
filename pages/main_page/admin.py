@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import mark_safe
+
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
@@ -13,6 +14,7 @@ from pages.main_page.models import (
     QuestionsBlock,
     ContactsBlock,
 )
+
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 
 

@@ -1,13 +1,13 @@
 from django.db import models
+from django.db.models.signals import post_save, pre_save, post_delete
+from django.dispatch import receiver
+
+from django_resized import ResizedImageField
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
-from django_resized import ResizedImageField
 import uuid
 import re
 from datetime import datetime
-from django.db.models.signals import post_save, pre_save, post_delete
-from django.dispatch import receiver
-from django.db.utils import IntegrityError
 
 
 def default_id():
@@ -26,8 +26,17 @@ def default_date():
 
 class Category(models.Model):
     """
-    Model Category of Shop App
+    Model Category of Shop App.
+
+    Fields:
+    - id: Primary key, auto-incremented;
+    - name: The name of the category;
+    - slug: Unique slug for the category;
+    - image_cat: Category image;
+    - image_cat_thumbnail: Thumbnail of the category image;
+    - order: Order of the category.
     """
+
     name = models.CharField(max_length=70, verbose_name='Название категории', unique=True)
     slug = models.SlugField(max_length=70, unique=True, verbose_name='Транслитерация')
     image_cat = models.ImageField(verbose_name='Фотография категории', upload_to='shop/images_cat')
@@ -48,8 +57,21 @@ class Category(models.Model):
 
 class Product(models.Model):
     """
-    Model Product of Shop App
+    Model Product of Shop App.
+
+    Fields:
+    - id: Primary key, auto-incremented;
+    - category: Foreign key to Category;
+    - name: Name of the product;
+    - description: Description of the product;
+    - status: Status of the product (choices: in_stock, out_of_stock, to_order);
+    - to_order: Quantity of products to order;
+    - size: Size of the product;
+    - material: Material of the product;
+    - order: Order of the product;
+    - price_1: Price per unit.
     """
+
     category = models.ForeignKey(Category, verbose_name='Выберите категорию товара', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Наименование', max_length=100)
     description = models.TextField(verbose_name='Описание товара', help_text='Введите подробное описание товара')
@@ -108,8 +130,17 @@ def delete_post_session_files(sender, instance, **kwargs):
 class ProductPrice(models.Model):
     """
     Model ProductPrice of Shop App.
+
     This model holds the pricing information for different quantities of a product.
+
+    Fields:
+    - id: Primary key, auto-incremented;
+    - product: Foreign key to Product;
+    - count: Quantity of product;
+    - price: Price per unit for the given quantity;
+    - order: Order of the pricing record.
     """
+
     product = models.ForeignKey(Product, related_name='prices', on_delete=models.CASCADE, verbose_name='Товар')
     count = models.PositiveIntegerField(verbose_name='Кол-во товара',
                                         help_text='От какого кол-ва товара начинает действовать оптовая цена')
@@ -167,8 +198,15 @@ def update_product_price_1(sender, instance, **kwargs):
 
 class ProductImage(models.Model):
     """
-    Model ProductImage of Shop App
+    Model ProductImage of Shop App.
+
+    Fields:
+    - id: Primary key, auto-incremented;
+    - product: Foreign key to Product;
+    - image: Image of the product;
+    - order: Order of the image.
     """
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='Товар')
     image = ResizedImageField(upload_to='shop/images',
                               verbose_name='Фотография товара',
@@ -209,8 +247,23 @@ def delete_old_image_file(sender, instance, **kwargs):
 
 class Orders(models.Model):
     """
-    Model Orders of Shop App
+    Model Orders of Shop App.
+
+    Fields:
+    - uuid: Unique identifier for the order;
+    - id: Order number;
+    - phone_number: Customer's phone number;
+    - name: Customer's name;
+    - pickup: Whether the order is for pickup;
+    - address: Delivery address;
+    - whatsapp_link: Link to WhatsApp for customer communication;
+    - comment: Customer's comment for the order;
+    - order_status: Status of the order;
+    - created_at: Date and time when the order was created;
+    - updated_at: Date and time when the order was last updated;
+    - total: Total cost of the order.
     """
+
     uuid = models.UUIDField(verbose_name='Номер заказа', primary_key=True, default=uuid.uuid4, editable=False)
     id = models.BigIntegerField(verbose_name='Номер заказа', default=default_id)
 
@@ -263,8 +316,16 @@ class Orders(models.Model):
 
 class ProductInfo(models.Model):
     """
-    Model ProductInfo of Shop App
+    Model ProductInfo of Shop App.
+
+    Fields:
+    - id: Primary key, auto-incremented;
+    - order: Foreign key to Orders;
+    - product: Foreign key to Product;
+    - count: Quantity of the product;
+    - price: Price per unit.
     """
+
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name='Заказ')
     product = models.ForeignKey(Product, on_delete=models.RESTRICT, verbose_name='Товар')
 

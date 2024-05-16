@@ -1,6 +1,7 @@
 from django.contrib import admin
-from pages.delivery_page.models import PaymentBlock
 from django.utils.html import mark_safe
+
+from pages.delivery_page.models import PaymentBlock
 
 
 def generate_thumbnail(obj, image_field):

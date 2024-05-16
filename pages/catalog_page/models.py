@@ -4,7 +4,13 @@ from django_resized import ResizedImageField
 
 class AddQuestionBlock(models.Model):
     """
-    Description of AddQuestionBlock Model of Catalog Page App
+    Description of AddQuestionBlock Model of Catalog Page App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - whatsapp_link: WhatsApp link;
+    - image: Image.
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
@@ -13,10 +19,6 @@ class AddQuestionBlock(models.Model):
                                      help_text='Используется в кнопке')
 
     image = models.FileField(verbose_name='Фото', upload_to='catalog_page/add_question/', max_length=500)
-    # image = ResizedImageField(upload_to='catalog_page/add_question/',
-    #                           verbose_name='Фото',
-    #                           size=[1100, None],
-    #                           quality=80, )
 
     def __str__(self):
         return 'Блок "Не нашли нужный размер?"'

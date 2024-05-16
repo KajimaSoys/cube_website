@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+
 from pages.catalog_page.models import AddQuestionBlock
 from pages.catalog_page.serializers import AddQuestionBlockSerializer
-
 from pages.common_elements.models import HeaderBlock
 from pages.common_elements.serializers import HeaderBlockSerializer
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
 
-def aggregate_data(request):
+def aggregate_data(request) -> JsonResponse:
     try:
         response_data = {}
 
@@ -28,4 +29,3 @@ def aggregate_data(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-

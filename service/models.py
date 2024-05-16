@@ -9,6 +9,18 @@ def default_date():
 
 
 class Reviews(models.Model):
+    """
+    Model Reviews of Service App.
+
+    Fields:
+    - name: Name of the author;
+    - review: Text of the review;
+    - image: Original review image;
+    - creation_date: Date of creation;
+    - published: Whether the review is published;
+    - order: Order of the review.
+    """
+
     name = models.CharField(verbose_name='Имя автора', max_length=100)
     review = RichTextField(verbose_name='Текста отзыва')
 

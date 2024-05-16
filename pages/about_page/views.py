@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+
 from pages.main_page.models import (
     AdvantagesBlock,
     ServiceOptionsBlock,
@@ -22,11 +23,12 @@ from pages.common_elements.serializers import (
     HeaderBlockSerializer,
     AddQuestionBlockSerializer
 )
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
 
-def aggregate_data(request):
+def aggregate_data(request) -> JsonResponse:
     try:
         response_data = {}
 

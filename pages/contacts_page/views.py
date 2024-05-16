@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import JsonResponse
+
 from pages.main_page.models import ContactsBlock
 from pages.main_page.serializers import ContactsBlockSerializer
 from pages.contacts_page.models import OutsideView
@@ -12,11 +12,12 @@ from pages.common_elements.serializers import (
     HeaderBlockSerializer,
     AddQuestionBlockSerializer
 )
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
 
-def aggregate_data(request):
+def aggregate_data(request) -> JsonResponse:
     try:
         response_data = {}
 

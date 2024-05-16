@@ -1,6 +1,7 @@
 from django.contrib import admin
-from pages.contacts_page.models import OutsideView
 from django.utils.html import mark_safe
+
+from pages.contacts_page.models import OutsideView
 
 
 def generate_thumbnail(obj, image_field):

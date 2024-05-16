@@ -1,11 +1,19 @@
 from django.db import models
 from shop.models import Product
-from django_resized import ResizedImageField
 
 
 class HeaderBlock(models.Model):
     """
-    Description of HeaderBlock Model of Common Elements App
+    Description of HeaderBlock Model of Common Elements App.
+
+    Fields:
+    - logo: Logo;
+    - number: Company phone number;
+    - mail: Company email;
+    - address: Company address;
+    - yandex_map_link: Yandex Maps link;
+    - tg_link: Telegram link;
+    - whatsapp_link: WhatsApp link.
     """
 
     logo = models.FileField(verbose_name='Логотип', upload_to='common_elements/header/', max_length=500)
@@ -28,7 +36,11 @@ class HeaderBlock(models.Model):
 
 class RecommendedProductBlock(models.Model):
     """
-    Description of RecommendedProductBlock Model of Common Elements App
+    Description of RecommendedProductBlock Model of Common Elements App.
+
+    Fields:
+    - order: Order of the product;
+    - product: Product.
     """
 
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
@@ -45,7 +57,13 @@ class RecommendedProductBlock(models.Model):
 
 class AddQuestionBlock(models.Model):
     """
-    Description of AddQuestionBlock Model of Common Elements App
+    Description of AddQuestionBlock Model of Common Elements App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - whatsapp_link: WhatsApp link;
+    - image: Image.
     """
 
     title = models.CharField(verbose_name='Заголовок', max_length=500)
@@ -54,10 +72,6 @@ class AddQuestionBlock(models.Model):
                                      help_text='Используется в кнопке')
 
     image = models.FileField(verbose_name='Фото', upload_to='common_elements/add_question/', max_length=500)
-    # image = ResizedImageField(upload_to='common_elements/add_question/',
-    #                           verbose_name='Фото',
-    #                           size=[1100, None],
-    #                           quality=80, )
 
     def __str__(self):
         return 'Блок "Остались вопросы?"'

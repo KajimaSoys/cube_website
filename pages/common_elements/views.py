@@ -1,10 +1,13 @@
 from django.http import JsonResponse
+
 from pages.common_elements.models import HeaderBlock
 from pages.common_elements.serializers import HeaderBlockSerializer
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
-def header_data(request):
+
+def header_data(request) -> JsonResponse:
     try:
         response_data = {}
 

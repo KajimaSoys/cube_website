@@ -1,11 +1,13 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
+
 from pages.common_elements.models import (
     HeaderBlock,
     RecommendedProductBlock,
     AddQuestionBlock,
 )
+
 from adminsortable2.admin import SortableAdminMixin
-from django.utils.html import mark_safe
 
 
 @admin.register(HeaderBlock)

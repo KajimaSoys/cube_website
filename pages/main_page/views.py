@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import JsonResponse
+
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
@@ -94,4 +94,3 @@ def aggregate_data(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-

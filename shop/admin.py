@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib import admin
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django.utils.html import mark_safe, format_html
 from django.forms import Textarea
 from django.forms.models import BaseInlineFormSet
 from django.db import models
+
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
+
 from shop.models import (
     Category,
     Product,

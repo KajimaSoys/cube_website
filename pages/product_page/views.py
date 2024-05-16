@@ -4,11 +4,12 @@ from pages.common_elements.models import RecommendedProductBlock
 from pages.common_elements.serializers import RecommendedProductBlockSerializer
 from pages.common_elements.models import HeaderBlock
 from pages.common_elements.serializers import HeaderBlockSerializer
+
 from shop.models import Category
 from shop.serializers import CategorySerializer
 
 
-def aggregate_data(request):
+def aggregate_data(request) -> JsonResponse:
     try:
         response_data = {}
 
