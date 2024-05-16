@@ -53,7 +53,19 @@ class Product(models.Model):
     category = models.ForeignKey(Category, verbose_name='Выберите категорию товара', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Наименование', max_length=100)
     description = models.TextField(verbose_name='Описание товара', help_text='Введите подробное описание товара')
-    in_stock = models.BooleanField(verbose_name="В наличии", default=True)
+
+    STATUS_CHOICES = (
+        ('in_stock', 'В наличии'),
+        ('out_of_stock', 'Отсутствует'),
+        ('to_order', 'Под заказ')
+    )
+    status = models.CharField(verbose_name='Статус товара', choices=STATUS_CHOICES, max_length=20, default='in_stock')
+    to_order = models.IntegerField(
+        verbose_name='Кол-во товаров под заказ',
+        blank=True,
+        null=True,
+        help_text='Если статус товара "Под заказ" нужно ввести кол-во товаров'
+    )
 
     size = models.CharField(verbose_name='Размер', max_length=30, blank=True, null=True)
     material = models.CharField(verbose_name='Материал', max_length=50, blank=True, null=True)

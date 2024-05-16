@@ -40,7 +40,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'category', 'category_info', 'name', 'in_stock', 'size', 'material', 'order', 'images', 'prices']
+        fields = ['id', 'category', 'category_info', 'name', 'status', 'to_order', 'size', 'material', 'order', 'images', 'prices']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -56,7 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'category_info', 'name', 'description', 'in_stock', 'size', 'material', 'images', 'prices']
+        fields = ['id', 'category_info', 'name', 'description', 'status', 'to_order', 'size', 'material', 'images', 'prices']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

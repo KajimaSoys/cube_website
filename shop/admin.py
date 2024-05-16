@@ -81,20 +81,19 @@ class ProductInfoInline(admin.StackedInline):
 @admin.register(Product)
 class ProductAdmin(SortableAdminMixin, admin.ModelAdmin):
     """Настройки для товаров"""
-    list_display = ['name', 'price_1', 'price_at_count_100', 'in_stock']
-    list_filter = ['in_stock', 'category']
-    list_editable = ['in_stock', 'price_1', ]
+    list_display = ['name', 'price_1', 'price_at_count_100', 'status', 'to_order']
+    list_filter = ['status', 'category']
+    list_editable = ['status', 'to_order', 'price_1', ]
     search_fields = ['material', 'name']
     list_display_links = ['name']
     autocomplete_fields = ['category', ]
     form = ProductAdminForm
     inlines = [ProductPriceInline, ProductImageInline]
-    # price_at_count_1.short_description = "Цена при 1шт."
 
     fieldsets = [
         ('Основная информация', {
             'fields': [
-                'category', 'name', 'description', 'in_stock',
+                'category', 'name', 'description', 'status', 'to_order'
             ],
         }),
         ('Характеристики товара', {

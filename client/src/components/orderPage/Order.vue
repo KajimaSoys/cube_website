@@ -46,13 +46,13 @@
                   >
                     {{ product.name }}
                   </router-link>
-                  <div class="quantity-choice" v-if="product.in_stock">
+                  <div class="quantity-choice" v-if="product.status === 'in_stock'">
                     <div
                         class="minus-button button"
                         :class="{
                             'disabled': product.count===min_value,
                             'scaling-svg': product.isScalingMinus,
-                            'out-of-stock-svg': !product.in_stock
+                            'out-of-stock-svg': product.status === 'out_of_stock'
                           }"
                         @click="handleClick(product, 'decreaseOnce')"
                         @mousedown="startDecreasing(product)"
@@ -83,7 +83,7 @@
                          :class="{
                               'disabled': product.count===max_value,
                               'scaling-svg': product.isScalingPlus,
-                              'out-of-stock-svg': !product.in_stock
+                              'out-of-stock-svg': product.status === 'out_of_stock'
                            }"
                          @click="handleClick(product, 'increaseOnce')"
                          @mousedown="startIncreasing(product)"
@@ -101,14 +101,14 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="current-price small-text-1" v-if="product.in_stock">
+                  <div class="current-price small-text-1" v-if="product.status === 'in_stock'">
                     {{ currentPriceOne(product) }} ₽ / шт
                   </div>
                 </div>
 
               </div>
               <div class="card-right-side">
-                <div class="product-price" v-if="product.in_stock">
+                <div class="product-price" v-if="product.status === 'in_stock'">
                   {{ product.finalPrice.toFixed(2) }} ₽
                 </div>
                 <div class="product-price" v-else>
@@ -265,7 +265,7 @@ export default {
   computed: {
     calculatedTotalPrice() {
       let totalPrice = 0
-      const inStockProducts = this.products.filter(product => product.in_stock === true);
+      const inStockProducts = this.products.filter(product => product.status === 'in_stock');
 
       return inStockProducts.reduce(
           (accumulator, currentValue) => {
@@ -384,7 +384,7 @@ export default {
     },
 
     getProductSummary() {
-      const inStockProducts = this.products.filter(product => product.in_stock === true);
+      const inStockProducts = this.products.filter(product => product.status === 'in_stock');
       const totalQuantity = inStockProducts.length
 
       const wordForm = this.getWordForm(totalQuantity);
@@ -439,7 +439,7 @@ export default {
           phone_number: this.phone,
           total: this.calculatedTotalPrice,
           products: this.products
-              .filter(product => product.in_stock === true)
+              .filter(product => product.status === 'in_stock')
               .map(product => ({
                 product_id: product.id,
                 count: product.count,

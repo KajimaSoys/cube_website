@@ -49,7 +49,7 @@
               :class="{
                 'disabled': count===min_value,
                 'scaling-svg': isScalingMinus,
-                'out-of-stock-svg': !product.in_stock
+                'out-of-stock-svg': product.status === 'out_of_stock'
               }"
               @click="handleClick('decreaseOnce')"
               @mousedown="startDecreasing"
@@ -80,7 +80,7 @@
                :class="{
                   'disabled': count===max_value,
                   'scaling-svg': isScalingPlus,
-                  'out-of-stock-svg': !product.in_stock
+                  'out-of-stock-svg': product.status === 'out_of_stock'
                }"
                @click="handleClick('increaseOnce')"
                @mousedown="startIncreasing"
@@ -98,7 +98,7 @@
             </svg>
           </div>
         </div>
-        <div v-if="product.in_stock" @click="addToCart" class="purchase-button">
+        <div v-if="product.status === 'in_stock'" @click="addToCart" class="purchase-button">
           В корзину
         </div>
         <div v-else class="purchase-button out-of-stock">
