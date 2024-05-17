@@ -49,7 +49,7 @@
               :class="{
                 'disabled': count===min_value,
                 'scaling-svg': isScalingMinus,
-                'out-of-stock-svg': product.status === 'out_of_stock'
+                'out-of-stock-svg': product.status !== 'in_stock'
               }"
               @click="handleClick('decreaseOnce')"
               @mousedown="startDecreasing"
@@ -80,7 +80,7 @@
                :class="{
                   'disabled': count===max_value,
                   'scaling-svg': isScalingPlus,
-                  'out-of-stock-svg': product.status === 'out_of_stock'
+                  'out-of-stock-svg': product.status !== 'in_stock'
                }"
                @click="handleClick('increaseOnce')"
                @mousedown="startIncreasing"
@@ -98,12 +98,32 @@
             </svg>
           </div>
         </div>
-        <div v-if="product.status === 'in_stock'" @click="addToCart" class="purchase-button">
+        <div
+            v-if="product.status === 'in_stock'"
+            @click="addToCart"
+            class="purchase-button"
+        >
           В корзину
         </div>
-        <div v-else class="purchase-button out-of-stock">
+        <div
+            v-else-if="product.status === 'out_of_stock'"
+            class="purchase-button out-of-stock"
+        >
           Нет в наличии
         </div>
+        <a
+            v-else-if="product.status === 'to_order'"
+            class="purchase-button to-order"
+            :href="get_whatsapp_text(product)"
+            target="_blank"
+        >
+          <span v-if="product.to_order">
+            Заказ от {{ product.to_order }}&nbsp;шт
+          </span>
+          <span v-else>
+            Под заказ
+          </span>
+        </a>
       </div>
 
     </div>
@@ -269,6 +289,11 @@ export default {
         dangerouslyUseHTMLString: true,
         message: '<a class="button notification" href="/cart">Перейти в корзину</a>',
       })
+    },
+
+    get_whatsapp_text(product){
+      let greet_message = `Здравствуйте! Я хочу заказать ${product.name}.`
+      return `https://api.whatsapp.com/send/?type=phone_number&app_absent=0&phone=79950071654&text=${greet_message}`
     }
 
   },
@@ -455,6 +480,11 @@ export default {
   fill: var(--black-35);
 }
 
+.to-order {
+    background-color: var(--yellow-primary);
+    padding: 1rem;
+    text-decoration: none;
+}
 
 @media screen and (max-width: 1280px) {
   .product-images {
@@ -463,6 +493,14 @@ export default {
 
   .image-container img {
     height: 7.5rem;
+  }
+
+  .purchase-block {
+    font-size: 1rem;
+  }
+
+  .to-order {
+    padding: 1rem 0.75rem;
   }
 }
 

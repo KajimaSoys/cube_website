@@ -142,7 +142,7 @@
                   :class="{
                 'disabled': count===min_value,
                 'scaling-svg': isScalingMinus,
-                'out-of-stock-svg': product.status === 'out_of_stock'
+                'out-of-stock-svg': product.status !== 'in_stock'
               }"
                   @click="decreaseOnce"
                   @mousedown="startDecreasing"
@@ -170,7 +170,7 @@
                    :class="{
                   'disabled': count===max_value,
                   'scaling-svg': isScalingPlus,
-                  'out-of-stock-svg': product.status === 'out_of_stock'
+                  'out-of-stock-svg': product.status !== 'in_stock'
                }"
                    @click="increaseOnce"
                    @mousedown="startIncreasing"
@@ -185,12 +185,32 @@
                 </svg>
               </div>
             </div>
-            <div v-if="product.status === 'in_stock'" @click="addToCart" class="purchase-button">
+            <div
+                v-if="product.status === 'in_stock'"
+                @click="addToCart"
+                class="purchase-button"
+            >
               В корзину
             </div>
-            <div v-else class="purchase-button out-of-stock">
+            <div
+                v-else-if="product.status === 'out_of_stock'"
+                class="purchase-button out-of-stock"
+            >
               Нет в наличии
             </div>
+            <a
+                v-else-if="product.status === 'to_order'"
+                class="purchase-button to-order"
+                :href="get_whatsapp_text(product)"
+                target="_blank"
+            >
+              <span v-if="product.to_order">
+                Заказ от {{ product.to_order }}&nbsp;шт
+              </span>
+              <span v-else>
+                Под заказ
+              </span>
+            </a>
           </div>
         </div>
       </div>
@@ -364,6 +384,11 @@ export default {
 
     strippedSrc(image) {
       return this.backendURL + '/media' + image.split('/media')[1]
+    },
+
+    get_whatsapp_text(product){
+      let greet_message = `Здравствуйте! Я хочу заказать ${product.name}.`
+      return `https://api.whatsapp.com/send/?type=phone_number&app_absent=0&phone=79950071654&text=${greet_message}`
     }
   },
   setup() {
@@ -608,6 +633,12 @@ export default {
 
 .out-of-stock-svg svg path {
   fill: var(--black-35);
+}
+
+.to-order {
+    background-color: var(--yellow-primary);
+    padding: 1rem;
+    text-decoration: none;
 }
 
 .image-slider {

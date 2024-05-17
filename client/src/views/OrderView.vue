@@ -94,7 +94,7 @@ export default {
       this.products = this.products.filter(item => item.id !== productId);
     },
     clearCart() {
-      this.products = this.products.filter(product => product.status === 'out_of_stock');
+      this.products = this.products.filter(product => product.status !== 'in_stock');
 
       this.cart = this.cart.filter(cartItem =>
           this.products.some(product => product.id === cartItem.id)

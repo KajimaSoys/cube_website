@@ -52,7 +52,7 @@
                         :class="{
                             'disabled': product.count===min_value,
                             'scaling-svg': product.isScalingMinus,
-                            'out-of-stock-svg': product.status === 'out_of_stock'
+                            'out-of-stock-svg': product.status !== 'in_stock'
                           }"
                         @click="handleClick(product, 'decreaseOnce')"
                         @mousedown="startDecreasing(product)"
@@ -83,7 +83,7 @@
                          :class="{
                               'disabled': product.count===max_value,
                               'scaling-svg': product.isScalingPlus,
-                              'out-of-stock-svg': product.status === 'out_of_stock'
+                              'out-of-stock-svg': product.status !== 'in_stock'
                            }"
                          @click="handleClick(product, 'increaseOnce')"
                          @mousedown="startIncreasing(product)"
