@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
+    CalculatorBlock,
     ServiceOptionsBlock,
     NewProductBlock,
     PopularProductBlock,
@@ -16,6 +17,7 @@ from pages.main_page.models import (
 from pages.main_page.serializers import (
     MainBlockSerializer,
     CatalogTeaserBlockSerializer,
+    CalculatorBlockSerializer,
     ServiceOptionsBlockSerializer,
     NewProductBlockSerializer,
     PopularProductBlockSerializer,
@@ -47,6 +49,7 @@ def aggregate_data(request):
 
         main_block = MainBlock.objects.first()
         catalog_teaser_block = CatalogTeaserBlock.objects.first()
+        calculator_block = CalculatorBlock.objects.first()
         category_list = Category.objects.all()
         service_options_block = ServiceOptionsBlock.objects.first()
 
@@ -67,6 +70,8 @@ def aggregate_data(request):
             response_data['main_block'] = MainBlockSerializer(main_block).data
         if catalog_teaser_block:
             response_data['catalog_teaser_block'] = CatalogTeaserBlockSerializer(catalog_teaser_block).data
+        if calculator_block:
+            response_data['calculator_block'] = CalculatorBlockSerializer(calculator_block).data
         if category_list:
             response_data['category_list'] = CategorySerializer(category_list, many=True).data
         if service_options_block:

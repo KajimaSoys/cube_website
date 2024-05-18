@@ -55,6 +55,30 @@ class CatalogTeaserBlock(models.Model):
         verbose_name_plural = '2 - Тизер каталога'
 
 
+class CalculatorBlock(models.Model):
+    """
+    Description of CalculatorBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - image: Image.
+    """
+
+    title = RichTextField(verbose_name='Заголовок')
+    description = models.CharField(verbose_name='Описание', max_length=500)
+
+    image = models.FileField(verbose_name='Фото', upload_to='main_page/calculator/', max_length=500)
+
+    def __str__(self):
+        return 'Блок калькулятора'
+
+    class Meta:
+        # TODO set correct numbers
+        verbose_name = '2 - Блок калькулятора'
+        verbose_name_plural = '2 - Блок калькулятора'
+
+
 class ServiceOptionsBlock(models.Model):
     """
     Description of ServiceOptionsBlock Model of Main Page App.

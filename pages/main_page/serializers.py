@@ -2,6 +2,7 @@ from rest_framework import serializers
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
+    CalculatorBlock,
     ServiceOptionsBlock,
     NewProductBlock,
     PopularProductBlock,
@@ -23,6 +24,12 @@ class MainBlockSerializer(serializers.ModelSerializer):
 class CatalogTeaserBlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatalogTeaserBlock
+        fields = "__all__"
+
+
+class CalculatorBlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalculatorBlock
         fields = "__all__"
 
 

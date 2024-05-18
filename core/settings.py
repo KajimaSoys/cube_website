@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'service.apps.ServiceConfig',
     'pages.common_elements.apps.CommonElementsConfig',
     'pages.main_page.apps.MainPageConfig',
+    'pages.calculator_page.apps.CalculatorPageConfig',
     'pages.catalog_page.apps.CatalogPageConfig',
     'pages.product_page.apps.ProductPageConfig',
     'pages.delivery_page.apps.DeliveryPageConfig',
@@ -147,6 +148,7 @@ ADMIN_ORDERING = (
         (
             'MainBlock',
             'CatalogTeaserBlock',
+            'CalculatorBlock',
             'ServiceOptionsBlock',
             'NewProductBlock',
             'PopularProductBlock',
@@ -157,6 +159,12 @@ ADMIN_ORDERING = (
             'QuestionsBlock',
             'ContactsBlock',
             'AddQuestionBlock'
+        )
+    ),
+    (
+        'calculator_page',
+        (
+            'AdditionalProductBlock',
         )
     ),
     (

@@ -4,6 +4,7 @@ from django.utils.html import mark_safe
 from pages.main_page.models import (
     MainBlock,
     CatalogTeaserBlock,
+    CalculatorBlock,
     ServiceOptionsBlock,
     NewProductBlock,
     PopularProductBlock,
@@ -38,6 +39,16 @@ class MainBlockAdmin(admin.ModelAdmin):
 @admin.register(CatalogTeaserBlock)
 class CatalogTeaserBlockAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(CalculatorBlock)
+class CalculatorBlockAdmin(admin.ModelAdmin):
+
+    def thumbnail(self, obj):
+        return generate_thumbnail(obj, 'image')
+
+    thumbnail.short_description = "Предпросмотр фото"
+    readonly_fields = ['thumbnail', ]
 
 
 @admin.register(ServiceOptionsBlock)
@@ -89,11 +100,13 @@ class ServiceOptionsBlockAdmin(admin.ModelAdmin):
 @admin.register(NewProductBlock)
 class NewProductBlockAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ('order', 'product')
+    autocomplete_fields = ('product', )
 
 
 @admin.register(PopularProductBlock)
 class PopularProductBlockAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ('order', 'product')
+    autocomplete_fields = ('product', )
 
 
 @admin.register(DeliveryBlock)
