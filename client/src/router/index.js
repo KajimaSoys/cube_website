@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import AboutView from "../views/AboutView.vue";
+import CalculatorView from "../views/CalculatorView.vue";
 import CatalogView from "../views/CatalogView.vue";
 import ContactsView from "../views/ContactsView.vue";
 import DeliveryView from "../views/DeliveryView.vue";
@@ -71,6 +72,17 @@ const router = createRouter({
                 breadcrumb: [
                     {name: 'Главная', link: '/'},
                     {name: 'Доставка и оплата'}
+                ]
+            }
+        },
+        {
+            path: '/calculator',
+            name: 'calculator',
+            component: CalculatorView,
+            meta: {
+                breadcrumb: [
+                    {name: 'Главная', link: '/'},
+                    {name: 'Калькулятор'}
                 ]
             }
         },

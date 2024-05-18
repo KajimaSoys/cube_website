@@ -15,6 +15,10 @@
         :category_list="category_list"
     />
 
+    <Calculator
+      :calculator_block="calculator_block"
+    />
+
     <ServiceOptions
         :service_options_block="service_options_block"
     />
@@ -73,6 +77,7 @@
 import Header from "../components/common/Header.vue";
 import Main from "../components/mainPage/Main.vue"
 import CatalogTeaser from "../components/mainPage/CatalogTeaser.vue"
+import Calculator from "../components/mainPage/Calculator.vue"
 import ServiceOptions from "../components/mainPage/ServiceOptions.vue"
 import ProductSlider from "../components/common/ProductSlider.vue";
 import Delivery from "../components/mainPage/Delivery.vue"
@@ -92,6 +97,7 @@ export default {
     Header,
     Main,
     CatalogTeaser,
+    Calculator,
     ServiceOptions,
     ProductSlider,
     Delivery,
@@ -108,6 +114,7 @@ export default {
       header_block: {},
       main_block: {},
       catalog_teaser_block: {},
+      calculator_block: {},
       category_list: [],
       service_options_block: {},
       new_product_block: [],
@@ -144,6 +151,7 @@ export default {
             this.header_block = receivedData.header_block
             this.main_block = receivedData.main_block
             this.catalog_teaser_block = receivedData.catalog_teaser_block
+            this.calculator_block = receivedData.calculator_block
             this.service_options_block = receivedData.service_options_block
             this.category_list = receivedData.category_list
             this.new_product_block = receivedData.new_product_block
@@ -156,7 +164,8 @@ export default {
             this.contacts_block = receivedData.contacts_block
             this.add_question_block = receivedData.add_question_block
 
-            window.ym(96164548, 'hit', window.location.href);
+            // todo uncomment on prod
+            // window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
             this.scrollToZero();

@@ -3,7 +3,7 @@
   <!-- Главная страница -->
   <url>
     <loc>https://cubekazan.ru/</loc>
-    <lastmod>2024-01-09</lastmod>
+    <lastmod>2024-06-01</lastmod>
     <priority>1</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -12,6 +12,13 @@
     <loc>https://cubekazan.ru/catalog/</loc>
     <lastmod>2024-01-09</lastmod>
     <priority>0.4</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <!-- Калькулятор -->
+  <url>
+    <loc>https://cubekazan.ru/calculator/</loc>
+    <lastmod>2024-06-01</lastmod>
+    <priority>0.5</priority>
     <changefreq>monthly</changefreq>
   </url>
   <!-- О магазине -->
