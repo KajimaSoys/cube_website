@@ -183,10 +183,6 @@ a:hover {
     padding-top: 4.4rem;
   }
 
-  .question-max {
-
-  }
-
   .question-background {
     height: calc(100%);
   }
