@@ -7,10 +7,17 @@
 
     <Breadcrumbs/>
 
-<!--    todo add example like calculator blocks -->
-<!--    <Delivery-->
-<!--        :delivery_block="delivery_block"-->
-<!--    />-->
+    <CalculatorDescription
+        :calculator_description_block="calculator_description_block"
+    />
+
+    <BoxInfo
+
+    />
+
+    <CalculationResult
+
+    />
 
 
   </div>
@@ -27,7 +34,10 @@
 
 <script>
 import Header from "../components/common/Header.vue";
-// import Delivery from "../components/mainPage/Delivery.vue";
+
+import CalculatorDescription from "../components/calculatorPage/CalculatorDescription.vue";
+import BoxInfo from "../components/calculatorPage/BoxInfo.vue";
+import CalculationResult from "../components/calculatorPage/CalculationResult.vue";
 
 import Footer from "../components/common/Footer.vue";
 import Breadcrumbs from "../components/common/Breadcrumbs.vue";
@@ -38,7 +48,10 @@ export default {
   inject: ['backendURL'],
   components: {
     Header,
-    // Delivery,
+
+    CalculatorDescription,
+    BoxInfo,
+    CalculationResult,
 
     Footer,
     Breadcrumbs,
@@ -46,6 +59,7 @@ export default {
   data() {
     return {
       header_block: {},
+      calculator_description_block: {},
       additional_product_block: [],
 
       category_list: [],
@@ -73,6 +87,7 @@ export default {
             let receivedData = response.data
 
             this.header_block = receivedData.header_block
+            this.calculator_description_block = receivedData.calculator_description_block
             this.additional_product_block = receivedData.additional_product_block
             this.category_list = receivedData.category_list
 

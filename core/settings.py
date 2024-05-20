@@ -164,6 +164,7 @@ ADMIN_ORDERING = (
     (
         'calculator_page',
         (
+            'CalculatorDescriptionBlock',
             'AdditionalProductBlock',
         )
     ),

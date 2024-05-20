@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from pages.calculator_page.models import AdditionalProductBlock
+from pages.calculator_page.models import (
+    CalculatorDescriptionBlock,
+    AdditionalProductBlock
+)
+
+
+class CalculatorDescriptionBlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalculatorDescriptionBlock
+        fields = "__all__"
 
 
 class AdditionalProductBlockSerializer(serializers.ModelSerializer):
