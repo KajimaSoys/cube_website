@@ -4,14 +4,18 @@
       <h2>Введите размеры коробок</h2>
 
       <BoxInfoInput
-        title="Внешняя коробка"
+        componentType="external"
+        defaultType="self-assembled"
+        :isSubmitted="isSubmitted"
       />
 
       <BoxInfoInput
-        title="Внутренняя коробка или товар"
+        componentType="inner"
+        defaultType="four-valve"
+        :isSubmitted="isSubmitted"
       />
 
-      <a class="button">Рассчитать</a>
+      <a class="button" @click="isSubmitted = !isSubmitted">Рассчитать</a>
 
     </div>
   </div>
@@ -28,6 +32,7 @@ export default {
   },
   data() {
     return {
+      isSubmitted: false,
     }
   },
   mounted() {
@@ -78,6 +83,7 @@ h2 {
   border-radius: 0.5rem;
   background: var(--green-light, #40AB5E);
   text-decoration: none;
+  cursor: pointer;
   color: white;
 }
 
