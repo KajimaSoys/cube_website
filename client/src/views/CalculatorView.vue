@@ -12,11 +12,11 @@
     />
 
     <BoxInfo
-
+      @calculate="handleCalculation"
     />
 
     <CalculationResult
-
+      :calculationData="calculationData"
     />
 
 
@@ -64,7 +64,9 @@ export default {
 
       category_list: [],
 
-      show: false
+      show: false,
+
+      calculationData: null,
     }
   },
   created() {
@@ -111,6 +113,10 @@ export default {
         document.head.appendChild(tag);
       }
       tag.setAttribute('content', content);
+    },
+
+    handleCalculation(data) {
+      this.calculationData = data;
     }
   },
 }

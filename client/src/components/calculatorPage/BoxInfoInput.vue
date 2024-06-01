@@ -30,8 +30,7 @@
 
     <input type="text"
            placeholder="100*100*100"
-           v-model="dimensions"
-           @input="validateField"
+           @input="handleInput"
            maxlength="15"
            class="dimensions-input"
            :class="{'error-border': !isInputValid && isSubmitted}"
@@ -72,10 +71,7 @@ export default {
   inject: ['backendURL'],
   props: {
     componentType: String,
-    defaultType: {
-      type: String,
-      default: 'self-assembled'
-    },
+    defaultType: String,
     isSubmitted: {
       type: Boolean,
       default: false
@@ -84,12 +80,13 @@ export default {
   components: {},
   data() {
     return {
-      selectedType: this.defaultType,
+      selectedType: this.defaultType || 'self-assembled',
       selectedSizeType: 'inner',
-      dimensions: '',
       suggestions: [],
       uniqueId: '',
-      isInputValid: false
+
+      isInputValid: false,
+      parsedDimensions: {},
     }
   },
 
@@ -113,24 +110,45 @@ export default {
   methods: {
     selectType(type) {
       this.selectedType = type;
+      this.emitInput();
     },
-    validateField(event) {
-      const allowedCharacters = /[^0-9* xXхХ]/g;
-      this.dimensions = event.target.value.replace(allowedCharacters, '');
-      this.isInputValid = this.parseDimensions(this.dimensions);
+    handleInput(event) {
+      const value = event.target.value.replace(/[^0-9* xXхХ]/g, '');
+      if (this.parseDimensions(value)) {
+        this.isInputValid = true;
+        this.emitInput();
+      } else {
+        this.isInputValid = false;
+      }
     },
+
     parseDimensions(value) {
       const pattern = /(\d+)\D+(\d+)\D+(\d+)/;
       const match = value.match(pattern);
       if (match) {
-        const [_, length, width, height] = match;
-        console.log(`Parsed dimensions: Length=${length}, Width=${width}, Height=${height}`);
-        return true; // Valid input
+        const [_, length, width, height] = match.map(Number);
+        this.parsedDimensions = { length, width, height };
+        return true;
       }
-      return false; // Invalid input
+      return false;
+    },
+
+    emitInput() {
+      if (this.isInputValid) {
+        this.$emit('inputDataChange', this.componentType, {
+          selectedType: this.selectedType,
+          parsedDimensions: this.parsedDimensions,
+          selectedSizeType: this.selectedSizeType
+        });
+      }
     }
 
   },
+  watch: {
+    selectedSizeType() {
+      this.emitInput();
+    }
+  }
 }
 </script>
 

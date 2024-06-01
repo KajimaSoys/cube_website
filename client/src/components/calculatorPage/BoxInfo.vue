@@ -7,16 +7,17 @@
         componentType="external"
         defaultType="self-assembled"
         :isSubmitted="isSubmitted"
+        @inputDataChange="processInput"
       />
 
       <BoxInfoInput
         componentType="inner"
         defaultType="four-valve"
         :isSubmitted="isSubmitted"
+        @inputDataChange="processInput"
       />
 
-      <a class="button" @click="isSubmitted = !isSubmitted">Рассчитать</a>
-
+      <a class="button" @click="submit">Рассчитать</a>
     </div>
   </div>
 </template>
@@ -33,11 +34,23 @@ export default {
   data() {
     return {
       isSubmitted: false,
+      boxData: { external: {}, inner: {} },
     }
   },
   mounted() {
   },
-  methods: {},
+  methods: {
+    submit() {
+      this.isSubmitted = true;
+      if (this.boxData.external && this.boxData.inner) {
+        this.$emit('calculate', this.boxData);
+      }
+    },
+
+    processInput(type, data) {
+      this.boxData[type] = data;
+    }
+  },
 }
 </script>
 
@@ -85,6 +98,7 @@ h2 {
   text-decoration: none;
   cursor: pointer;
   color: white;
+  user-select: none;
 }
 
 a {

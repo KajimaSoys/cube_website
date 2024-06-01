@@ -3,8 +3,16 @@
     <div class="calculation-result-max">
 
       <h2>Расчет</h2>
-      <div class="calculation-result-content">
-        Какой-то результат
+      <div v-if="calculationData" class="calculation-result-content">
+        Большая коробка {{ displayDimensions.largeBox }} мм. (внутренние размеры)
+        <br>
+        Маленькая коробка {{ displayDimensions.smallBox }} мм. (внешние размеры)
+        <br>
+        По дну: {{ boxesPerBase.length }} x {{ boxesPerBase.width }} = {{ boxesPerBase.total }} шт.
+        <br>
+        В высоту: {{ boxesPerHeight }} шт.
+        <br>
+        Итого: {{ totalBoxes }} шт. коробок/товаров в коробке
       </div>
 
     </div>
@@ -15,14 +23,85 @@
 export default {
   name: "CalculationResult",
   inject: ['backendURL'],
+  props: ['calculationData'],
   components: {},
   data() {
     return {
     }
   },
+  computed: {
+    displayDimensions() {
+      if (!this.calculationData) return { largeBox: '', smallBox: '' };
+
+      const largeBox = this.convertDimensions('external', this.calculationData.external);
+      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
+
+      return {
+        largeBox: `${largeBox.length}x${largeBox.width}x${largeBox.height}`,
+        smallBox: `${smallBox.length}x${smallBox.width}x${smallBox.height}`,
+      };
+    },
+    boxesPerBase() {
+      if (!this.calculationData) return { length: 0, width: 0, total: 0 };
+
+      const largeBox = this.convertDimensions('external', this.calculationData.external);
+      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
+
+      const length = Math.floor(largeBox.length / smallBox.length);
+      const width = Math.floor(largeBox.width / smallBox.width);
+      const total = length * width;
+
+      return { length, width, total };
+    },
+    boxesPerHeight() {
+      if (!this.calculationData) return 0;
+
+      const largeBox = this.convertDimensions('external', this.calculationData.external);
+      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
+      
+      return Math.floor(largeBox.height / smallBox.height);
+    },
+    totalBoxes() {
+      return this.boxesPerBase.total * this.boxesPerHeight;
+    }
+  },
   mounted() {
   },
-  methods: {},
+  methods: {
+    convertDimensions(componentType, boxData) {
+      let selectedType = boxData.selectedType;
+      let parsedDimensions = boxData.parsedDimensions;
+      let selectedSizeType = boxData.selectedSizeType;
+
+      let { length, width, height } = parsedDimensions;
+      if (componentType === 'external' && selectedSizeType === 'external') {
+        if (selectedType === 'self-assembled') {
+          // console.log('Большая коробка внешний размер самосборной во внутренний размер')
+          length -= 0.8;
+          width -= 0.2;
+          height -= 0.2;
+        } else if (selectedType === 'four-valve') {
+          // console.log('Большая коробка внешний размер четырехклапанной во внутренний размер')
+          length -= 0.5;
+          width -= 0.5;
+          height -= 0.5;
+        }
+      } else if (componentType === 'inner' && selectedSizeType === 'inner') {
+          if (selectedType === 'self-assembled') {
+            // console.log('Маленькая коробка внутренний размер самосборной во внешний размер')
+            length += 0.8;
+            width += 0.2;
+            height += 0.2;
+          } else if (selectedType === 'four-valve') {
+            // console.log('Маленькая коробка внутренний размер четырехклапанной во внешний размер')
+            length += 0.5;
+            width += 0.5;
+            height += 0.5;
+          }
+      }
+      return { length, width, height };
+    }
+  },
 }
 </script>
 
