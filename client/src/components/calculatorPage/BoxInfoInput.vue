@@ -32,7 +32,7 @@
            placeholder="100*100*100"
            @input="handleInput"
            v-model="dimensions"
-           maxlength="15"
+           maxlength="20"
            class="dimensions-input"
            :class="{'error-border': !isInputValid && isSubmitted}"
     >
@@ -153,7 +153,7 @@ export default {
     },
 
     handleInput() {
-      this.dimensions = this.dimensions.replace(/[^0-9* xXхХ]/g, '');
+      this.dimensions = this.dimensions.replace(/,/g, '.').replace(/[^0-9.* xXхХ]/g, '');
       this.filterSuggestions(this.dimensions);
 
       if (this.parseDimensions(this.dimensions)) {
@@ -165,10 +165,10 @@ export default {
     },
 
     parseDimensions(value) {
-      const pattern = /(\d+)\D+(\d+)\D+(\d+)/;
+      const pattern = /(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)$/;
       const match = value.match(pattern);
       if (match) {
-        const [_, length, width, height] = match.map(Number);
+        const [_, length, __, width, ___, height, ____] = match.map(Number);
         this.parsedDimensions = { length, width, height };
         return true;
       }
@@ -182,7 +182,7 @@ export default {
     },
 
     selectSuggestion(input) {
-      this.dimensions = input.replace(/[^0-9* xXхХ]/g, '');
+      this.dimensions = input.replace(/,/g, '.').replace(/[^0-9.* xXхХ]/g, '');
       this.suggestionSelected = true;
       if (this.parseDimensions(this.dimensions)) {
         this.isInputValid = true;
@@ -193,7 +193,7 @@ export default {
     },
 
     emitInput() {
-      console.log('input emitted with this.parsedDimensions:', this.parsedDimensions)
+      // console.log('input emitted with this.parsedDimensions:', this.parsedDimensions)
       if (this.isInputValid) {
         this.$emit('inputDataChange', this.componentType, {
           selectedType: this.selectedType,
