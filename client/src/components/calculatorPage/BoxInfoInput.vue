@@ -31,13 +31,22 @@
     <input type="text"
            placeholder="100*100*100"
            @input="handleInput"
+           v-model="dimensions"
            maxlength="15"
            class="dimensions-input"
            :class="{'error-border': !isInputValid && isSubmitted}"
     >
 
-    <div v-if="suggestions.length" class="suggestions">
-      <div v-for="suggestion in suggestions" :key="suggestion.id" class="suggestion">
+    <div
+        v-if="filteredSuggestions.length && dimensions && !suggestionSelected"
+        class="suggestions"
+    >
+      <div
+          v-for="suggestion in filteredSuggestions"
+          :key="suggestion.id"
+          class="suggestion"
+          @click="selectSuggestion(suggestion.dimensions)"
+      >
         {{ suggestion.name }} ({{ suggestion.dimensions }})
       </div>
     </div>
@@ -66,6 +75,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "BoxInfoInput",
   inject: ['backendURL'],
@@ -82,17 +93,24 @@ export default {
     return {
       selectedType: this.defaultType || 'self-assembled',
       selectedSizeType: 'inner',
-      suggestions: [],
+
+      suggestionsList: [],
+      filteredSuggestions: [],
+      suggestionSelected: false,
+
+      dimensions: "",
+      parsedDimensions: {},
       uniqueId: '',
 
       isInputValid: false,
-      parsedDimensions: {},
     }
   },
 
   created() {
     // Generate a unique ID for each instance
     this.uniqueId = `_${Math.random().toString(36).substr(2, 9)}`;
+
+    this.fetchDimensions();
   },
   mounted() {
   },
@@ -108,13 +126,37 @@ export default {
     }
   },
   methods: {
+    async fetchDimensions() {
+      const endpoints = [
+        `${this.backendURL}/api/v1/category/samosbornye-korobki/`,
+        `${this.backendURL}/api/v1/category/chetyrehklapannye-korobki/`
+      ];
+
+      try {
+        const responses = await Promise.all(endpoints.map(url => axios.get(url)));
+        this.suggestionsList = responses.flatMap(response =>
+          response.data.map(item => ({
+            id: item.id,
+            name: item.name,
+            dimensions: item.size
+          }))
+        );
+        this.filteredSuggestions = JSON.parse(JSON.stringify(this.suggestionsList));
+      } catch (error) {
+        console.error("Failed to fetch dimensions:", error);
+      }
+    },
+
     selectType(type) {
       this.selectedType = type;
       this.emitInput();
     },
-    handleInput(event) {
-      const value = event.target.value.replace(/[^0-9* xXхХ]/g, '');
-      if (this.parseDimensions(value)) {
+
+    handleInput() {
+      this.dimensions = this.dimensions.replace(/[^0-9* xXхХ]/g, '');
+      this.filterSuggestions(this.dimensions);
+
+      if (this.parseDimensions(this.dimensions)) {
         this.isInputValid = true;
         this.emitInput();
       } else {
@@ -133,7 +175,25 @@ export default {
       return false;
     },
 
+    filterSuggestions(input) {
+      const inputRegex = new RegExp(input.split(/\D+/).join('.*'), 'i');
+      this.filteredSuggestions = this.suggestionsList.filter(s => inputRegex.test(s.dimensions)).slice(0, 5);
+      this.suggestionSelected = false;
+    },
+
+    selectSuggestion(input) {
+      this.dimensions = input.replace(/[^0-9* xXхХ]/g, '');
+      this.suggestionSelected = true;
+      if (this.parseDimensions(this.dimensions)) {
+        this.isInputValid = true;
+        this.emitInput();
+      } else {
+        this.isInputValid = false;
+      }
+    },
+
     emitInput() {
+      console.log('input emitted with this.parsedDimensions:', this.parsedDimensions)
       if (this.isInputValid) {
         this.$emit('inputDataChange', this.componentType, {
           selectedType: this.selectedType,

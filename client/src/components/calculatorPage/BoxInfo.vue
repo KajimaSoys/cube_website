@@ -42,9 +42,13 @@ export default {
   methods: {
     submit() {
       this.isSubmitted = true;
-      if (this.boxData.external && this.boxData.inner) {
+      if (!this.isEmpty(this.boxData.external) && !this.isEmpty(this.boxData.inner)) {
         this.$emit('calculate', this.boxData);
       }
+    },
+
+    isEmpty(obj) {
+      return Object.keys(obj).length === 0;
     },
 
     processInput(type, data) {
