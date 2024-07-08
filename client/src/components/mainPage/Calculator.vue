@@ -80,12 +80,12 @@ export default {
 }
 
 .description {
-  width: 70%;
+  width: 68%;
 }
 
 .button {
   margin-top: 2rem;
-  padding: 1rem 2rem;
+  padding: 1rem 2.5rem;
   height: 2.5rem;
 
   display: flex;
@@ -109,12 +109,13 @@ a:hover {
 .image-container {
   position: absolute;
   z-index: 1;
-  bottom: -1rem;
-  right: -12rem;
+  bottom: -11rem;
+  right: -4rem;
 }
 
 .image-container img {
   width: 100%;
+  max-width: 40rem;
   object-fit: cover;
 }
 
@@ -125,20 +126,26 @@ a:hover {
 
   .calculator-content {
     padding: 4rem 0 4rem 2.25rem;
+    width: 45%;
+  }
+
+  .description {
+    width: 80%;
   }
 
   .button {
     height: 1.5rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
   }
 
   .image-container {
-    bottom: -1rem;
-    right: -13rem;
+    bottom: -10rem;
+    right: -4rem;
   }
 
   .image-container img {
-    width: 85%;
+    max-width: 38rem;
   }
 }
 
@@ -153,7 +160,7 @@ a:hover {
   }
 
   .description {
-    width: 95%;
+    width: 90%;
   }
 
   .button {
@@ -162,12 +169,12 @@ a:hover {
   }
 
   .image-container {
-    bottom: -1rem;
-    right: -30rem;
+    bottom: -3rem;
+    right: -3rem;
   }
 
   .image-container img {
-    width: 66%;
+    max-width: 24rem;
   }
 
 }
@@ -193,7 +200,7 @@ a:hover {
 
   .description {
     text-align: center;
-    width: 70%;
+    width: 85%;
   }
 
   .button {
@@ -208,12 +215,11 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 10rem;
+    height: 16rem;
   }
 
   .image-container img {
-    width: 21rem;
-    rotate: 26deg;
+    width: 22rem;
   }
 
 }
