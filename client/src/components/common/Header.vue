@@ -9,13 +9,30 @@
           </router-link>
         </div>
 
+        <div class="calculator-logo-container">
+          <router-link :to="{ name: 'calculator' }" class="calculator-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_544_1112)">
+                <path d="M8.12817 14.1632C8.12817 14.4619 7.88055 14.704 7.57508 14.704C7.26962 14.704 7.022 14.4619 7.022 14.1632M8.12817 14.1632C8.12817 13.8645 7.88055 13.6224 7.57508 13.6224C7.26962 13.6224 7.022 13.8645 7.022 14.1632M8.12817 14.1632H7.022M8.12817 18.4896C8.12817 18.7882 7.88055 19.0303 7.57508 19.0303C7.26962 19.0303 7.022 18.7882 7.022 18.4896M8.12817 18.4896C8.12817 18.1909 7.88055 17.9488 7.57508 17.9488C7.26962 17.9488 7.022 18.1909 7.022 18.4896M8.12817 18.4896H7.022M12.5529 14.1632C12.5529 14.4619 12.3052 14.704 11.9998 14.704C11.6943 14.704 11.4467 14.4619 11.4467 14.1632M12.5529 14.1632C12.5529 13.8645 12.3052 13.6224 11.9998 13.6224C11.6943 13.6224 11.4467 13.8645 11.4467 14.1632M12.5529 14.1632H11.4467M12.5529 18.4896C12.5529 18.7882 12.3052 19.0303 11.9998 19.0303C11.6943 19.0303 11.4467 18.7882 11.4467 18.4896M12.5529 18.4896C12.5529 18.1909 12.3052 17.9488 11.9998 17.9488C11.6943 17.9488 11.4467 18.1909 11.4467 18.4896M12.5529 18.4896H11.4467M16.9776 14.1632C16.9776 14.4619 16.7299 14.704 16.4245 14.704C16.119 14.704 15.8714 14.4619 15.8714 14.1632M16.9776 14.1632C16.9776 13.8645 16.7299 13.6224 16.4245 13.6224C16.119 13.6224 15.8714 13.8645 15.8714 14.1632M16.9776 14.1632H15.8714M16.9776 18.4896C16.9776 18.7882 16.7299 19.0303 16.4245 19.0303C16.119 19.0303 15.8714 18.7882 15.8714 18.4896M16.9776 18.4896C16.9776 18.1909 16.7299 17.9488 16.4245 17.9488C16.119 17.9488 15.8714 18.1909 15.8714 18.4896M16.9776 18.4896H15.8714M8.06891 9.83682H15.9306C16.4907 9.83682 16.7707 9.83682 16.9846 9.72782C17.1728 9.63195 17.3258 9.47897 17.4217 9.29081C17.5306 9.0769 17.5306 8.79687 17.5306 8.23682V6.71714C17.5306 6.15709 17.5306 5.87706 17.4217 5.66315C17.3258 5.47499 17.1728 5.32201 16.9846 5.22614C16.7707 5.11714 16.4907 5.11714 15.9306 5.11714H8.06891C7.50886 5.11714 7.22883 5.11714 7.01492 5.22614C6.82676 5.32201 6.67378 5.47499 6.5779 5.66315C6.46891 5.87706 6.46891 6.15709 6.46891 6.71714V8.23682C6.46891 8.79687 6.46891 9.0769 6.5779 9.29081C6.67378 9.47897 6.82676 9.63195 7.01492 9.72782C7.22883 9.83682 7.50886 9.83682 8.06891 9.83682ZM7.95039 22.8159H16.0492C17.7293 22.8159 18.5694 22.8159 19.2111 22.4889C19.7756 22.2013 20.2346 21.7424 20.5222 21.1779C20.8492 20.5362 20.8492 19.6961 20.8492 18.0159V5.98408C20.8492 4.30392 20.8492 3.46385 20.5222 2.82211C20.2346 2.25762 19.7756 1.79868 19.2111 1.51106C18.5694 1.18408 17.7293 1.18408 16.0492 1.18408H7.95039C6.27023 1.18408 5.43015 1.18408 4.78842 1.51106C4.22393 1.79868 3.76499 2.25762 3.47737 2.82211C3.15039 3.46385 3.15039 4.30392 3.15039 5.98408V18.0159C3.15039 19.6961 3.15039 20.5362 3.47737 21.1779C3.76499 21.7424 4.22393 22.2013 4.78842 22.4889C5.43015 22.8159 6.27023 22.8159 7.95039 22.8159Z" stroke="#289646" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_544_1112">
+                  <rect width="24" height="24" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            Калькулятор
+          </router-link>
+        </div>
+
 
         <div class="navigate-links" :class="{ open: isBurgerMenuOpen }">
-          <router-link :to="{ name: 'catalog' }" class="menu-item">Каталог</router-link>
-          <router-link :to="{ name: 'delivery' }" class="menu-item">Доставка и оплата</router-link>
-          <router-link :to="{ name: 'about' }" class="menu-item">О магазине</router-link>
-          <router-link :to="{ name: 'contacts' }" class="menu-item">Контакты</router-link>
-          <router-link :to="{ name: 'reviews' }" class="menu-item">Отзывы</router-link>
+          <router-link :to="{ name: 'catalog' }" class="menu-item" active-class="active-link">Каталог</router-link>
+          <router-link :to="{ name: 'delivery' }" class="menu-item" active-class="active-link">Доставка и оплата</router-link>
+          <router-link :to="{ name: 'about' }" class="menu-item" active-class="active-link">О магазине</router-link>
+          <router-link :to="{ name: 'contacts' }" class="menu-item" active-class="active-link">Контакты</router-link>
+          <router-link :to="{ name: 'reviews' }" class="menu-item" active-class="active-link">Отзывы</router-link>
+          <router-link :to="{ name: 'calculator' }" class="menu-item" active-class="active-link">Калькулятор</router-link>
         </div>
 
         <div class="credentials">
@@ -52,11 +69,12 @@
                 </div>
 
                 <div class="navigate-links">
-                  <router-link :to="{ name: 'catalog' }" class="menu-item">Каталог</router-link>
-                  <router-link :to="{ name: 'delivery' }" class="menu-item">Доставка и оплата</router-link>
-                  <router-link :to="{ name: 'about' }" class="menu-item">О магазине</router-link>
-                  <router-link :to="{ name: 'contacts' }" class="menu-item">Контакты</router-link>
-                  <router-link :to="{ name: 'reviews' }" class="menu-item">Отзывы</router-link>
+                  <router-link :to="{ name: 'catalog' }" class="menu-item" active-class="active-link">Каталог</router-link>
+                  <router-link :to="{ name: 'delivery' }" class="menu-item" active-class="active-link">Доставка и оплата</router-link>
+                  <router-link :to="{ name: 'about' }" class="menu-item" active-class="active-link">О магазине</router-link>
+                  <router-link :to="{ name: 'contacts' }" class="menu-item" active-class="active-link">Контакты</router-link>
+                  <router-link :to="{ name: 'reviews' }" class="menu-item" active-class="active-link">Отзывы</router-link>
+                  <router-link :to="{ name: 'calculator' }" class="menu-item" active-class="active-link">Калькулятор</router-link>
                 </div>
 
               </div>
@@ -153,7 +171,7 @@ export default {
     },
 
     updateWindowWidth() {
-      if (window.innerWidth > 1000) {
+      if (window.innerWidth > 1280) {
         this.isBurgerMenuOpen = false
         document.body.style.overflow = "";
       }
@@ -221,6 +239,10 @@ export default {
   margin-right: 2rem;
 }
 
+.calculator-logo-container {
+  display: none;
+}
+
 .navigate-links {
   display: flex;
   flex-direction: row;
@@ -228,6 +250,7 @@ export default {
   gap: 2rem;
   position: relative;
   flex: 1;
+  transition: all 0.2s ease-in-out;
 }
 
 .menu-item {
@@ -244,6 +267,15 @@ export default {
 
 .menu-item:hover {
   opacity: 0.5;
+}
+
+.active-link {
+  color: var(--green-primary)
+}
+
+.active-link:hover {
+  color: var(--green-light);
+  opacity: 1;
 }
 
 .credentials {
@@ -410,6 +442,14 @@ export default {
     margin-top: 0 !important;
     border-radius: unset;
   }
+
+  .navigate-links {
+    gap: 1.2rem;
+  }
+
+  .menu-item {
+    font-size: 1.0625rem;
+  }
 }
 
 @media screen and (max-width: 1280px) {
@@ -429,24 +469,8 @@ export default {
     gap: 1.5rem;
   }
 
-}
-
-@media screen and (max-width: 1000px) {
-  .header-component {
-    margin-top: 0.5rem;
-  }
-
-  .logo-container {
-    flex: 1;
-    display: flex;
-  }
-
-  .logo img {
-    width: 3.25rem;
-    height: 3.25rem;
-  }
-
-  .navigate-links {
+  .flex-row > .navigate-links .menu-item:nth-child(3),
+  .flex-row > .navigate-links .menu-item:nth-child(5) {
     display: none;
   }
 
@@ -483,7 +507,7 @@ export default {
     line-height: normal;
   }
 
-  .menu-item {
+  .side-menu .menu-item {
     font-size: 1.25rem;
   }
 
@@ -529,7 +553,51 @@ export default {
   .burger-menu.cross span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
   }
+}
 
+@media screen and (max-width: 1000px) {
+  .logo-container {
+    display: flex;
+  }
+
+  .logo {
+    margin-right: 1rem;
+  }
+
+  .logo img {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+
+  .calculator-logo-container {
+    flex: 1;
+    display: flex;
+    height: 3.25rem;
+  }
+
+  .calculator-button {
+    background-color: #D9E9DE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 2rem;
+    padding: 0 1rem;
+
+    font-size: 0.875rem;
+    color: var(--green-primary);
+    text-decoration: none;
+
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .calculator-button:hover {
+    opacity: 0.5;
+  }
+
+  .navigate-links {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 640px) {
@@ -552,6 +620,22 @@ export default {
   .logo img, .cart-logo, .side-container {
     width: 3rem;
     height: 3rem;
+  }
+
+  .logo {
+    margin-right: 0.5rem;
+  }
+
+  .calculator-logo-container {
+    height: 3rem;
+  }
+
+  .calculator-button {
+    font-size: 0.75rem;
+  }
+
+  .cart-logo {
+    margin-left: unset;
   }
 
   .burger-menu {
@@ -594,6 +678,5 @@ export default {
   .cross {
     width: 1rem;
   }
-
 }
 </style>
