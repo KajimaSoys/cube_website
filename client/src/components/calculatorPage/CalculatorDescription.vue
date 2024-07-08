@@ -1,10 +1,9 @@
 <template>
-<div class="calculator-description-component zero-padding">
+<div class="calculator-description-component zero-top-padding">
     <div class="calculator-description-max">
       <div class="calculator-description-content">
         <h1 v-html="calculator_description_block.title"></h1>
         <div class="description">{{ calculator_description_block.description }}</div>
-
       </div>
       <div class="calculator-description-background"></div>
       <div class="image-container">
@@ -45,26 +44,21 @@ export default {
   overflow: hidden;
 }
 
-.zero-padding {
+.zero-top-padding {
   padding-top: 0!important;
 }
 
 .calculator-description-max {
-  max-width: 76.3rem;
+  max-width: 90rem;
   width: 100%;
-
   position: relative;
   overflow: hidden;
   border-radius: 1.5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .calculator-description-background {
   position: absolute;
-  max-width: 76.3rem;
+  max-width: 90rem;
   width: 100%;
   height: calc(100%);
   border-radius: 1.5rem;
@@ -74,13 +68,14 @@ export default {
 }
 
 .calculator-description-content {
-  padding: 2rem 0 4rem 2rem;
+  padding: 5rem 0 5rem 6.8rem;
   position: relative;
   z-index: 2;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
   width: 55%;
   gap: 1rem;
 }
@@ -90,18 +85,19 @@ h1 {
 }
 
 .description {
-  width: 70%;
+  width: 68%;
 }
 
 .image-container {
   position: absolute;
   z-index: 1;
-  bottom: -1rem;
-  right: -12rem;
+  bottom: -14rem;
+  right: 2rem;
 }
 
 .image-container img {
   width: 100%;
+  max-width: 40rem;
   object-fit: cover;
 }
 
@@ -110,37 +106,57 @@ h1 {
     padding-top: 8rem;
   }
 
-  .calculator-description-max {
-    padding: 0 2.25rem;
-  }
-
   .calculator-description-content {
-    padding: 3rem 7rem 4rem 3rem;
-    justify-content: space-between;
+    padding: 4rem 0 4rem 2.25rem;
+    width: 45%;
   }
 
   h1 {
     width: 80%;
     font-size: 2rem;
   }
+
+  .description {
+    width: 80%;
+  }
+
+  .image-container {
+    bottom: -14rem;
+    right: -1rem;
+  }
+
+  .image-container img {
+    max-width: 38rem;
+  }
 }
 
 @media screen and (max-width: 1000px) {
-  .calculator-description-max {
-    padding: 0;
-  }
-
   .calculator-description-component {
     padding-top: 5rem;
   }
 
   .calculator-description-content {
-    padding: 3rem 4.5rem 4rem 2.25rem;
+    padding: 3rem 0 3rem 2.25rem;
+    gap: 0.5rem;
+    width: 70%;
   }
 
   h1 {
-    width: 70%;
-    font-size: 1.5rem;
+    width: 90%;
+    font-size: 2.125rem;
+  }
+
+  .description {
+    width: 75%;
+  }
+
+  .image-container {
+    bottom: -7rem;
+    right: -7rem;
+  }
+
+  .image-container img {
+    max-width: 24rem;
   }
 }
 
@@ -149,20 +165,39 @@ h1 {
     padding-top: 4.4rem;
   }
 
-  .calculator-description-max {
-    gap: 0.5rem;
+  .calculator-description-background {
+    height: calc(100%);
   }
 
   .calculator-description-content {
-    padding: 2rem 4.5rem 3rem 4.5rem;
-    flex-direction: column;
-    gap: 1.5rem;
+    padding: 2rem 1rem 0 1rem;
+    align-items: center;
+    width: unset;
   }
 
   h1 {
     width: 43vw;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 1.875rem;
+  }
+
+  .description {
+    text-align: center;
+    width: 85%;
+  }
+
+  .image-container {
+    position: relative;
+    bottom: -1rem;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 14rem;
+  }
+
+  .image-container img {
+    width: 22rem;
   }
 }
 

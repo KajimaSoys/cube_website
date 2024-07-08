@@ -1,5 +1,5 @@
 <template>
-  <div class="delivery-component" :class="separate ? 'zero-padding': ''">
+  <div class="delivery-component" :class="separate ? 'zero-top-padding': ''">
     <div class="delivery-max">
       <div class="delivery-content">
         <div class="left-side">
@@ -225,7 +225,7 @@ export default {
   align-items: center;
 }
 
-.zero-padding {
+.zero-top-padding {
   padding-top: 0!important;
 }
 

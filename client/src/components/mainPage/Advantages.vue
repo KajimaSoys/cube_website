@@ -1,5 +1,5 @@
 <template>
-  <div class="advantages-component" :class="separate ? 'zero-padding': ''">
+  <div class="advantages-component" :class="separate ? 'zero-top-padding': ''">
     <div class="advantages-max">
       <h2 class="advantages-head" v-html="advantages_block.title"></h2>
       <div class="advantages-content">
@@ -156,7 +156,7 @@ export default {
   height: calc(100% + 10rem);
 }
 
-.zero-padding {
+.zero-top-padding {
   padding-top: 0!important;
 }
 

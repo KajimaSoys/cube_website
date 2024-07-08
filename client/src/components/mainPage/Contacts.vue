@@ -1,5 +1,5 @@
 <template>
-  <div class="contacts-component" :class="separate ? 'zero-padding': ''">
+  <div class="contacts-component" :class="separate ? 'zero-top-padding': ''">
     <div class="contacts-max">
       <div class="map">
         <iframe
@@ -123,7 +123,7 @@ export default {
   overflow: hidden;
 }
 
-.zero-padding {
+.zero-top-padding {
   padding-top: 0!important;
 }
 
