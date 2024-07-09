@@ -124,12 +124,23 @@ a:hover {
 }
 
 @media screen and (max-width: 1000px) {
-  .box-info-max {
-    padding: 0;
-  }
-
   .box-info-component {
     padding-top: 5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: unset;
+  }
+
+  .button {
+    width: -webkit-fill-available;
+    width: -moz-fill-available;
+    padding: 1rem;
+    height: 1.5rem;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: unset;
   }
 }
 
@@ -140,6 +151,17 @@ a:hover {
 
   .box-info-max {
     gap: 0.5rem;
+    padding: 0 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .button {
+    margin-top: 0.5rem;
+    height: 1.25rem;
   }
 }
 </style>

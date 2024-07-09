@@ -66,9 +66,9 @@
       </div>
     </div>
 
-    <div class="hint">
-      Выпадающий список с вариантами размеров
-    </div>
+<!--    <div class="hint">-->
+<!--      Выпадающий список с вариантами размеров-->
+<!--    </div>-->
   </div>
 
 </div>
@@ -215,10 +215,10 @@ export default {
 
 <style scoped>
 .box-info-input-content {
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   background: #FFF;
 
-  padding: 2rem 2rem 1.25rem 2rem;
+  padding: 2rem;
   width: -webkit-fill-available;
   width: -moz-fill-available;
 
@@ -236,13 +236,13 @@ h3 {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .type-choice-btn {
   padding: 0.5rem 0.75rem;
-  background-color: #e8e8e8;
-  border-radius: 0.35rem;
+  border: 1px solid var(--green-light);
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 1rem;
   user-select: none;
@@ -254,7 +254,7 @@ h3 {
 }
 
 .type-choice-btn-active {
-  background-color: #4d4d4d;
+  background-color: var(--green-light);
   color: white;
 }
 
@@ -264,16 +264,17 @@ h3 {
 }
 
 .box-info-input-label {
-  font-size: 0.975rem;
+  font-size: 0.875rem;
   margin-bottom: 0.5rem;
   font-weight: 500;
+  color: var(--black-55);
 }
 
 .dimensions-input {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border: 1px solid var(--black-20);
-  border-radius: 0.35rem;
+  border-radius: 0.5rem;
   outline: none;
   resize: none;
   line-height: 1.5;
@@ -305,12 +306,19 @@ h3 {
 .suggestion {
   padding: 0.5rem;
   background-color: #f0f0f0;
-  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  border-radius: 0.5rem;
   cursor: pointer;
+  opacity: 1;
+
+  transition: all 0.2s ease-in-out;
 }
 
 .suggestion:hover {
-  background-color: #e0e0e0;
+  background-color: #D9E9DE;
+  border: 1px solid var(--green-light);
+  color: var(--black);
 }
 
 .radio-buttons-container {
@@ -318,6 +326,7 @@ h3 {
   flex-direction: row;
   gap: 1rem;
   justify-content: space-between;
+  margin-top: 0.5rem;
 }
 
 .radio-buttons {
@@ -337,12 +346,12 @@ h3 {
   background-color: #fff;
   margin: 0;
   font: inherit;
-  color: currentColor;
+  color: var(--green-light);
   width: 1em;
   height: 1em;
   border: 0.15em solid currentColor;
   border-radius: 50%;
-  transform: translateY(-0.075em);
+  /*transform: translateY(-0.075em);*/
   display: grid;
   place-content: center;
   cursor: pointer;
@@ -364,7 +373,7 @@ h3 {
 
 .radio-button label {
   user-select: none;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -376,22 +385,74 @@ h3 {
 
 @media screen and (max-width: 1280px) {
   .box-info-input-content {
-    padding: 3rem 7rem 4rem 3rem;
+    padding: 1.5rem;
     justify-content: space-between;
+  }
+
+  h3 {
+    margin-bottom: unset;
+  }
+
+  .type-choice {
+    margin-bottom: unset;
+  }
+
+  .type-choice-btn, .suggestion {
+    font-size: 0.875rem;
+  }
+
+  .radio-buttons input[type="radio"]::before {
+    height: 0.67em;
   }
 }
 
 @media screen and (max-width: 1000px) {
   .box-info-input-content {
-    padding: 3rem 4.5rem 4rem 2.25rem;
+    padding: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .radio-buttons input[type="radio"]::before {
+    height: 0.65em;
   }
 }
 
 @media screen and (max-width: 640px) {
   .box-info-input-content {
-    padding: 2rem 4.5rem 3rem 4.5rem;
     flex-direction: column;
-    gap: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  .type-choice-btn {
+    font-size: 0.75rem;
+  }
+
+  .box-info-input-label {
+    font-size: 0.75rem;
+  }
+
+  .dimensions-input {
+    font-size: 0.875rem;
+  }
+
+  .radio-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .radio-buttons input[type="radio"]::before {
+    height: 0.7em;
+  }
+
+  .radio-buttons input[type="radio"] {
+    border: 0.1em solid currentColor;
   }
 }
 </style>
