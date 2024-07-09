@@ -1,24 +1,61 @@
 <template>
-<div class="calculation-result-component" id="calculation-result">
+<div v-if="calculationData" class="calculation-result-component" id="calculation-result">
     <div class="calculation-result-max">
 
       <h2>Расчет</h2>
-      <div v-if="calculationData" class="calculation-result-content">
-        Большая коробка {{ displayDimensions.largeBox }} мм. (внутренние размеры)
-        <br>
-        Маленькая коробка {{ displayDimensions.smallBox }} мм. (внешние размеры)
-        <br>
-        По дну: {{ boxesPerBase.length }} x {{ boxesPerBase.width }} = {{ boxesPerBase.total }} шт.
-        <br>
-        В высоту: {{ boxesPerHeight }} шт.
-        <br>
-        Итого: {{ totalBoxes }} шт. коробок/товаров в коробке
-        <br>
-        <br>
-          Возможны погрешности. Чтобы всё точно поместилось. замерьте ваши товары с небольшим запасом или проверьте всё ещё раз у нас в магазине, продавец вам поможет
-        <br>
-        <br>
+      <div  class="calculation-result-content">
+        <div class="calculation-result-text">
+          Большая коробка {{ displayDimensions.largeBox }} мм. (внутренние размеры)
+          <br>
+          Маленькая коробка {{ displayDimensions.smallBox }} мм. (внешние размеры)
+          <br>
+          По дну: {{ boxesPerBase.length }} x {{ boxesPerBase.width }} = {{ boxesPerBase.total }} шт.
+          <br>
+          В высоту: {{ boxesPerHeight }} шт.
+          <br>
+          Итого: {{ totalBoxes }} шт. коробок или товаров поместится в большую коробку
+          <br>
+          <br>
+          Возможны погрешности. Чтобы всё точно поместилось, замерьте ваши товары с небольшим запасом или проверьте всё ещё раз у нас в магазине, продавец вам поможет
+          <br>
+          <br>
           Калькулятор не учитывает размер прокладок между рядами.
+        </div>
+
+        <div class="suggested-products-block">
+          <h3>Ваши товары</h3>
+          <div class="suggested-products-list">
+            <div class="suggested-product">
+              1
+            </div>
+            <div class="suggested-product">
+              2
+            </div>
+          </div>
+        </div>
+
+        <div class="additional-products-block">
+          <h3>С этими товарами часто берут</h3>
+          <div class="additional-products-list">
+            <div class="additional-product">
+              1
+            </div>
+            <div class="additional-product">
+              2
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <div class="order-button button">
+          Оформить заказ
+        </div>
+
+        <div class="contact-manager-button button">
+          Связаться с менеджером
+        </div>
       </div>
     </div>
   </div>
@@ -131,7 +168,11 @@ export default {
   display: flex;
   flex-direction: column;
 
-  gap: 1rem;
+  gap: 2rem;
+}
+
+h2 {
+  font-size: 2rem;
 }
 
 .calculation-result-content {
@@ -140,12 +181,69 @@ export default {
 
   padding: 2rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 4rem;
 }
 
-h2 {
-  font-size: 2rem;
+.calculation-result-text {
+  width: 60%;
+}
+
+h3 {
   margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.order-button {
+  padding: 1rem 6rem;
+  height: 2.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 0.5rem;
+  border: 2px solid var(--green-light);
+  background: var(--green-light, #40AB5E);
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  opacity: 1;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.order-button:hover {
+  opacity: 0.5;
+}
+
+.contact-manager-button {
+  padding: 1rem 6rem;
+  height: 2.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 0.5rem;
+  border: 2px solid var(--green-light);
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--green-primary);
+  user-select: none;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.contact-manager-button:hover {
+  background: var(--green-light, #40AB5E);
+  color: white;
 }
 
 @media screen and (max-width: 1280px) {

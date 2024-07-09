@@ -105,6 +105,12 @@ export default {
     scrollToZero() {
       document.documentElement.scrollTop = 0;
     },
+
+    scrollToElement(elementId) {
+      const element = document.getElementById(elementId);
+      element.scrollIntoView({behavior: "smooth"});
+    },
+
     setMetaTag(name, content) {
       let tag = document.querySelector(`meta[name="${name}"]`);
       if (!tag) {
@@ -117,6 +123,8 @@ export default {
 
     handleCalculation(data) {
       this.calculationData = data;
+      setTimeout(() => this.scrollToElement('calculation-result'), 500)
+
     }
   },
 }
