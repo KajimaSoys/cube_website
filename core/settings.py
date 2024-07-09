@@ -148,8 +148,8 @@ ADMIN_ORDERING = (
         (
             'MainBlock',
             'CatalogTeaserBlock',
-            'CalculatorBlock',
             'ServiceOptionsBlock',
+            'CalculatorBlock',
             'NewProductBlock',
             'PopularProductBlock',
             'DeliveryBlock',
@@ -224,7 +224,7 @@ LINKED_MODELS = [
         'source_app': 'common_elements',
         'target_app': 'main_page',
         'model_name': 'AddQuestionBlock',
-        'model_name_verbose': '12 - Блок "Остались вопросы?"'
+        'model_name_verbose': '13 - Блок "Остались вопросы?"'
     },
 
     # product_page

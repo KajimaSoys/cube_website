@@ -55,30 +55,6 @@ class CatalogTeaserBlock(models.Model):
         verbose_name_plural = '2 - Тизер каталога'
 
 
-class CalculatorBlock(models.Model):
-    """
-    Description of CalculatorBlock Model of Main Page App.
-
-    Fields:
-    - title: Title;
-    - description: Description;
-    - image: Image.
-    """
-
-    title = RichTextField(verbose_name='Заголовок')
-    description = models.CharField(verbose_name='Описание', max_length=500)
-
-    image = models.FileField(verbose_name='Фото', upload_to='main_page/calculator/', max_length=500)
-
-    def __str__(self):
-        return 'Блок калькулятора'
-
-    class Meta:
-        # TODO set correct numbers
-        verbose_name = '2 - Блок калькулятора'
-        verbose_name_plural = '2 - Блок калькулятора'
-
-
 class ServiceOptionsBlock(models.Model):
     """
     Description of ServiceOptionsBlock Model of Main Page App.
@@ -112,6 +88,29 @@ class ServiceOptionsBlock(models.Model):
         verbose_name_plural = '3 - Услуги компании'
 
 
+class CalculatorBlock(models.Model):
+    """
+    Description of CalculatorBlock Model of Main Page App.
+
+    Fields:
+    - title: Title;
+    - description: Description;
+    - image: Image.
+    """
+
+    title = RichTextField(verbose_name='Заголовок')
+    description = models.CharField(verbose_name='Описание', max_length=500)
+
+    image = models.FileField(verbose_name='Фото', upload_to='main_page/calculator/', max_length=500)
+
+    def __str__(self):
+        return 'Блок калькулятора'
+
+    class Meta:
+        verbose_name = '4 - Блок калькулятора'
+        verbose_name_plural = '4 - Блок калькулятора'
+
+
 class NewProductBlock(models.Model):
     """
     Description of NewProductBlock Model of Main Page App.
@@ -129,7 +128,7 @@ class NewProductBlock(models.Model):
 
     class Meta:
         verbose_name = 'новинка'
-        verbose_name_plural = '4 - Новинки'
+        verbose_name_plural = '5 - Новинки'
         ordering = ['order', ]
 
 
@@ -150,7 +149,7 @@ class PopularProductBlock(models.Model):
 
     class Meta:
         verbose_name = 'популярная модель'
-        verbose_name_plural = '5 - Популярные модели'
+        verbose_name_plural = '6 - Популярные модели'
         ordering = ['order', ]
 
 
@@ -186,8 +185,8 @@ class DeliveryBlock(models.Model):
         return 'Доставка'
 
     class Meta:
-        verbose_name = '6 - Доставка'
-        verbose_name_plural = '6 - Доставка'
+        verbose_name = '7 - Доставка'
+        verbose_name_plural = '7 - Доставка'
 
 
 class AdvantagesBlock(models.Model):
@@ -246,8 +245,8 @@ class AdvantagesBlock(models.Model):
         return 'Преимущества компании'
 
     class Meta:
-        verbose_name = '7 - Преимущества компании'
-        verbose_name_plural = '7 - Преимущества компании'
+        verbose_name = '8 - Преимущества компании'
+        verbose_name_plural = '8 - Преимущества компании'
 
 
 class CartonInfoBlock(models.Model):
@@ -282,8 +281,8 @@ class CartonInfoBlock(models.Model):
         return 'Информация о картоне'
 
     class Meta:
-        verbose_name = '8 - Информация о картоне'
-        verbose_name_plural = '8 - Информация о картоне'
+        verbose_name = '9 - Информация о картоне'
+        verbose_name_plural = '9 - Информация о картоне'
 
 
 class RequestBlock(models.Model):
@@ -308,8 +307,8 @@ class RequestBlock(models.Model):
         return 'Блок заявки в Whatsapp'
 
     class Meta:
-        verbose_name = '9 - Блок заявки в Whatsapp'
-        verbose_name_plural = '9 - Блок заявки в Whatsapp'
+        verbose_name = '10 - Блок заявки в Whatsapp'
+        verbose_name_plural = '10 - Блок заявки в Whatsapp'
 
 
 class QuestionsBlock(models.Model):
@@ -336,8 +335,8 @@ class QuestionsBlock(models.Model):
         return 'Частые вопросы'
 
     class Meta:
-        verbose_name = '10 - Частые вопросы'
-        verbose_name_plural = '10 - Частые вопросы'
+        verbose_name = '11 - Частые вопросы'
+        verbose_name_plural = '11 - Частые вопросы'
         ordering = ['order', ]
 
 
@@ -371,5 +370,5 @@ class ContactsBlock(models.Model):
         return 'Контакты'
 
     class Meta:
-        verbose_name = '11 - Контакты'
-        verbose_name_plural = '11 - Контакты'
+        verbose_name = '12 - Контакты'
+        verbose_name_plural = '12 - Контакты'
