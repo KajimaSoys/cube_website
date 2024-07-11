@@ -17,8 +17,8 @@
 
     <CalculationResult
       :calculationData="calculationData"
+      :additionalProductsDefault="additionalProducts"
     />
-
 
   </div>
   <div v-else class="loading">
@@ -60,7 +60,7 @@ export default {
     return {
       header_block: {},
       calculator_description_block: {},
-      additional_product_block: [],
+      additionalProducts: [],
 
       category_list: [],
 
@@ -90,8 +90,10 @@ export default {
 
             this.header_block = receivedData.header_block
             this.calculator_description_block = receivedData.calculator_description_block
-            this.additional_product_block = receivedData.additional_product_block
             this.category_list = receivedData.category_list
+
+            this.processAdditionalProducts(receivedData.additional_products_block)
+
 
             // TODO uncomment on prod
             // window.ym(96164548, 'hit', window.location.href);
@@ -102,13 +104,50 @@ export default {
             console.log('An error occurred: ', error);
           })
     },
+
+    processAdditionalProducts(additionalProductsRaw) {
+      if (additionalProductsRaw) {
+        this.additionalProducts = additionalProductsRaw.map(product => {
+        // count calculation
+        let count = 1;
+
+        // price calculation
+        let product_unpacked = product.product
+        const basePrice = product_unpacked.prices.find(price => price.count === 1).price;
+        let finalPrice = basePrice * count;
+        product_unpacked.prices.forEach(priceInfo => {
+          if (count >= priceInfo.count) {
+            finalPrice = priceInfo.price * count;
+          }
+        });
+
+        return {
+          ...product_unpacked,
+          count: count,
+          finalPrice: finalPrice,
+          isScalingPlus: false,
+          isScalingMinus: false,
+        };
+      });
+      } else {
+        this.additionalProducts = []
+      }
+
+    },
+
     scrollToZero() {
       document.documentElement.scrollTop = 0;
     },
 
     scrollToElement(elementId) {
-      const element = document.getElementById(elementId);
-      element.scrollIntoView({behavior: "smooth"});
+      const requestElement = document.getElementById(elementId);
+      const offset = 200;
+      const elementPosition = requestElement.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     },
 
     setMetaTag(name, content) {

@@ -34,15 +34,19 @@
           </div>
         </div>
 
-        <div class="additional-products-block">
+        <div class="additional-products-block" v-if="additionalProducts.length > 0">
           <h3>С этими товарами часто берут</h3>
           <div class="additional-products-list">
-            <div class="additional-product">
-              1
-            </div>
-            <div class="additional-product">
-              2
-            </div>
+
+            <ProductCardHorizontal
+              v-for="product in additionalProducts"
+              :key="product.id"
+              :product="product"
+              :quantity="1"
+              :removable="true"
+              @remove-from-add-list="removeFromAddList"
+
+            />
           </div>
         </div>
 
@@ -62,13 +66,25 @@
 </template>
 
 <script>
+import ProductCardHorizontal from "../calculatorPage/ProductCardHorizontal.vue";
+
 export default {
   name: "CalculationResult",
   inject: ['backendURL'],
-  props: ['calculationData'],
-  components: {},
+  props: {
+    calculationData: {
+      type: Object
+    },
+    additionalProductsDefault: {
+      type: Array
+    }
+  },
+  components: {
+    ProductCardHorizontal
+  },
   data() {
     return {
+      additionalProducts: []
     }
   },
   computed: {
@@ -142,8 +158,29 @@ export default {
           }
       }
       return { length, width, height };
+    },
+    removeFromAddList (productId) {
+      this.additionalProducts = this.additionalProducts.filter(product => product.id !== productId);
     }
+
   },
+  watch: {
+    additionalProductsDefault: {
+      handler(newVal) {
+        this.additionalProducts = newVal
+      },
+      deep: true,
+      immediate: true
+    },
+    calculationData: {
+      handler() {
+        this.additionalProducts = JSON.parse(JSON.stringify(this.additionalProductsDefault));
+      },
+      deep: true,
+      immediate: true
+    },
+
+  }
 }
 </script>
 
@@ -193,6 +230,13 @@ h3 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
+
+.additional-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .buttons {
   display: flex;
   flex-direction: row;
@@ -259,6 +303,10 @@ h3 {
     padding: 3rem 7rem 4rem 3rem;
     justify-content: space-between;
   }
+
+  .additional-products-list {
+    gap: 0.5rem;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -289,5 +337,7 @@ h3 {
     flex-direction: column;
     gap: 1.5rem;
   }
+
+
 }
 </style>
