@@ -144,7 +144,7 @@ export default {
         smallBox: `${smallBox.length}x${smallBox.width}x${smallBox.height}`,
       };
     },
-    calculateBoxesPerBase() {
+    calculateBoxesPerBase(largeBox, smallBox) {
       if (!this.calculationData) return { length: 0, width: 0, total: 0 };
 
       const length = Math.floor(largeBox.length / smallBox.length);
@@ -153,7 +153,7 @@ export default {
 
       return { length, width, total };
     },
-    calculateBoxesPerHeight() {
+    calculateBoxesPerHeight(largeBox, smallBox) {
       if (!this.calculationData) return 0;
 
       return Math.floor(largeBox.height / smallBox.height);
@@ -248,7 +248,19 @@ export default {
 
     removeFromAddList (productId) {
       this.additionalProducts = this.additionalProducts.filter(product => product.id !== productId);
-    }
+    },
+
+    initializeCalculations() {
+      if (!this.calculationData) return;
+      const largeBox = this.convertDimensions('outer', this.calculationData.outer);
+      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
+      this.displayDimensions = this.calculateDisplayDimensions(largeBox, smallBox);
+      this.boxesPerBase = this.calculateBoxesPerBase(largeBox, smallBox);
+      this.boxesPerHeight = this.calculateBoxesPerHeight(largeBox, smallBox);
+      this.totalBoxes = this.calculateTotalBoxes();
+      this.searchFittingBoxes(this.calculationData);
+      this.additionalProducts = [...this.additionalProductsDefault];
+    },
   },
   watch: {
     additionalProductsDefault: {
@@ -259,19 +271,7 @@ export default {
       immediate: true
     },
     calculationData: {
-      handler(newVal) {
-        const largeBox = this.convertDimensions('outer', newVal.outer);
-        const smallBox = this.convertDimensions('inner', newVal.inner);
-
-        this.displayDimensions = this.calculateDisplayDimensions(largeBox, smallBox)
-        this.boxesPerBase = this.calculateBoxesPerBase(largeBox, smallBox)
-        this.boxesPerHeight = this.calculateBoxesPerHeight(largeBox, smallBox)
-        this.totalBoxes = this.calculateTotalBoxes(largeBox, smallBox)
-        if (newVal) {
-          this.searchFittingBoxes(newVal)
-        }
-        this.additionalProducts = [...this.additionalProductsDefault];
-      },
+      handler: "initializeCalculations",
       deep: true,
       immediate: true
     },
