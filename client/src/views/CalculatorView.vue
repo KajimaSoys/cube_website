@@ -150,7 +150,7 @@ export default {
 
     scrollToElement(elementId) {
       const requestElement = document.getElementById(elementId);
-      const offset = 200;
+      const offset = 100;
       const elementPosition = requestElement.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - offset;
       window.scrollTo({

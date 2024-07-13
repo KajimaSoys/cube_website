@@ -22,6 +22,10 @@
           Калькулятор не учитывает размер прокладок между рядами.
         </div>
 
+        <div class="calculation-result-tip">
+          В расчёте мы использовали введённые вами размеры. Ниже предлагаем подходящие товары из каталога. Количество штук уже указано в соответствии с расчётом.
+        </div>
+
         <div class="suggested-products-block">
           <h3>Ваши товары</h3>
           <div class="suggested-products-list">
@@ -314,11 +318,21 @@ h2 {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 .calculation-result-text {
   width: 60%;
+}
+
+.calculation-result-tip {
+  margin-bottom: 2rem;
+  color: #3F6F4C;
+  background-color: #D9EBDE;
+  font-size: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  width: 68%;
 }
 
 h3 {
@@ -344,24 +358,27 @@ h3 {
   gap: 1rem;
 }
 
-.order-button {
+.button {
   padding: 1rem 6rem;
   height: 2.5rem;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   border-radius: 0.5rem;
   border: 2px solid var(--green-light);
-  background: var(--green-light, #40AB5E);
   text-decoration: none;
   cursor: pointer;
-  color: white;
   user-select: none;
   opacity: 1;
 
   transition: all 0.2s ease-in-out;
+}
+
+.order-button {
+  background: var(--green-light, #40AB5E);
+  color: white;
 }
 
 .order-button:hover {
@@ -369,21 +386,7 @@ h3 {
 }
 
 .contact-manager-button {
-  padding: 1rem 6rem;
-  height: 2.5rem;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  border-radius: 0.5rem;
-  border: 2px solid var(--green-light);
-  text-decoration: none;
-  cursor: pointer;
   color: var(--green-primary);
-  user-select: none;
-
-  transition: all 0.2s ease-in-out;
 }
 
 .contact-manager-button:hover {
@@ -393,7 +396,7 @@ h3 {
 
 @media screen and (max-width: 1280px) {
   .calculation-result-component {
-    padding-top: 8rem;
+    padding-top: 4rem;
   }
 
   .calculation-result-max {
@@ -401,44 +404,80 @@ h3 {
   }
 
   .calculation-result-content {
-    padding: 3rem 7rem 4rem 3rem;
+    padding: 1.5rem;
     justify-content: space-between;
   }
 
-  .additional-products-list {
-    gap: 0.5rem;
+  .calculation-result-text {
+    width: 70%;
+  }
+
+  .calculation-result-tip {
+    width: 77%;
+    margin-bottom: unset;
+  }
+
+  .button {
+    flex: 1;
+    height: 2rem;
   }
 }
 
 @media screen and (max-width: 1000px) {
   .calculation-result-max {
-    padding: 0;
+    gap: 1rem;
   }
 
   .calculation-result-component {
-    padding-top: 5rem;
+    padding-top: 2.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
   }
 
   .calculation-result-content {
-    padding: 3rem 4.5rem 4rem 2.25rem;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .calculation-result-text {
+    width: 100%;
+  }
+
+  .calculation-result-tip {
+    width: -webkit-fill-available;
+    width: -moz-fill-available;
+    font-size: 0.875rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .button {
+    padding: 1rem 1rem;
+    height: 1.125rem;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .calculation-result-component {
-    padding-top: 4.4rem;
+  .calculation-result-max {
+    padding: 0 1rem;
   }
 
-  .calculation-result-max {
+  .calculation-result-component {
+    padding-top: 4rem;
+  }
+
+  .buttons {
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  .calculation-result-content {
-    padding: 2rem 4.5rem 3rem 4.5rem;
-    flex-direction: column;
-    gap: 1.5rem;
+  .button {
+    padding: 0.9125rem 1rem;
+    height: 1rem;
   }
-
-
 }
 </style>

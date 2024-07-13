@@ -94,6 +94,7 @@
       <div v-if="removable" class="delete-button" @click="deleteProduct(product.id)">
         Удалить
       </div>
+      <div v-else class="dummy"></div>
     </div>
   </div>
 </template>
@@ -402,7 +403,10 @@ export default {
 }
 
 @media screen and (max-width: 1280px) {
-
+  .product-card {
+    width: -webkit-fill-available;
+    width: -moz-fill-available;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -466,14 +470,6 @@ export default {
 
   .product-price {
     font-size: 0.875rem;
-  }
-
-  .order-info {
-    margin-top: 1rem;
-  }
-
-  .total-price {
-    font-size: 1.25rem;
   }
 }
 </style>
