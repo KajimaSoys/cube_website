@@ -20,6 +20,7 @@
       :calculationData="calculationData"
       :productList="productList"
       :additionalProductsDefault="additionalProducts"
+      @add-to-cart="addToCart"
     />
 
   </div>
@@ -66,10 +67,12 @@ export default {
       // var for this.handleCalculation (emitted from child)
       calculationData: null,
 
+      cart: [],
       show: false,
     }
   },
   created() {
+    this.loadCart();
     this.getPageData();
     this.getProducts();
   },
@@ -81,10 +84,30 @@ export default {
       document.body.style.overflow = "";
       this.scrollToZero();
 
-      // TODO change to new metadata
       document.title = 'Калькулятор | Магазин упаковки КУБ в Казани';
-      // this.setMetaTag('description', 'Узнайте о вариантах доставки и способах оплаты в магазине упаковки КУБ. Быстрая и надежная доставка картонных коробок по Казани и всей России.');
-      // this.setMetaTag('keywords', 'доставка упаковки, оплата картонных коробок, магазин упаковки Казань, упаковка для маркетплейсов, удобная доставка');
+      this.setMetaTag('description', 'Используйте наш уникальный калькулятор для оптимизации упаковки в магазине коробок КУБ в Казани! Узнайте точное количество маленьких коробок, которое поместится в одну большую. Эффективные решения для вашего бизнеса с широким выбором картонных коробок на заказ.');
+      this.setMetaTag('keywords', 'калькулятор коробок, оптимизация упаковки Казань, магазин упаковки Казань, упаковка для маркетплейсов, купить картонные коробки Казань, расчет коробок онлайн');
+    },
+
+    addToCart(productId, quantity) {
+      const cartItem = this.cart.find(item => item.id === productId);
+
+      if (cartItem) {
+        cartItem.quantity += quantity;
+      } else {
+        this.cart.push({id: productId, quantity});
+      }
+
+      this.saveCart();
+    },
+    loadCart() {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        this.cart = JSON.parse(cartData);
+      }
+    },
+    saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     },
 
     async getPageData() {
@@ -172,8 +195,6 @@ export default {
     handleCalculation(data) {
       this.calculationData = data;
       setTimeout(() => this.scrollToElement('calculation-result'), 500)
-      // console.log('emitted data', data)
-      // console.log('current product list', this.productList)
     }
   },
 }

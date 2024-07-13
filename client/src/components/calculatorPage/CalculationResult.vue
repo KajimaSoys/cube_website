@@ -67,13 +67,17 @@
       </div>
 
       <div class="buttons">
-        <div class="order-button button">
+        <div class="order-button button" @click="addToCart">
           Оформить заказ
         </div>
 
-        <div class="contact-manager-button button">
+        <a
+          class="contact-manager-button button"
+          :href="get_whatsapp_text()"
+          target="_blank"
+        >
           Связаться с менеджером
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -90,6 +94,9 @@ export default {
     additionalProductsDefault: Array,
     productList: Array
   },
+  emits: [
+      'add-to-cart'
+  ],
   components: {
     ProductCardHorizontal
   },
@@ -265,6 +272,29 @@ export default {
       this.searchFittingBoxes(this.calculationData);
       this.additionalProducts = [...this.additionalProductsDefault];
     },
+
+    addToCart() {
+      this.$emit('add-to-cart', this.outerBoxForOrder.id, this.outerBoxForOrder.count)
+      this.$emit('add-to-cart', this.innerBoxForOrder.id, this.innerBoxForOrder.count)
+      if (this.additionalProducts.length > 0) {
+        this.additionalProducts.forEach(product => {
+          this.$emit('add-to-cart', product.id, product.count)
+        })
+      }
+
+      this.$router.push({name: 'cart'});
+
+    },
+
+    get_whatsapp_text(){
+      let greet_message = `Здравствуйте! На странице калькулятора я получил(-а) следующие результаты: %0D%0A
+Большая коробка ${this.displayDimensions.largeBox} мм. (внутренние размеры) %0D%0A
+Маленькая коробка ${this.displayDimensions.smallBox} мм. (внешние размеры) %0D%0A
+По дну: ${this.boxesPerBase.length} x ${this.boxesPerBase.width} = ${this.boxesPerBase.total} шт. %0D%0A
+В высоту: ${this.boxesPerHeight} шт. %0D%0A
+Итого: ${this.totalBoxes} шт. %0D%0A%0D%0A`
+      return `https://api.whatsapp.com/send/?type=phone_number&app_absent=0&phone=79950071654&text=${greet_message}`
+    }
   },
   watch: {
     additionalProductsDefault: {
