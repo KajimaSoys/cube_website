@@ -12,11 +12,13 @@
     />
 
     <BoxInfo
+      :productList="productList"
       @calculate="handleCalculation"
     />
 
     <CalculationResult
       :calculationData="calculationData"
+      :productList="productList"
       :additionalProductsDefault="additionalProducts"
     />
 
@@ -47,92 +49,99 @@ export default {
   name: "CalculatorView",
   inject: ['backendURL'],
   components: {
-    Header,
-
-    CalculatorDescription,
-    BoxInfo,
-    CalculationResult,
-
-    Footer,
-    Breadcrumbs,
+    Header, CalculatorDescription, BoxInfo, CalculationResult, Footer, Breadcrumbs,
   },
   data() {
     return {
+      // received data from this.getPageData
       header_block: {},
       calculator_description_block: {},
-      additionalProducts: [],
-
       category_list: [],
 
-      show: false,
+      // received data from this.getProducts
+      productList: [],
 
+      // var for this.processAdditionalProducts
+      additionalProducts: [],
+      // var for this.handleCalculation (emitted from child)
       calculationData: null,
+
+      show: false,
     }
   },
   created() {
-    this.getPageData()
+    this.getPageData();
+    this.getProducts();
   },
   mounted() {
-    document.body.style.overflow = "";
-    this.scrollToZero();
-
-    // TODO change to new metadata
-    document.title = 'Калькулятор | Магазин упаковки КУБ в Казани';
-    // this.setMetaTag('description', 'Узнайте о вариантах доставки и способах оплаты в магазине упаковки КУБ. Быстрая и надежная доставка картонных коробок по Казани и всей России.');
-    // this.setMetaTag('keywords', 'доставка упаковки, оплата картонных коробок, магазин упаковки Казань, упаковка для маркетплейсов, удобная доставка');
+    this.setupPage();
   },
   methods: {
-    async getPageData() {
-      await axios
-          .get(`${this.backendURL}/api/v1/calculator_page/`)
-          .then(response => {
-            let receivedData = response.data
+    setupPage() {
+      document.body.style.overflow = "";
+      this.scrollToZero();
 
-            this.header_block = receivedData.header_block
-            this.calculator_description_block = receivedData.calculator_description_block
-            this.category_list = receivedData.category_list
-
-            this.processAdditionalProducts(receivedData.additional_products_block)
-
-
-            // TODO uncomment on prod
-            // window.ym(96164548, 'hit', window.location.href);
-
-            this.show = true
-          })
-          .catch(error => {
-            console.log('An error occurred: ', error);
-          })
+      // TODO change to new metadata
+      document.title = 'Калькулятор | Магазин упаковки КУБ в Казани';
+      // this.setMetaTag('description', 'Узнайте о вариантах доставки и способах оплаты в магазине упаковки КУБ. Быстрая и надежная доставка картонных коробок по Казани и всей России.');
+      // this.setMetaTag('keywords', 'доставка упаковки, оплата картонных коробок, магазин упаковки Казань, упаковка для маркетплейсов, удобная доставка');
     },
 
-    processAdditionalProducts(additionalProductsRaw) {
-      if (additionalProductsRaw) {
-        this.additionalProducts = additionalProductsRaw.map(product => {
-        // count calculation
-        let count = 1;
+    async getPageData() {
+      await axios
+        .get(`${this.backendURL}/api/v1/calculator_page/`)
+        .then(response => {
+          const receivedData = response.data
+          const additionalProductsRaw = receivedData.additional_products_block
 
-        // price calculation
-        let product_unpacked = product.product
-        const basePrice = product_unpacked.prices.find(price => price.count === 1).price;
-        let finalPrice = basePrice * count;
-        product_unpacked.prices.forEach(priceInfo => {
-          if (count >= priceInfo.count) {
-            finalPrice = priceInfo.price * count;
-          }
-        });
+          this.header_block = receivedData.header_block
+          this.calculator_description_block = receivedData.calculator_description_block
+          this.category_list = receivedData.category_list
+          this.additionalProducts = additionalProductsRaw ? additionalProductsRaw.map(product => this.calculateFinalPrice(product.product)) : [];
 
-        return {
-          ...product_unpacked,
-          count: count,
-          finalPrice: finalPrice,
-          isScalingPlus: false,
-          isScalingMinus: false,
-        };
-      });
-      } else {
-        this.additionalProducts = []
+          // TODO uncomment on prod
+          // window.ym(96164548, 'hit', window.location.href);
+
+          this.show = true
+        })
+        .catch(error => {
+          console.log('An error occurred: ', error);
+        })
+    },
+
+    async getProducts() {
+      const endpoints = [
+        `${this.backendURL}/api/v1/category/samosbornye-korobki/`,
+        `${this.backendURL}/api/v1/category/chetyrehklapannye-korobki/`
+      ];
+
+      try {
+        const responses = await Promise.all(endpoints.map(url => axios.get(url)));
+        const productList = responses.map(response => response.data).flat();
+        this.productList = productList ? productList.map(this.calculateFinalPrice) : [];
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
       }
+    },
 
+    // Общая функция для расчета цены продукта
+    calculateFinalPrice(product) {
+      const count = 1;
+      const basePrice = product.prices.find(price => price.count === 1).price;
+      let finalPrice = basePrice * count;
+      product.prices.forEach(priceInfo => {
+        if (count >= priceInfo.count) {
+          finalPrice = priceInfo.price * count;
+        }
+      });
+
+      return {
+        ...product,
+        count: count,
+        finalPrice: finalPrice,
+        isScalingPlus: false,
+        isScalingMinus: false,
+      };
     },
 
     scrollToZero() {
@@ -163,7 +172,8 @@ export default {
     handleCalculation(data) {
       this.calculationData = data;
       setTimeout(() => this.scrollToElement('calculation-result'), 500)
-
+      // console.log('emitted data', data)
+      // console.log('current product list', this.productList)
     }
   },
 }

@@ -26,10 +26,20 @@
           <h3>Ваши товары</h3>
           <div class="suggested-products-list">
             <div class="suggested-product">
-              1
+              <ProductCardHorizontal
+                :product="outerBoxForOrder"
+                :quantity="outerBoxQuantity"
+                :removable="false"
+                @remove-from-add-list="removeFromAddList"
+              />
             </div>
             <div class="suggested-product">
-              2
+              <ProductCardHorizontal
+                :product="innerBoxForOrder"
+                :quantity="innerBoxQuantity"
+                :removable="false"
+                @remove-from-add-list="removeFromAddList"
+              />
             </div>
           </div>
         </div>
@@ -45,8 +55,8 @@
               :quantity="1"
               :removable="true"
               @remove-from-add-list="removeFromAddList"
-
             />
+            <!--@add-to-cart="addToCart"-->
           </div>
         </div>
 
@@ -72,58 +82,25 @@ export default {
   name: "CalculationResult",
   inject: ['backendURL'],
   props: {
-    calculationData: {
-      type: Object
-    },
-    additionalProductsDefault: {
-      type: Array
-    }
+    calculationData: Object,
+    additionalProductsDefault: Array,
+    productList: Array
   },
   components: {
     ProductCardHorizontal
   },
   data() {
     return {
+      displayDimensions: {"largeBox": "", "smallBox": ""},
+      boxesPerBase: { length: 0, width: 0, total: 0 },
+      boxesPerHeight: 0,
+      totalBoxes: 0,
+      outerBoxForOrder: null,
+      outerBoxQuantity: 1,
+      innerBoxForOrder: null,
+      innerBoxQuantity: 1,
       additionalProducts: []
     }
-  },
-  computed: {
-    displayDimensions() {
-      if (!this.calculationData) return { largeBox: '', smallBox: '' };
-
-      const largeBox = this.convertDimensions('external', this.calculationData.external);
-      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
-
-      return {
-        largeBox: `${largeBox.length}x${largeBox.width}x${largeBox.height}`,
-        smallBox: `${smallBox.length}x${smallBox.width}x${smallBox.height}`,
-      };
-    },
-    boxesPerBase() {
-      if (!this.calculationData) return { length: 0, width: 0, total: 0 };
-
-      const largeBox = this.convertDimensions('external', this.calculationData.external);
-      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
-
-      const length = Math.floor(largeBox.length / smallBox.length);
-      const width = Math.floor(largeBox.width / smallBox.width);
-      const total = length * width;
-
-      return { length, width, total };
-    },
-    boxesPerHeight() {
-      if (!this.calculationData) return 0;
-
-      const largeBox = this.convertDimensions('external', this.calculationData.external);
-      const smallBox = this.convertDimensions('inner', this.calculationData.inner);
-      
-      return Math.floor(largeBox.height / smallBox.height);
-    },
-    totalBoxes() {
-      return this.boxesPerBase.total * this.boxesPerHeight;
-    }
-  },
-  mounted() {
   },
   methods: {
     convertDimensions(componentType, boxData) {
@@ -132,7 +109,7 @@ export default {
       let selectedSizeType = boxData.selectedSizeType;
 
       let { length, width, height } = parsedDimensions;
-      if (componentType === 'external' && selectedSizeType === 'external') {
+      if (componentType === 'outer' && selectedSizeType === 'outer') {
         if (selectedType === 'self-assembled') {
           // console.log('Большая коробка внешний размер самосборной во внутренний размер')
           length -= 0.8;
@@ -159,10 +136,119 @@ export default {
       }
       return { length, width, height };
     },
+    calculateDisplayDimensions(largeBox, smallBox) {
+      if (!this.calculationData) return { largeBox: '', smallBox: '' };
+
+      return {
+        largeBox: `${largeBox.length}x${largeBox.width}x${largeBox.height}`,
+        smallBox: `${smallBox.length}x${smallBox.width}x${smallBox.height}`,
+      };
+    },
+    calculateBoxesPerBase() {
+      if (!this.calculationData) return { length: 0, width: 0, total: 0 };
+
+      const length = Math.floor(largeBox.length / smallBox.length);
+      const width = Math.floor(largeBox.width / smallBox.width);
+      const total = length * width;
+
+      return { length, width, total };
+    },
+    calculateBoxesPerHeight() {
+      if (!this.calculationData) return 0;
+
+      return Math.floor(largeBox.height / smallBox.height);
+    },
+    calculateTotalBoxes() {
+      return this.boxesPerBase.total * this.boxesPerHeight;
+    },
+
+    searchFittingBoxes(newVal) {
+      const outerBoxDimensions = newVal.outer.parsedDimensions;
+      const innerBoxDimensions = newVal.inner.parsedDimensions;
+      const outerFittingBox = this.findBox(outerBoxDimensions, this.productList);
+      const innerFittingBox = this.findBox(innerBoxDimensions, this.productList);
+
+      this.outerBoxForOrder = outerFittingBox.match;
+      this.innerBoxForOrder = innerFittingBox.match;
+      this.innerBoxQuantity = this.totalBoxes
+
+      // Перерасчет, если хотя бы один из размеров не точен
+      if (!outerFittingBox.isExact || !innerFittingBox.isExact) {
+        this.recalculateQuantities();
+      }
+
+      // Отображаем результаты
+      this.displayResults(outerFittingBox.match, innerFittingBox.match);
+    },
+
+    findBox(size, boxes) {
+      const exactMatch = boxes.find(box => {
+        const boxSize = this.parseDimensionsFromString(box.size);
+        return boxSize && boxSize.length === size.length && boxSize.width === size.width && boxSize.height === size.height;
+      });
+      if (exactMatch) return { match: exactMatch, isExact: true };
+
+      // Поиск ближайшего размера, если точного соответствия нет
+      let nearestBox = null;
+      let minDifference = Infinity;
+      boxes.forEach(box => {
+        const boxSize = this.parseDimensionsFromString(box.size);
+        if (boxSize) {
+          const difference = Math.sqrt(
+            Math.pow(boxSize.length - size.length, 2) +
+            Math.pow(boxSize.width - size.width, 2) +
+            Math.pow(boxSize.height - size.height, 2)
+          );
+          if (difference < minDifference) {
+            minDifference = difference;
+            nearestBox = box;
+          }
+        }
+      });
+      return { match: nearestBox, isExact: false };
+    },
+
+    recalculateQuantities() {
+      if (!this.outerBoxForOrder || !this.innerBoxForOrder) {
+        console.error('Внешняя или внутренняя коробка не определена');
+        return;
+      }
+
+      const outerDimensions = this.parseDimensionsFromString(this.outerBoxForOrder.size);
+      const innerDimensions = this.parseDimensionsFromString(this.innerBoxForOrder.size);
+
+      if (!outerDimensions || !innerDimensions) {
+        console.error('Ошибка при парсинге размеров коробок');
+        return;
+      }
+
+      const countByFloor = Math.floor(outerDimensions.length / innerDimensions.length) *
+                           Math.floor(outerDimensions.width / innerDimensions.width);
+      const countByHeight = Math.floor(outerDimensions.height / innerDimensions.height);
+
+      // const totalBoxes = countByFloor * countByHeight;
+      // console.log(`Перерасчитанное количество коробок: ${totalBoxes}`);
+      this.innerBoxQuantity = countByFloor * countByHeight;
+    },
+
+    // Парсинг размеров из строки
+    parseDimensionsFromString(value) {
+      const pattern = /(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)$/;
+      const match = value.match(pattern);
+      if (match) {
+        const [_, length, __, width, ___, height, ____] = match.map(Number);
+        return { length, width, height };
+      }
+      return null;
+    },
+
+    displayResults(outerBox, innerBox) {
+      console.log(`Внешняя коробка: ${outerBox.name}, Внутренняя коробка: ${innerBox.name}`);
+    },
+
     removeFromAddList (productId) {
       this.additionalProducts = this.additionalProducts.filter(product => product.id !== productId);
     }
-
   },
   watch: {
     additionalProductsDefault: {
@@ -173,13 +259,22 @@ export default {
       immediate: true
     },
     calculationData: {
-      handler() {
-        this.additionalProducts = JSON.parse(JSON.stringify(this.additionalProductsDefault));
+      handler(newVal) {
+        const largeBox = this.convertDimensions('outer', newVal.outer);
+        const smallBox = this.convertDimensions('inner', newVal.inner);
+
+        this.displayDimensions = this.calculateDisplayDimensions(largeBox, smallBox)
+        this.boxesPerBase = this.calculateBoxesPerBase(largeBox, smallBox)
+        this.boxesPerHeight = this.calculateBoxesPerHeight(largeBox, smallBox)
+        this.totalBoxes = this.calculateTotalBoxes(largeBox, smallBox)
+        if (newVal) {
+          this.searchFittingBoxes(newVal)
+        }
+        this.additionalProducts = [...this.additionalProductsDefault];
       },
       deep: true,
       immediate: true
     },
-
   }
 }
 </script>
@@ -229,6 +324,12 @@ h2 {
 h3 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
+}
+
+.suggested-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .additional-products-list {

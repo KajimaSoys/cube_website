@@ -4,15 +4,17 @@
       <h2>Введите размеры коробок</h2>
 
       <BoxInfoInput
-        componentType="external"
-        defaultType="self-assembled"
+        componentType="outer"
+        defaultType="four-valve"
+        :productList="productList"
         :isSubmitted="isSubmitted"
         @inputDataChange="processInput"
       />
 
       <BoxInfoInput
         componentType="inner"
-        defaultType="four-valve"
+        defaultType="self-assembled"
+        :productList="productList"
         :isSubmitted="isSubmitted"
         @inputDataChange="processInput"
       />
@@ -28,13 +30,16 @@ import BoxInfoInput from "./BoxInfoInput.vue";
 export default {
   name: "BoxInfo",
   inject: ['backendURL'],
+  props: {
+    productList: Array
+  },
   components: {
     BoxInfoInput,
   },
   data() {
     return {
       isSubmitted: false,
-      boxData: { external: {}, inner: {} },
+      boxData: { outer: {}, inner: {} },
     }
   },
   mounted() {
@@ -42,7 +47,7 @@ export default {
   methods: {
     submit() {
       this.isSubmitted = true;
-      if (!this.isEmpty(this.boxData.external) && !this.isEmpty(this.boxData.inner)) {
+      if (!this.isEmpty(this.boxData.outer) && !this.isEmpty(this.boxData.inner)) {
         this.$emit('calculate', this.boxData);
       }
     },

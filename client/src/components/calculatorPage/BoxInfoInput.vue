@@ -1,6 +1,6 @@
 <template>
 <div class="box-info-input-content">
-  <h3 v-if="componentType==='external'">
+  <h3 v-if="componentType==='outer'">
     Внешняя коробка
   </h3>
   <h3 v-else-if="componentType==='inner'">
@@ -61,8 +61,8 @@
       </div>
 
       <div class="radio-button">
-        <input type="radio" :id="externalRadioId" :name="uniqueName" value="external" v-model="selectedSizeType">
-        <label :for="externalRadioId">Внешний размер</label>
+        <input type="radio" :id="outerRadioId" :name="uniqueName" value="outer" v-model="selectedSizeType">
+        <label :for="outerRadioId">Внешний размер</label>
       </div>
     </div>
 
@@ -83,6 +83,7 @@ export default {
   props: {
     componentType: String,
     defaultType: String,
+    productList: Array,
     isSubmitted: {
       type: Boolean,
       default: false
@@ -109,8 +110,6 @@ export default {
   created() {
     // Generate a unique ID for each instance
     this.uniqueId = `_${Math.random().toString(36).substr(2, 9)}`;
-
-    this.fetchDimensions();
   },
   mounted() {
   },
@@ -121,32 +120,11 @@ export default {
     innerRadioId() {
       return `inner_${this.uniqueId}`;
     },
-    externalRadioId() {
-      return `external_${this.uniqueId}`;
+    outerRadioId() {
+      return `outer_${this.uniqueId}`;
     }
   },
   methods: {
-    async fetchDimensions() {
-      const endpoints = [
-        `${this.backendURL}/api/v1/category/samosbornye-korobki/`,
-        `${this.backendURL}/api/v1/category/chetyrehklapannye-korobki/`
-      ];
-
-      try {
-        const responses = await Promise.all(endpoints.map(url => axios.get(url)));
-        this.suggestionsList = responses.flatMap(response =>
-          response.data.map(item => ({
-            id: item.id,
-            name: item.name,
-            dimensions: item.size
-          }))
-        );
-        this.filteredSuggestions = JSON.parse(JSON.stringify(this.suggestionsList));
-      } catch (error) {
-        console.error("Failed to fetch dimensions:", error);
-      }
-    },
-
     selectType(type) {
       this.selectedType = type;
       this.emitInput();
@@ -207,6 +185,15 @@ export default {
   watch: {
     selectedSizeType() {
       this.emitInput();
+    },
+    productList(newVal) {
+      this.suggestionsList = newVal.map(item => ({
+        id: item.id,
+        name: item.name,
+        dimensions: item.size
+      }))
+
+      this.filteredSuggestions = JSON.parse(JSON.stringify(this.suggestionsList));
     }
   }
 }
