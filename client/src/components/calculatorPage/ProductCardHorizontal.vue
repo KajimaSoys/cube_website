@@ -162,7 +162,6 @@ export default {
       });
 
       product.finalPrice = finalPrice
-      // this.updateCart(product)
     },
 
     handleClick(product, action) {
@@ -234,11 +233,6 @@ export default {
       this.interval = null;
       this.increaseAmount = 1;
     },
-
-    // Todo убедиться в необходимости этого метода
-   /* updateCart(product) {
-      this.$emit('update-cart', product.id, product.count);
-    },*/
     deleteProduct(productId) {
       this.$emit('remove-from-add-list', productId);
     },
@@ -248,6 +242,7 @@ export default {
       handler(newQuantity) {
         if (this.product) {
           this.product.count = newQuantity;
+          this.calculatePrice(this.product)
         }
       },
       immediate: true

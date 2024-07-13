@@ -122,8 +122,7 @@ export default {
           this.category_list = receivedData.category_list
           this.additionalProducts = additionalProductsRaw ? additionalProductsRaw.map(product => this.calculateFinalPrice(product.product)) : [];
 
-          // TODO uncomment on prod
-          // window.ym(96164548, 'hit', window.location.href);
+          window.ym(96164548, 'hit', window.location.href);
 
           this.show = true
         })
@@ -193,7 +192,7 @@ export default {
     },
 
     handleCalculation(data) {
-      this.calculationData = data;
+      this.calculationData = JSON.parse(JSON.stringify(data));
       setTimeout(() => this.scrollToElement('calculation-result'), 500)
     }
   },

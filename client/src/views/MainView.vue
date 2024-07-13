@@ -165,8 +165,7 @@ export default {
             this.contacts_block = receivedData.contacts_block
             this.add_question_block = receivedData.add_question_block
 
-            // todo uncomment on prod
-            // window.ym(96164548, 'hit', window.location.href);
+            window.ym(96164548, 'hit', window.location.href);
 
             this.show = true
             this.scrollToZero();

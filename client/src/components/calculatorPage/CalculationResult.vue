@@ -60,14 +60,13 @@
               :removable="true"
               @remove-from-add-list="removeFromAddList"
             />
-            <!--@add-to-cart="addToCart"-->
           </div>
         </div>
 
       </div>
 
       <div class="buttons">
-        <div class="order-button button" @click="addToCart">
+        <div class="order-button button" @click="processToCart">
           Оформить заказ
         </div>
 
@@ -244,8 +243,8 @@ export default {
 
     // Парсинг размеров из строки
     parseDimensionsFromString(value) {
-      const pattern = /(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)$/;
-      const match = value.match(pattern);
+      const pattern = /(\d+([.,]\d+)?)[ xXхХ]+(\d+([.,]\d+)?)[ xXхХ]+(\d+([.,]\d+)?)$/;
+      const match = value.replace(',', '.').match(pattern);
       if (match) {
         const [_, length, __, width, ___, height, ____] = match.map(Number);
         return { length, width, height };
@@ -273,9 +272,13 @@ export default {
       this.additionalProducts = [...this.additionalProductsDefault];
     },
 
-    addToCart() {
-      this.$emit('add-to-cart', this.outerBoxForOrder.id, this.outerBoxForOrder.count)
-      this.$emit('add-to-cart', this.innerBoxForOrder.id, this.innerBoxForOrder.count)
+    processToCart() {
+      if (this.outerBoxForOrder.count > 0) {
+        this.$emit('add-to-cart', this.outerBoxForOrder.id, this.outerBoxForOrder.count)
+      }
+      if (this.innerBoxForOrder.count > 0) {
+        this.$emit('add-to-cart', this.innerBoxForOrder.id, this.innerBoxForOrder.count)
+      }
       if (this.additionalProducts.length > 0) {
         this.additionalProducts.forEach(product => {
           this.$emit('add-to-cart', product.id, product.count)
