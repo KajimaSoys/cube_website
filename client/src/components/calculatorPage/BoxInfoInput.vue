@@ -143,7 +143,7 @@ export default {
     },
 
     parseDimensions(value) {
-      const pattern = /(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)[ xXхХ]+(\d+(\.\d+)?)$/;
+      const pattern = /(\d+(\.\d+)?)[ xXхХ*]+(\d+(\.\d+)?)[ xXхХ*]+(\d+(\.\d+)?)$/;
       const match = value.match(pattern);
       if (match) {
         const [_, length, __, width, ___, height, ____] = match.map(Number);

@@ -188,7 +188,7 @@ export default {
       }
 
       // Отображаем результаты
-      this.displayResults(outerFittingBox.match, innerFittingBox.match);
+      // this.displayResults(outerFittingBox.match, innerFittingBox.match);
     },
 
     findBox(size, boxes) {
@@ -243,7 +243,7 @@ export default {
 
     // Парсинг размеров из строки
     parseDimensionsFromString(value) {
-      const pattern = /(\d+([.,]\d+)?)[ xXхХ]+(\d+([.,]\d+)?)[ xXхХ]+(\d+([.,]\d+)?)$/;
+      const pattern = /(\d+([.,]\d+)?)[ xXхХ*]+(\d+([.,]\d+)?)[ xXхХ*]+(\d+([.,]\d+)?)$/;
       const match = value.replace(',', '.').match(pattern);
       if (match) {
         const [_, length, __, width, ___, height, ____] = match.map(Number);
