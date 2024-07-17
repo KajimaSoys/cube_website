@@ -347,6 +347,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
+  white-space: nowrap;
 }
 
 .product-price {
