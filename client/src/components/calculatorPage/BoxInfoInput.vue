@@ -25,11 +25,11 @@
 
   <div class="box-info-input">
     <span class="box-info-input-label">
-      Введите размеры (ДxШxВ)
+      Введите размеры (ДxШxВ) см
     </span>
 
     <input type="text"
-           placeholder="100*100*100"
+           placeholder="10x10x10"
            @input="handleInput"
            v-model="dimensions"
            maxlength="20"
@@ -127,6 +127,9 @@ export default {
   methods: {
     selectType(type) {
       this.selectedType = type;
+      this.dimensions = this.dimensions.replace(/,/g, '.').replace(/[^0-9.* xXхХ]/g, '');
+      this.filterSuggestions(this.dimensions);
+
       this.emitInput();
     },
 
@@ -155,7 +158,17 @@ export default {
 
     filterSuggestions(input) {
       const inputRegex = new RegExp(input.split(/\D+/).join('.*'), 'i');
-      this.filteredSuggestions = this.suggestionsList.filter(s => inputRegex.test(s.dimensions)).slice(0, 5);
+
+      // Сначала сортировка по категории
+      let sortedSuggestions = [];
+      if (this.selectedType === 'self-assembled') {
+        sortedSuggestions = this.suggestionsList.sort((a, b) => a.category_id === 7 ? -1 : 1);
+      } else if (this.selectedType === 'four-valve') {
+        sortedSuggestions = this.suggestionsList.sort((a, b) => a.category_id === 8 ? -1 : 1);
+      }
+
+      // Затем фильтрация по названию
+      this.filteredSuggestions = sortedSuggestions.filter(s => inputRegex.test(s.dimensions)).slice(0, 5);
       this.suggestionSelected = false;
     },
 
@@ -190,7 +203,8 @@ export default {
       this.suggestionsList = newVal.map(item => ({
         id: item.id,
         name: item.name,
-        dimensions: item.size
+        dimensions: item.size,
+        category_id: item.category
       }))
 
       this.filteredSuggestions = JSON.parse(JSON.stringify(this.suggestionsList));

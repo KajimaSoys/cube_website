@@ -118,7 +118,7 @@
             target="_blank"
         >
           <span v-if="product.to_order">
-            Заказ от {{ product.to_order }}&nbsp;шт
+            Под заказ от {{ product.to_order }}&nbsp;шт
           </span>
           <span v-else>
             Под заказ
@@ -439,7 +439,8 @@ export default {
 
 .purchase-button {
   display: flex;
-  padding: 1rem 1.5rem;
+  padding: 0 1.5rem;
+  height: 54px;
   justify-content: center;
   align-items: center;
   align-self: stretch;
@@ -482,7 +483,7 @@ export default {
 
 .to-order {
     background-color: var(--yellow-primary);
-    padding: 1rem;
+    padding: 0 1rem;
     text-decoration: none;
 }
 
@@ -500,7 +501,7 @@ export default {
   }
 
   .to-order {
-    padding: 1rem 0.75rem;
+    padding: 0 0.75rem;
   }
 }
 
@@ -527,7 +528,7 @@ export default {
   }
 
   .purchase-button {
-    padding: 1rem 0.5rem;
+    padding: 0 0.5rem;
   }
 }
 
@@ -545,7 +546,8 @@ export default {
   }
 
   .purchase-button {
-    padding: 0.75rem 0.5rem;
+    padding: 0 0.5rem;
+    height: 45px;
   }
 }
 </style>
