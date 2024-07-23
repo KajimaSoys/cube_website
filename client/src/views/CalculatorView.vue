@@ -156,6 +156,7 @@ export default {
           finalPrice = priceInfo.price * count;
         }
       });
+      const cleanSize = product.size.replace(/[^\d.,xXхХ*]/g, '');
 
       return {
         ...product,
@@ -163,6 +164,7 @@ export default {
         finalPrice: finalPrice,
         isScalingPlus: false,
         isScalingMinus: false,
+        size: cleanSize
       };
     },
 

@@ -175,8 +175,10 @@ export default {
     searchFittingBoxes(newVal) {
       const outerBoxDimensions = newVal.outer.parsedDimensions;
       const innerBoxDimensions = newVal.inner.parsedDimensions;
-      const outerFittingBox = this.findBox(outerBoxDimensions, this.productList);
-      const innerFittingBox = this.findBox(innerBoxDimensions, this.productList);
+      const outerBoxSelectedType = newVal.outer.selectedType;
+      const innerBoxSelectedType = newVal.inner.selectedType;
+      const outerFittingBox = this.findBox(outerBoxDimensions, this.productList, outerBoxSelectedType);
+      const innerFittingBox = this.findBox(innerBoxDimensions, this.productList, innerBoxSelectedType);
 
       this.outerBoxForOrder = outerFittingBox.match;
       this.innerBoxForOrder = innerFittingBox.match;
@@ -191,14 +193,18 @@ export default {
       // this.displayResults(outerFittingBox.match, innerFittingBox.match);
     },
 
-    findBox(size, boxes) {
+    findBox(size, boxes, selectedType) {
+      const categoryPriority = selectedType === 'self-assembled' ? 7 : 8;
+
+      // Поиск точного соответствия с учетом приоритета по категории
       const exactMatch = boxes.find(box => {
         const boxSize = this.parseDimensionsFromString(box.size);
-        return boxSize && boxSize.length === size.length && boxSize.width === size.width && boxSize.height === size.height;
+        // console.log(`def size:${box.size}\n parsed size:${JSON.stringify(boxSize)}`)
+        return boxSize && boxSize.length === size.length && boxSize.width === size.width && boxSize.height === size.height && box.category === categoryPriority;
       });
       if (exactMatch) return { match: exactMatch, isExact: true };
 
-      // Поиск ближайшего размера, если точного соответствия нет
+      // Если точного совпадения нет, поиск ближайшего размера с учетом категории
       let nearestBox = null;
       let minDifference = Infinity;
       boxes.forEach(box => {
@@ -209,14 +215,33 @@ export default {
             Math.pow(boxSize.width - size.width, 2) +
             Math.pow(boxSize.height - size.height, 2)
           );
-          if (difference < minDifference) {
-            minDifference = difference;
-            nearestBox = box;
+            if (difference < minDifference && box.category === categoryPriority) {
+              minDifference = difference;
+              nearestBox = box;
+            }
           }
+        });
+
+        // Если ближайший размер с приоритетной категорией не найден, ищем по всем категориям
+        if (!nearestBox) {
+          boxes.forEach(box => {
+            const boxSize = this.parseDimensionsFromString(box.size);
+            if (boxSize) {
+              const difference = Math.sqrt(
+                Math.pow(boxSize.length - size.length, 2) +
+                Math.pow(boxSize.width - size.width, 2) +
+                Math.pow(boxSize.height - size.height, 2)
+              );
+              if (difference < minDifference) {
+                minDifference = difference;
+                nearestBox = box;
+              }
+            }
+          });
         }
-      });
-      return { match: nearestBox, isExact: false };
-    },
+
+        return { match: nearestBox, isExact: false };
+      },
 
     recalculateQuantities() {
       if (!this.outerBoxForOrder || !this.innerBoxForOrder) {
@@ -244,7 +269,7 @@ export default {
     // Парсинг размеров из строки
     parseDimensionsFromString(value) {
       const pattern = /(\d+([.,]\d+)?)[ xXхХ*]+(\d+([.,]\d+)?)[ xXхХ*]+(\d+([.,]\d+)?)$/;
-      const match = value.replace(',', '.').match(pattern);
+      const match = value.replace(/,/g, '.').match(pattern);
       if (match) {
         const [_, length, __, width, ___, height, ____] = match.map(Number);
         return { length, width, height };
