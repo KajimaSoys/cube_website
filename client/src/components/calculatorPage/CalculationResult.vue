@@ -144,7 +144,15 @@ export default {
             height += 0.5;
           }
       }
-      return { length, width, height };
+      const roundedLength = parseFloat(length.toFixed(2));
+      const roundedWidth = parseFloat(width.toFixed(2));
+      const roundedHeight = parseFloat(height.toFixed(2));
+
+      return {
+        length: roundedLength,
+        width: roundedWidth,
+        height: roundedHeight
+      };
     },
     calculateDisplayDimensions(largeBox, smallBox) {
       if (!this.calculationData) return { largeBox: '', smallBox: '' };
