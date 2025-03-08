@@ -5,9 +5,9 @@
       <h2>Расчет</h2>
       <div  class="calculation-result-content">
         <div class="calculation-result-text">
-          Большая коробка {{ displayDimensions.largeBox }} мм. (внутренние размеры)
+          Большая коробка {{ displayDimensions.largeBox }} см. (внутренние размеры)
           <br>
-          Маленькая коробка {{ displayDimensions.smallBox }} мм. (внешние размеры)
+          Маленькая коробка {{ displayDimensions.smallBox }} см. (внешние размеры)
           <br>
           По дну: {{ boxesPerBase.length }} x {{ boxesPerBase.width }} = {{ boxesPerBase.total }} шт.
           <br>
@@ -324,8 +324,8 @@ export default {
 
     get_whatsapp_text(){
       let greet_message = `Здравствуйте! На странице калькулятора я получил(-а) следующие результаты: %0D%0A
-Большая коробка ${this.displayDimensions.largeBox} мм. (внутренние размеры) %0D%0A
-Маленькая коробка ${this.displayDimensions.smallBox} мм. (внешние размеры) %0D%0A
+Большая коробка ${this.displayDimensions.largeBox} см. (внутренние размеры) %0D%0A
+Маленькая коробка ${this.displayDimensions.smallBox} см. (внешние размеры) %0D%0A
 По дну: ${this.boxesPerBase.length} x ${this.boxesPerBase.width} = ${this.boxesPerBase.total} шт. %0D%0A
 В высоту: ${this.boxesPerHeight} шт. %0D%0A
 Итого: ${this.totalBoxes} шт. %0D%0A%0D%0A`
