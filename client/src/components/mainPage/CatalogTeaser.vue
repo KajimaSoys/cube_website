@@ -59,7 +59,9 @@ export default {
   },
   computed: {
     shown_category_list() {
-      let sorted_categories = this.category_list.sort((a, b) => a.order - b.order);
+      let sorted_categories = this.category_list
+          .filter(category => category?.slug)
+          .sort((a, b) => a.order - b.order);
       return this.showAll ? sorted_categories : sorted_categories.slice(0, 10);
     },
   },

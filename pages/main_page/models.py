@@ -121,10 +121,10 @@ class NewProductBlock(models.Model):
     """
 
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Товар")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Товар")
 
     def __str__(self):
-        return self.product.name
+        return self.product.name if self.product else 'Удалённый товар'
 
     class Meta:
         verbose_name = 'новинка'
@@ -142,10 +142,10 @@ class PopularProductBlock(models.Model):
     """
 
     order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Товар")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Товар")
 
     def __str__(self):
-        return self.product.name
+        return self.product.name if self.product else 'Удалённый товар'
 
     class Meta:
         verbose_name = 'популярная модель'

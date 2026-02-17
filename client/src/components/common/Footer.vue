@@ -27,7 +27,7 @@
               </router-link>
               <div class="catalog-items">
                 <router-link class="catalog-item"
-                   v-for="category in category_list"
+                   v-for="category in categories_with_slug"
                    :key="category.id"
                    :to="{ name: 'catalog-category', params: { categorySlug: category.slug } }"
                    @click="scrollToZero()"
@@ -207,6 +207,11 @@ export default {
     }
   },
   mounted() {
+  },
+  computed: {
+    categories_with_slug() {
+      return this.category_list.filter(category => category?.slug);
+    }
   },
   methods: {
     scrollToZero(){
