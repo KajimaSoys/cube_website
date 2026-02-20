@@ -22,7 +22,9 @@ class HeaderBlockAdmin(admin.ModelAdmin):
                 'address',
                 'yandex_map_link',
                 'tg_link',
+                'vk_link',
                 'whatsapp_link',
+                'max_link',
             ],
         }),
     ]

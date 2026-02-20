@@ -13,7 +13,9 @@ class HeaderBlock(models.Model):
     - address: Company address;
     - yandex_map_link: Yandex Maps link;
     - tg_link: Telegram link;
-    - whatsapp_link: WhatsApp link.
+    - vk_link: VK link;
+    - whatsapp_link: WhatsApp link;
+    - max_link: MAX link.
     """
 
     logo = models.FileField(verbose_name='Логотип', upload_to='common_elements/header/', max_length=500)
@@ -24,7 +26,9 @@ class HeaderBlock(models.Model):
     yandex_map_link = models.CharField(verbose_name='Ссылка на Яндекс Карты', max_length=500, default='')
 
     tg_link = models.CharField(verbose_name='Ссылка на Telegram', max_length=255, help_text='Используется в футере')
+    vk_link = models.CharField(verbose_name='Ссылка на VK', max_length=255, help_text='Используется в футере', default='https://vk.ru/cubekazan')
     whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255, help_text='Используется в футере')
+    max_link = models.CharField(verbose_name='Ссылка на MAX', max_length=255, help_text='Используется в футере', default='https://max.ru/u/f9LHodD0cOKZhk6BBd53tajoqsgHshJHe-HnWneXmnVi31D0ym7gdn98dCI')
 
     def __str__(self):
         return 'Навигационная панель'

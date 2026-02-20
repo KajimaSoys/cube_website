@@ -347,7 +347,9 @@ class ContactsBlock(models.Model):
     Fields:
     - title: Title;
     - tg_link: Telegram link;
+    - vk_link: VK link;
     - whatsapp_link: WhatsApp link;
+    - max_link: MAX link;
     - monday_friday_schedule: Schedule for Monday to Friday;
     - sunday_schedule: Schedule for Saturday;
     - dinner_schedule: Schedule for Sunday;
@@ -357,7 +359,9 @@ class ContactsBlock(models.Model):
 
     title = RichTextField(verbose_name='Заголовок')
     tg_link = models.CharField(verbose_name='Ссылка на Telegram', max_length=255)
+    vk_link = models.CharField(verbose_name='Ссылка на VK', max_length=255, default='https://vk.ru/cubekazan')
     whatsapp_link = models.CharField(verbose_name='Ссылка на Whatsapp', max_length=255)
+    max_link = models.CharField(verbose_name='Ссылка на MAX', max_length=255, default='https://max.ru/u/f9LHodD0cOKZhk6BBd53tajoqsgHshJHe-HnWneXmnVi31D0ym7gdn98dCI')
 
     monday_friday_schedule = models.CharField(verbose_name='Расписание (понедельник-пятница)', max_length=255, help_text='чч:мм-чч:мм')
     sunday_schedule = models.CharField(verbose_name='Расписание (суббота)', max_length=255, help_text='чч:мм-чч:мм')

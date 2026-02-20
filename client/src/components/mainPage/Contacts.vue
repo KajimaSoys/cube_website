@@ -18,6 +18,14 @@
               </svg>
               Telegram
             </a>
+            <a class="vk-link" :href="contacts_block.vk_link" target="_blank">
+              <div id="vk-link">
+                <svg viewBox="4 7.6 13.84 8.84" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 7.6C4.12 13.12 6.88 16.44 11.72 16.44V13.28C13.48 13.46 14.8 14.72 15.34 16.44H17.84C17.15 13.93 15.34 12.55 14.21 12.02C15.34 11.37 16.93 9.78 17.31 7.6H15.04C14.54 9.38 13.06 10.97 11.72 11.12V7.6H9.45V13.77C8.09 13.43 6.37 11.72 6.29 7.6H4Z" fill="white"/>
+                </svg>
+              </div>
+              ВКонтакте
+            </a>
             <a class="whatsapp-link" :href="contacts_block.whatsapp_link" target="_blank">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <g clip-path="url(#clip0_210_806)">
@@ -32,6 +40,15 @@
                 </defs>
               </svg>
               What'sApp
+            </a>
+            <a class="max-link" :href="contacts_block.max_link" target="_blank">
+              <div id="max-link">
+                <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="white" fill-rule="evenodd" clip-rule="evenodd"
+                    d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z"/>
+                </svg>
+              </div>
+              MAX
             </a>
           </div>
         </div>
@@ -68,6 +85,14 @@
             </svg>
             Telegram
           </a>
+          <a class="vk-link" :href="contacts_block.vk_link" target="_blank">
+            <div id="vk-link">
+              <svg viewBox="4 7.6 13.84 8.84" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 7.6C4.12 13.12 6.88 16.44 11.72 16.44V13.28C13.48 13.46 14.8 14.72 15.34 16.44H17.84C17.15 13.93 15.34 12.55 14.21 12.02C15.34 11.37 16.93 9.78 17.31 7.6H15.04C14.54 9.38 13.06 10.97 11.72 11.12V7.6H9.45V13.77C8.09 13.43 6.37 11.72 6.29 7.6H4Z" fill="white"/>
+              </svg>
+            </div>
+            ВКонтакте
+          </a>
           <a class="whatsapp-link" :href="contacts_block.whatsapp_link" target="_blank">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
               <g clip-path="url(#clip0_210_806)">
@@ -82,6 +107,15 @@
               </defs>
             </svg>
             What'sApp
+          </a>
+          <a class="max-link" :href="contacts_block.max_link" target="_blank">
+            <div id="max-link">
+              <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                <path fill="white" fill-rule="evenodd" clip-rule="evenodd"
+                  d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z"/>
+              </svg>
+            </div>
+            MAX
           </a>
         </div>
       </div>
@@ -151,6 +185,7 @@ export default {
   padding: 4rem 4rem 5rem 4rem;
   display: flex;
   flex-direction: row;
+  gap: 1.5rem;
 }
 
 .social-links.bottom {
@@ -167,15 +202,38 @@ export default {
 .social-links {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 1rem;
 }
 
-.telegram-link, .whatsapp-link {
+.telegram-link, .vk-link, .whatsapp-link, .max-link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
   color: var(--black-55);
+}
+
+#vk-link, #max-link {
+  background: #40AB5E;
+  border-radius: 50%;
+  height: 26.67px;
+  width: 26.67px;
+  display: grid;
+  place-items: center;
+  margin: 3px 2px 2px 2px;
+}
+
+#vk-link svg{
+  width: 15px;
+  height: 10px;
+  display: block;
+}
+
+
+#max-link svg {
+  width: 70%;
+  height: 70%;
+  display: block;
 }
 
 .right-side {
@@ -298,6 +356,10 @@ a:hover {
 
   .social-links {
     font-size: 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    width: 80%;
   }
 
   .title, .subtitle {
@@ -339,8 +401,16 @@ a:hover {
   }
 
   .social-links.bottom {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    width: fit-content;
+    gap: 0.5rem 2rem;
+    margin: 0 auto;
+
+  }
+
+  .social-links.bottom > a {
+    width: fit-content;
+
   }
 
   .schedule, .contacts {
@@ -363,6 +433,12 @@ a:hover {
 @media screen and (max-width: 400px) {
   h2 {
     width: 50vw;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .social-links {
+    grid-template-columns: 1fr;
   }
 }
 </style>
