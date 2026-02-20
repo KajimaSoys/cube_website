@@ -106,7 +106,7 @@
           </h1>
 
           <div class="description-block">
-            <div class="price-one">
+            <div class="price-one" v-if="product.prices">
               {{ product.prices[0].price }} ₽ / шт
             </div>
             <div class="description" v-html="product.description"></div>

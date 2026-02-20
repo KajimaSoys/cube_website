@@ -140,10 +140,25 @@ export default {
       try {
         const responses = await Promise.all(endpoints.map(url => axios.get(url)));
         const productList = responses.map(response => response.data).flat();
-        this.productList = productList ? productList.map(this.calculateFinalPrice) : [];
+        this.productList = productList
+          ? productList
+            .filter(product => this.hasValidSize(product))
+            .map(this.calculateFinalPrice)
+          : [];
       } catch (error) {
         console.error("Failed to fetch products:", error);
       }
+    },
+
+    normalizeSize(size) {
+      if (typeof size !== 'string') {
+        return '';
+      }
+      return size.replace(/[^\d.,xXхХ*]/g, '').trim();
+    },
+
+    hasValidSize(product) {
+      return this.normalizeSize(product?.size).length > 0;
     },
 
     // Общая функция для расчета цены продукта
@@ -156,7 +171,7 @@ export default {
           finalPrice = priceInfo.price * count;
         }
       });
-      const cleanSize = product.size.replace(/[^\d.,xXхХ*]/g, '');
+      const cleanSize = this.normalizeSize(product.size);
 
       return {
         ...product,

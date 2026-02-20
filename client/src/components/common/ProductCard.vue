@@ -2,12 +2,13 @@
   <div class="product-card">
     <div class="product-images">
       <router-link
+          v-if="productRoute"
           class="image-container"
-          :to="{ name: 'product', params: { categorySlug: product.category_info.slug, productId: product.id } }"
+          :to="productRoute"
           @mouseenter="hover = true"
           @mouseleave="hover = false">
         <img
-            v-if="product.images.length > 0"
+            v-if="product.images?.length > 0"
             :src="computedSrc"
             loading="lazy"
             alt=""
@@ -19,25 +20,50 @@
             alt=""
         >
       </router-link>
+      <div
+          v-else
+          class="image-container"
+          @mouseenter="hover = true"
+          @mouseleave="hover = false"
+      >
+        <img
+            v-if="product.images?.length > 0"
+            :src="computedSrc"
+            loading="lazy"
+            alt=""
+        >
+        <img
+            v-else
+            :src="frontendURL + '/images/no-image.png'"
+            loading="lazy"
+            alt=""
+        >
+      </div>
     </div>
+
     <div class="product-content">
       <div class="base-info">
         <router-link
+            v-if="productRoute"
             class="title"
-            :to="{ name: 'product', params: { categorySlug: product.category_info.slug, productId: product.id }}"
+            :to="productRoute"
         >
           {{ product.name }}
         </router-link>
+
+        <div v-else class="title">
+          {{ product.name }}
+        </div>
         <!--        <div class="material" v-if="product.material">-->
         <!--          {{ product.material }}-->
         <!--        </div>-->
       </div>
 
       <div class="prices">
-        <div class="price-one">
+        <div class="price-one" v-if="product.prices">
           {{ product.prices[0].price }} ₽
         </div>
-        <div class="price-wholesale" v-if="product.prices[1]">
+        <div class="price-wholesale" v-if="product.prices && product.prices[1]">
           {{ product.prices[1].price }} ₽ от {{ product.prices[1].count }} шт
         </div>
       </div>
@@ -186,17 +212,45 @@ export default {
   },
 
   computed: {
-    calculatedPrice() {
-      const basePrice = this.product.prices.find(price => price.count === 1).price;
-      let finalPrice = basePrice * this.count;
+    productRoute() {
+      const categorySlug = this.product?.category_info?.slug;
+      const productId = this.product?.id;
 
-      this.product.prices.forEach(priceInfo => {
-        if (this.count >= priceInfo.count) {
-          finalPrice = priceInfo.price * this.count;
+      if (!categorySlug || !productId) {
+        return null;
+      }
+
+      return {
+        name: 'product',
+        params: {
+          categorySlug,
+          productId
         }
-      });
+      };
+    },
 
-      return finalPrice.toFixed(2);
+    calculatedPrice() {
+      const prices = this.product?.prices
+
+      if (!Array.isArray(prices) || prices.length === 0) {
+        return '0.00'
+      }
+
+      const basePriceObj = prices.find(p => p.count === 1)
+
+      if (!basePriceObj) {
+        return '0.00'
+      }
+
+      let finalPrice = basePriceObj.price * this.count
+
+      prices.forEach(priceInfo => {
+        if (this.count >= priceInfo.count) {
+          finalPrice = priceInfo.price * this.count
+        }
+      })
+
+      return Number(finalPrice).toFixed(2)
     },
     computedSrc() {
       let src = this.hover && this.product.images[1] ? this.product.images[1].image : this.product.images[0].image
