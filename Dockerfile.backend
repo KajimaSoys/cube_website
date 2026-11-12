@@ -1,19 +1,21 @@
-FROM python:3.8
+FROM python:3.8-slim
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_CACHE_DIR=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
 COPY req.txt /app/
 RUN pip install -r req.txt
 
+# Код и static/media в рантайме приходят через bind-mount ./:/app (см. docker-compose.yml),
+# поэтому в образ кладём только код — без media/ и static/, чтобы не раздувать образ.
 COPY core/ /app/core/
-COPY media/ /app/media/
 COPY pages/ /app/pages/
 COPY service/ /app/service/
 COPY shop/ /app/shop/
-COPY static/ /app/static/
 COPY manage.py /app/
 
 COPY entrypoint.sh /entrypoint.sh

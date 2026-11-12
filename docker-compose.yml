@@ -6,6 +6,7 @@
         context: .
         dockerfile: ./Dockerfile.backend
       container_name: django-cube
+      restart: always
       environment:
         - DEBUG=${DEBUG}
         - SECRET_KEY=${SECRET_KEY}
@@ -32,6 +33,7 @@
         context: .
         dockerfile: ./Dockerfile.frontend
       container_name: nginx-cube
+      restart: always
       ports:
         - "127.0.0.1:8081:80"
       depends_on:

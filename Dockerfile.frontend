@@ -1,5 +1,5 @@
 # Первая стадия: Vue
-FROM node:lts-alpine as build-stage
+FROM node:22-alpine AS build-stage
 WORKDIR /app
 COPY client/package*.json ./
 RUN npm install
