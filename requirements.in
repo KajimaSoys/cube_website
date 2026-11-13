@@ -1,0 +1,15 @@
+# Прямые зависимости проекта. requirements.txt генерируется из этого файла:
+#   docker run --rm -v "$PWD":/w -w /w python:3.14-slim-trixie sh -c \
+#     "pip install -q pip-tools && pip-compile --generate-hashes --strip-extras -o requirements.txt requirements.in"
+Django~=5.2.19
+djangorestframework
+django-cors-headers
+django-ckeditor
+django-admin-sortable2
+django-imagekit
+django-resized
+Pillow
+psycopg[binary]
+gunicorn
+requests
+tzdata

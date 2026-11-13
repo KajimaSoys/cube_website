@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
@@ -7,7 +8,6 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 import uuid
 import re
-from datetime import datetime
 
 
 def default_id():
@@ -21,7 +21,9 @@ def default_id():
 
 
 def default_date():
-    return datetime.now()
+    # Aware-время вместо naive datetime.now(): при USE_TZ=True naive-значения дают RuntimeWarning
+    # при каждом сохранении. Сохраняемое значение не меняется.
+    return timezone.now()
 
 
 class Category(models.Model):

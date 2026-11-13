@@ -21,3 +21,8 @@ postgresql
 backup_*.json
 db.json
 .DS_Store
+audit
+.claude
+MIGRATION*.md
+DEPLOY*.md
+requirements.in

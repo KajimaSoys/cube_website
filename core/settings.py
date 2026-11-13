@@ -32,10 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd parties
-    'debug_toolbar',
     'ckeditor',
     'rest_framework',
-    'phone_field',
     'adminsortable2',
     'imagekit',
     'corsheaders',
@@ -43,7 +41,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     # 3rd parties
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 
     # default
@@ -111,7 +108,6 @@ TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_L10N = True
 
 USE_TZ = True
 
@@ -128,6 +124,15 @@ try:
     from .local_settings import *
 except ImportError:
     from .prod_settings import *
+
+# django-debug-toolbar подключается только в режиме разработки и только если установлен
+# (в продовом образе его нет).
+import importlib.util
+
+DEBUG_TOOLBAR_ENABLED = DEBUG and importlib.util.find_spec('debug_toolbar') is not None
+if DEBUG_TOOLBAR_ENABLED:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
 # app-model ordering

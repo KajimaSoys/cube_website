@@ -1,63 +1,104 @@
-  version: '3.8'
+name: cube_website
 
-  services:
-    django:
-      build:
-        context: .
-        dockerfile: ./Dockerfile.backend
-      container_name: django-cube
-      restart: always
-      environment:
-        - DEBUG=${DEBUG}
-        - SECRET_KEY=${SECRET_KEY}
-        - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-        - DB_NAME=${DB_NAME}
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
-        - DB_HOST=${DB_HOST}
-        - DB_PORT=${DB_PORT}
-        - CSRF_TRUSTED=${CSRF_TRUSTED}
-        - HMAC_KEY=${HMAC_KEY}
-        - CSRF_COOKIE_SECURE=${CSRF_COOKIE_SECURE}
-        - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE}
-        - SMSRU_APIKEY=${SMSRU_APIKEY}
-        - SMSRU_CLIENT=${SMSRU_CLIENT}
-      volumes:
-        - ./:/app
-        - ./media:/app/media
-      depends_on:
-        - db
+# Общие настройки защиты для всех контейнеров.
+x-hardening: &hardening
+  restart: unless-stopped
+  init: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  pids_limit: 256
 
-    nginx:
-      build:
-        context: .
-        dockerfile: ./Dockerfile.frontend
-      container_name: nginx-cube
-      restart: always
-      ports:
-        - "127.0.0.1:8081:80"
-      depends_on:
-        - django
-      volumes:
-        - ./static:/app/static
-        - ./media:/app/media
+services:
+  django:
+    <<: *hardening
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: cube_website-django:latest
+    container_name: django-cube
+    env_file:
+      - .env
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./media:/app/media
+      - ./static:/app/static
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthcheck/', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-    db:
-      image: postgres:16
-      container_name: db-cube
-      restart: always
-      environment:
-        - POSTGRES_DB=${DB_NAME}
-        - POSTGRES_USER=${DB_USER}
-        - POSTGRES_PASSWORD=${DB_PASSWORD}
-      volumes:
-        - db_data:/var/lib/postgresql/data
-        - ./postgresql:/docker-entrypoint-initdb.d
+  nginx:
+    <<: *hardening
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: cube_website-nginx:latest
+    container_name: nginx-cube
+    read_only: true
+    tmpfs:
+      - /tmp
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - ./static:/app/static:ro
+      - ./media:/app/media:ro
+    depends_on:
+      django:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
-  volumes:
-    db_data:
+  db:
+    <<: *hardening
+    # Официальный postgres:18.7-trixie + обновления безопасности Debian.
+    # gosu не нужен: контейнер сразу стартует от пользователя postgres (см. user ниже).
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM postgres:18.7-trixie
+        RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+            && rm -f /usr/local/bin/gosu
+    image: cube_website-db:18.7
+    container_name: db-cube
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    # Сразу от postgres (uid 999): entrypoint не переключает пользователя, поэтому capabilities не нужны совсем.
+    user: postgres
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    shm_size: 128m
+    volumes:
+      # С Postgres 18 том монтируется в /var/lib/postgresql, данные лежат в /var/lib/postgresql/18/docker.
+      - db18_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
-  networks:
-    default:
-        name: cube_network
-        external: true
+volumes:
+  # Том Postgres 16 (db_data) не удаляется и остаётся для отката, пока вы не удалите его вручную.
+  db18_data:
+
+networks:
+  default:
+    name: cube_network
+    external: true

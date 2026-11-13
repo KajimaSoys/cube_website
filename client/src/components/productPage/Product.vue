@@ -13,7 +13,7 @@
                 :slides-per-view="1"
                 :initial-slide="this.currentImageIndex"
                 :space-between="32"
-                :navigation="{ nextEl: `.swiper-button-next`, prevEl: `.swiper-button-prev` }"
+                :navigation="{ nextEl: `.swiper-button-next`, prevEl: `.swiper-button-prev`, addIcons: false }"
                 :onSwiper="getSwiperInstance"
                 @slideChange="onSlideChange"
             >
@@ -658,6 +658,8 @@ export default {
 
 .swiper-button-next,
 .swiper-button-prev {
+  /* Swiper 12+ задаёт кнопкам ширину 44px; возвращаем прежние 27px из Swiper 11 */
+  width: calc(var(--swiper-navigation-size) / 44 * 27);
   height: 2.85rem;
   display: flex;
   justify-content: center;

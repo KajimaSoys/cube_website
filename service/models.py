@@ -1,11 +1,13 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 from django_resized import ResizedImageField
 from ckeditor.fields import RichTextField
 
 
 def default_date():
-    return datetime.now()
+    # Aware-время вместо naive datetime.now(): при USE_TZ=True naive-значения дают RuntimeWarning
+    # при каждом сохранении. Сохраняемое значение не меняется.
+    return timezone.now()
 
 
 class Reviews(models.Model):

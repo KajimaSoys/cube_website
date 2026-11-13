@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+set -eu
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py collectstatic --noinput
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput --verbosity 0
 
-exec gunicorn core.wsgi:application --bind 0.0.0.0:8000
+exec "$@"

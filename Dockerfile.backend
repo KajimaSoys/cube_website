@@ -1,23 +1,46 @@
-FROM python:3.8-slim
+# syntax=docker/dockerfile:1
+FROM python:3.14.10-slim-trixie
 
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PIP_NO_CACHE_DIR=1
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_ROOT_USER_ACTION=ignore
+
+# Обновления безопасности системных пакетов поверх базового образа.
+RUN apt-get update \
+    && apt-get upgrade -y --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Непривилегированный пользователь без shell и домашнего каталога.
+# Писать он может только в media/ и static/ — код принадлежит root и доступен только на чтение.
+RUN groupadd --system --gid 10001 app \
+    && useradd --system --uid 10001 --gid app --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin app \
+    && install -d -o app -g app -m 0755 /app/media /app/static
 
 WORKDIR /app
 
-COPY req.txt /app/
-RUN pip install -r req.txt
+# Все пакеты зафиксированы вместе с хешами (pip сам включает --require-hashes).
+COPY requirements.txt ./
+# После установки удаляем pip и ensurepip: в рантайме они не нужны, а их вложенные библиотеки дают лишние CVE.
+RUN pip install --no-compile -r requirements.txt \
+    && pip uninstall -y pip \
+    && rm -rf /usr/local/lib/python3.14/ensurepip
 
-# Код и static/media в рантайме приходят через bind-mount ./:/app (см. docker-compose.yml),
-# поэтому в образ кладём только код — без media/ и static/, чтобы не раздувать образ.
-COPY core/ /app/core/
-COPY pages/ /app/pages/
-COPY service/ /app/service/
-COPY shop/ /app/shop/
-COPY manage.py /app/
+COPY core/ ./core/
+COPY pages/ ./pages/
+COPY service/ ./service/
+COPY shop/ ./shop/
+COPY manage.py entrypoint.sh ./
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+USER app
+
+EXPOSE 8000
+
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
+CMD ["gunicorn", "core.wsgi:application", \
+     "--bind", "0.0.0.0:8000", \
+     "--workers", "2", "--worker-class", "gthread", "--threads", "4", \
+     "--worker-tmp-dir", "/tmp", \
+     "--timeout", "60", "--graceful-timeout", "30", \
+     "--access-logfile", "-", "--error-logfile", "-"]

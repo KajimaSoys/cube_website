@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.db import connection
+from django.http import HttpResponse
 
 from pages.main_page import views as main_page_views
 from pages.calculator_page import views as calculator_page_views
@@ -15,10 +17,16 @@ from pages.common_elements import views as common_elements_views
 
 from shop import views as shop_views
 
+
+def healthcheck(request):
+    """Проверка живости для Docker healthcheck: приложение отвечает и БД доступна."""
+    connection.ensure_connection()
+    return HttpResponse('ok', content_type='text/plain')
+
 urlpatterns = [
+    path('healthcheck/', healthcheck, name='healthcheck'),
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),
-    path('__debug__/', include('debug_toolbar.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
     path('api/v1/main_page/', main_page_views.aggregate_data, name='main_page'),
@@ -62,3 +70,6 @@ urlpatterns = [
 
 admin.site.site_header = "Панель управления сайта Куб Казань"
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG_TOOLBAR_ENABLED:
+    urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))

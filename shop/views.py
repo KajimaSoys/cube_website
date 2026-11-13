@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.http import JsonResponse, HttpResponse
 
 from shop.models import (
@@ -90,7 +91,7 @@ def create_order(request):
 
 def send_sms(order):
     message = (f'Поступил заказ №{order.id}\n'
-               f'Дата: {order.created_at.strftime("%d.%m.%Y %H:%M:%S")}')
+               f'Дата: {timezone.localtime(order.created_at).strftime("%d.%m.%Y %H:%M:%S")}')
 
     send_data = {
         'api_id': settings.SMSRU_APIKEY,

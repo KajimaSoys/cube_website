@@ -1,12 +1,19 @@
-# Первая стадия: Vue
-FROM node:22-alpine AS build-stage
+# syntax=docker/dockerfile:1
+
+# Стадия 1: сборка Vue
+FROM node:26.13.1-alpine3.24 AS build
 WORKDIR /app
-COPY client/package*.json ./
-RUN npm install
+COPY client/package.json client/package-lock.json ./
+RUN npm ci --no-audit --no-fund
 COPY client/ .
 RUN npm run build
 
-# Вторая стадия: Nginx
-FROM nginx:stable-alpine
+# Стадия 2: nginx от непривилегированного пользователя (uid 101), слушает 8080
+FROM nginxinc/nginx-unprivileged:1.30.6-alpine
+# Обновления безопасности Alpine, затем обратно на непривилегированного пользователя nginx (101).
+USER root
+RUN apk upgrade --no-cache
+USER 101
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 8080
