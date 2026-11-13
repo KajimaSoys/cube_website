@@ -1,12 +1,13 @@
 import smtplib
 from decimal import Decimal
+from types import SimpleNamespace
 from unittest import mock
 
 from django.core import mail
 from django.test import TestCase, override_settings
 
 from shop.models import Category, Orders, Product, ProductInfo
-from shop.notifications import format_rub, send_order_email
+from shop.notifications import _item, format_rub, send_order_email
 
 
 @override_settings(
@@ -18,10 +19,10 @@ from shop.notifications import format_rub, send_order_email
 class OrderEmailTests(TestCase):
     def setUp(self):
         category = Category.objects.create(name='Коробки', slug='boxes', image_cat='shop/images_cat/x.jpg')
-        product = Product.objects.create(category=category, name='Коробка 300×200×150', description='-',
+        self.product = product = Product.objects.create(category=category, name='Коробка 300×200×150', description='-',
                                          size='300×200×150', price_1=50)
-        self.order = Orders.objects.create(name='Иван', phone_number='+7 (999) 123-45-67', pickup=False,
-                                           address='Казань, ул. Баумана, 1', total=Decimal('4500'))
+        self.order = Orders.objects.create(name='Иван', phone_number='+7 (999) 123-45-67',
+                                           total=Decimal('4500'))
         ProductInfo.objects.create(order=self.order, product=product, count=100, price=Decimal('4500'))
 
     def test_email_contains_order(self):
@@ -34,7 +35,7 @@ class OrderEmailTests(TestCase):
         self.assertIn('<orders@example.com>', message.from_email)
         self.assertIn('Коробка 300×200×150', message.body)
         self.assertIn('100 шт × 45 ₽ = 4 500 ₽', message.body)
-        self.assertIn('Казань, ул. Баумана, 1', message.body)
+        self.assertNotIn('Получение', message.body)
         html = message.alternatives[0][0]
         self.assertIn('tel:+79991234567', html)
         self.assertIn(f'https://cubekazan.ru/admin/shop/orders/{self.order.pk}/change/', html)
@@ -50,6 +51,34 @@ class OrderEmailTests(TestCase):
         with self.assertLogs('shop.notifications', 'ERROR'):
             send_order_email(self.order)
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_product_without_name_and_size(self):
+        Product.objects.filter(pk=self.product.pk).update(name='', size=None)
+        send_order_email(self.order)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(f'Товар #{self.product.pk} (без названия) — 100 шт', mail.outbox[0].body)
+        self.assertNotIn('None', mail.outbox[0].body)
+
+    def test_order_without_items(self):
+        ProductInfo.objects.filter(order=self.order).delete()
+        send_order_email(self.order)
+        self.assertIn('Позиции не найдены', mail.outbox[0].body)
+
+    def test_broken_item_values(self):
+        item = _item(SimpleNamespace(product=None, product_id=None, count=0, price=None))
+        self.assertEqual(item['name'], 'Товар не найден')
+        self.assertEqual(item['unit_price'], '—')
+        self.assertEqual(item['line_total'], '—')
+
+    def test_template_failure_sends_fallback(self):
+        with mock.patch('shop.notifications.render_to_string', side_effect=RuntimeError('boom')), \
+                self.assertLogs('shop.notifications', 'ERROR'):
+            send_order_email(self.order)
+        self.assertEqual(len(mail.outbox), 1)
+        message = mail.outbox[0]
+        self.assertEqual(message.subject, f'Новая заявка №{self.order.id} с сайта cubekazan.ru')
+        self.assertIn('Полное письмо собрать не удалось', message.body)
+        self.assertIn('+7 (999) 123-45-67', message.body)
 
     def test_format_rub(self):
         self.assertEqual(format_rub(15400), '15 400 ₽')
