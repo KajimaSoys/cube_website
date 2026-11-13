@@ -129,6 +129,10 @@ except ImportError:
 # (в продовом образе его нет).
 import importlib.util
 
+# В проде API отдаёт только JSON: browsable API (HTML-интерфейс DRF) наружу не нужен.
+if not DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ['rest_framework.renderers.JSONRenderer']
+
 DEBUG_TOOLBAR_ENABLED = DEBUG and importlib.util.find_spec('debug_toolbar') is not None
 if DEBUG_TOOLBAR_ENABLED:
     INSTALLED_APPS.append('debug_toolbar')

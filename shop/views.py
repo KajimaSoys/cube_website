@@ -22,8 +22,17 @@ from rest_framework.permissions import AllowAny
 import hmac
 import hashlib
 import json
+import logging
+
 import requests
 from django.conf import settings
+
+from shop.pricing import unit_price
+
+logger = logging.getLogger(__name__)
+
+# Сколько товаров можно запросить одним POST /api/v1/products/ (корзина).
+MAX_CART_ITEMS = 200
 
 
 class CategoryListView(generics.ListAPIView):
@@ -39,7 +48,15 @@ class ProductListView(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return Product.objects.select_related('category').prefetch_related('images', 'prices')
         elif self.request.method == 'POST':
-            ids = [item['id'] for item in self.request.data if 'id' in item]
+            # Корзина из localStorage: [{"id": 1, "quantity": 2}, ...]. Мусорный ввод — пустой ответ, а не 500.
+            data = self.request.data if isinstance(self.request.data, list) else []
+            ids = []
+            for item in data[:MAX_CART_ITEMS]:
+                if isinstance(item, dict):
+                    try:
+                        ids.append(int(item.get('id')))
+                    except (TypeError, ValueError):
+                        continue
             if not ids:
                 return Product.objects.none()  # Возвращает пустой QuerySet
             return Product.objects.filter(id__in=ids).select_related('category').prefetch_related('images', 'prices')
@@ -79,6 +96,9 @@ def create_order(request):
     else:
         return HttpResponse(status=403)
 
+    if not isinstance(request.data, dict) or not isinstance(request.data.get('request'), dict):
+        return JsonResponse({'request': ['Обязательное поле.']}, status=status.HTTP_400_BAD_REQUEST)
+
     serializer = OrderSerializer(data=request.data['request'])
     if serializer.is_valid():
         order = serializer.save()
@@ -90,6 +110,7 @@ def create_order(request):
 
 
 def send_sms(order):
+    """Уведомление менеджеру. Заказ уже сохранён, поэтому сбой SMS не должен превращаться в 500 для клиента."""
     message = (f'Поступил заказ №{order.id}\n'
                f'Дата: {timezone.localtime(order.created_at).strftime("%d.%m.%Y %H:%M:%S")}')
 
@@ -99,34 +120,42 @@ def send_sms(order):
         'msg': message,
         'json': 1
     }
-    print(send_data)
-    result = requests.post(url='https://sms.ru/sms/send', data=send_data)
-    if result.status_code == 200:
-        json_data = result.json()
-        print(json_data)
+    try:
+        result = requests.post(url='https://sms.ru/sms/send', data=send_data, timeout=10)
+        result.raise_for_status()
+        answer = result.json()
+    except (requests.RequestException, ValueError) as exc:
+        # В лог не пишем send_data: там API-ключ.
+        logger.error('SMS о заказе №%s не отправлено: %s', order.id, exc.__class__.__name__)
+        return
+    if answer.get('status') != 'OK':
+        logger.error('SMS о заказе №%s: sms.ru ответил %s (код %s)', order.id,
+                     answer.get('status'), answer.get('status_code'))
     else:
-        print("Ошибка запроса:", result.status_code)
+        logger.info('SMS о заказе №%s отправлено', order.id)
 
 
 class GetProductPrice(APIView):
     queryset = ProductPrice.objects.all()
 
     def get(self, request, *args, **kwargs):
-        product_id = request.GET.get('product_id')
-        count = int(request.GET.get('count', 0))
-
-        if not product_id:
+        try:
+            product_id = int(request.GET['product_id'])
+        except KeyError:
             return Response({'error': 'product_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response({'error': 'product_id must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Получаем все цены для данного продукта, отсортированные по количеству
-            product_prices = ProductPrice.objects.filter(product_id=product_id).order_by('count')
+            count = int(request.GET.get('count', 1))
+        except ValueError:
+            return Response({'error': 'count must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
+        if count < 1:
+            return Response({'error': 'count must be >= 1'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Ищем подходящую цену на основе заданного количества
-            for product_price in product_prices:
-                if count >= product_price.count:
-                    price = product_price.price
-        except ProductPrice.DoesNotExist:
+        tiers = ProductPrice.objects.filter(product_id=product_id).values_list('count', 'price')
+        price = unit_price(tiers, count)
+        if price is None:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'price': price}, status=status.HTTP_200_OK)

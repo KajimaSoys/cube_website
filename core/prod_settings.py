@@ -64,9 +64,15 @@ CSRF_COOKIE_SECURE = env_bool('CSRF_COOKIE_SECURE')
 SESSION_COOKIE_SECURE = env_bool('SESSION_COOKIE_SECURE')
 SESSION_COOKIE_HTTPONLY = True
 
+# Осознанно принятые предупреждения `manage.py check`, через запятую,
+# например: ckeditor.W001,security.W005,security.W021
+SILENCED_SYSTEM_CHECKS = env_list('SILENCED_SYSTEM_CHECKS')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {'console': {'class': 'logging.StreamHandler'}},
     'root': {'handlers': ['console'], 'level': os.environ.get('LOG_LEVEL', 'WARNING')},
+    # Отправка SMS о заказах: INFO, чтобы в логах было видно, что уведомление ушло.
+    'loggers': {'shop': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}},
 }

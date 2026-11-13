@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.utils.html import mark_safe, format_html
+from django.utils.html import format_html
 from django.forms import Textarea
 from django.forms.models import BaseInlineFormSet
 from django.db import models
@@ -35,7 +35,7 @@ class CategoryAdmin(SortableAdminMixin, admin.ModelAdmin):
 
     def thumbnail(self, obj):
         if obj.image_cat:
-            return mark_safe(f'<a href="{obj.image_cat.url}"><img src="{obj.image_cat.url}" width="200" /></a>')
+            return format_html('<a href="{0}"><img src="{0}" width="200" /></a>', obj.image_cat.url)
         return "Предпросмотр пока недоступен. Добавьте фото и сохраните категорию для отображения фото."
 
     thumbnail.short_description = "Предпросмотр фото"
@@ -67,7 +67,7 @@ class ProductImageInline(SortableInlineAdminMixin, admin.TabularInline):
 
     def thumbnail(self, obj):
         if obj.image:
-            return mark_safe(f'<a href="{obj.image.url}"><img src="{obj.image.url}" width="200" /></a>')
+            return format_html('<a href="{0}"><img src="{0}" width="200" /></a>', obj.image.url)
         return "Предпросмотр пока недоступен. Добавьте фото и сохраните товар для отображения фото."
 
     thumbnail.short_description = "Предпросмотр фото"
