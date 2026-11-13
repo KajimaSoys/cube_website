@@ -38,8 +38,13 @@ To set up the project locally, follow these steps:
      - `HMAC_KEY` - Key for HMAC.
      - `CSRF_COOKIE_SECURE` - Set to `True` for HTTPS.
      - `SESSION_COOKIE_SECURE` - Set to `True` for HTTPS.
-     - `SMSRU_APIKEY` - (Optional) API key for sms.ru.
-     - `SMSRU_CLIENT` - (Optional) Your number to receive messages from sms.ru.
+     - `EMAIL_HOST` - SMTP server for order notifications, default is `smtp.yandex.ru` (Mail.ru: `smtp.mail.ru`).
+     - `EMAIL_PORT` - SMTP port, default is `465`.
+     - `EMAIL_USE_SSL` - Default is `True` (port 465). For port 587 set `EMAIL_USE_SSL=False` and `EMAIL_USE_TLS=True`.
+     - `EMAIL_HOST_USER` - Sender mailbox login, e.g. `orders@yandex.ru`. Also used as the sender address.
+     - `EMAIL_HOST_PASSWORD` - App password of the mailbox (not the account password).
+     - `ORDER_NOTIFY_EMAILS` - Comma-separated recipients of new order notifications.
+     - `SITE_URL` - (Optional) Site address for the admin link in the email, default is the first `CSRF_TRUSTED` origin.
    - **Frontend `./client/.env`**:
      - `VITE_BACKEND_HOST` - Backend host, default is `http://127.0.0.1:8000`.
      - `VITE_FRONTEND_HOST` - Frontend host, default is `http://localhost:5173`.

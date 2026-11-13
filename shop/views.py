@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.http import JsonResponse, HttpResponse
 
 from shop.models import (
@@ -22,14 +21,12 @@ from rest_framework.permissions import AllowAny
 import hmac
 import hashlib
 import json
-import logging
 
-import requests
 from django.conf import settings
 
+from shop.notifications import send_order_email
 from shop.pricing import unit_price
 
-logger = logging.getLogger(__name__)
 
 # Сколько товаров можно запросить одним POST /api/v1/products/ (корзина).
 MAX_CART_ITEMS = 200
@@ -103,36 +100,10 @@ def create_order(request):
     if serializer.is_valid():
         order = serializer.save()
 
-        send_sms(order)
+        send_order_email(order)
 
         return JsonResponse({'order_number': order.id}, status=status.HTTP_201_CREATED)
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def send_sms(order):
-    """Уведомление менеджеру. Заказ уже сохранён, поэтому сбой SMS не должен превращаться в 500 для клиента."""
-    message = (f'Поступил заказ №{order.id}\n'
-               f'Дата: {timezone.localtime(order.created_at).strftime("%d.%m.%Y %H:%M:%S")}')
-
-    send_data = {
-        'api_id': settings.SMSRU_APIKEY,
-        'to': settings.SMSRU_CLIENT,
-        'msg': message,
-        'json': 1
-    }
-    try:
-        result = requests.post(url='https://sms.ru/sms/send', data=send_data, timeout=10)
-        result.raise_for_status()
-        answer = result.json()
-    except (requests.RequestException, ValueError) as exc:
-        # В лог не пишем send_data: там API-ключ.
-        logger.error('SMS о заказе №%s не отправлено: %s', order.id, exc.__class__.__name__)
-        return
-    if answer.get('status') != 'OK':
-        logger.error('SMS о заказе №%s: sms.ru ответил %s (код %s)', order.id,
-                     answer.get('status'), answer.get('status_code'))
-    else:
-        logger.info('SMS о заказе №%s отправлено', order.id)
 
 
 class GetProductPrice(APIView):

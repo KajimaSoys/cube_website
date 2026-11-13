@@ -42,8 +42,25 @@ DATABASES = {
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 HMAC_KEY = os.environ.get("HMAC_KEY")
-SMSRU_APIKEY = os.environ.get('SMSRU_APIKEY')
-SMSRU_CLIENT = os.environ.get('SMSRU_CLIENT')
+
+# --- Почта: уведомления менеджеру о новых заказах ---
+# Отправка через SMTP почтового сервиса (Яндекс: smtp.yandex.ru:465 по SSL, пароль приложения).
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.yandex.ru')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '465'))
+EMAIL_USE_SSL = env_bool('EMAIL_USE_SSL', True)
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+# Заказ отправляется синхронно: без таймаута зависший SMTP держал бы ответ клиенту.
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', '10'))
+# Яндекс и Mail.ru отклоняют письма, у которых отправитель не совпадает с логином ящика.
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL') or EMAIL_HOST_USER
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# Кому слать уведомления о заказах, через запятую.
+ORDER_NOTIFY_EMAILS = env_list('ORDER_NOTIFY_EMAILS')
+# Адрес сайта для ссылки на заказ в админке. По умолчанию первый из CSRF_TRUSTED.
+SITE_URL = (os.environ.get('SITE_URL') or next(iter(CSRF_TRUSTED_ORIGINS), '')).rstrip('/')
 
 # --- HTTPS и заголовки безопасности ---
 # TLS завершается на nginx хоста, который передаёт X-Forwarded-Proto: https.
@@ -73,6 +90,6 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {'console': {'class': 'logging.StreamHandler'}},
     'root': {'handlers': ['console'], 'level': os.environ.get('LOG_LEVEL', 'WARNING')},
-    # Отправка SMS о заказах: INFO, чтобы в логах было видно, что уведомление ушло.
+    # Письма о заказах: INFO, чтобы в логах было видно, что уведомление ушло.
     'loggers': {'shop': {'handlers': ['console'], 'level': 'INFO', 'propagate': False}},
 }

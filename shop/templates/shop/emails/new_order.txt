@@ -1,0 +1,20 @@
+{% autoescape off %}Новая заявка №{{ order.id }} с сайта {{ site_name }}
+Дата: {{ created_at }}
+
+Клиент
+  Имя: {{ order.name }}
+  Телефон: {{ order.phone_number }}
+  WhatsApp: {{ order.whatsapp_link }}
+  Получение: {% if order.pickup %}самовывоз{% else %}доставка — {{ order.address|default:"адрес не указан" }}{% endif %}
+{% if order.comment %}  Комментарий: {{ order.comment }}
+{% endif %}
+Состав заказа
+{% for item in items %}  {{ forloop.counter }}. {{ item.name }}{% if item.size %} ({{ item.size }}){% endif %} — {{ item.count }} шт × {{ item.unit_price }} = {{ item.line_total }}
+{% endfor %}
+Итого: {{ total }}
+{% if admin_url %}
+Заказ в админке: {{ admin_url }}
+{% endif %}
+--
+Письмо отправлено автоматически сайтом {{ site_name }}.
+{% endautoescape %}

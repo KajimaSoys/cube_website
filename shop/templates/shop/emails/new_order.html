@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Новая заявка №{{ order.id }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f2f2f2;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f2f2;">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;font-family:Arial,Helvetica,sans-serif;color:#222222;">
+
+  <tr><td style="padding:24px 28px 8px;">
+    <div style="font-size:13px;color:#888888;">{{ site_name }} · {{ created_at }}</div>
+    <h1 style="margin:6px 0 0;font-size:22px;line-height:28px;">Новая заявка №{{ order.id }}</h1>
+  </td></tr>
+
+  <tr><td style="padding:16px 28px 0;">
+    <h2 style="margin:0 0 8px;font-size:15px;color:#888888;font-weight:normal;text-transform:uppercase;letter-spacing:.5px;">Клиент</h2>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:15px;line-height:22px;">
+      <tr><td style="padding:2px 16px 2px 0;color:#888888;">Имя</td><td style="padding:2px 0;"><b>{{ order.name }}</b></td></tr>
+      <tr><td style="padding:2px 16px 2px 0;color:#888888;">Телефон</td><td style="padding:2px 0;"><a href="tel:{{ phone_tel }}" style="color:#222222;">{{ order.phone_number }}</a> · <a href="{{ order.whatsapp_link }}" style="color:#1a8f4a;">WhatsApp</a></td></tr>
+      <tr><td style="padding:2px 16px 2px 0;color:#888888;vertical-align:top;">Получение</td><td style="padding:2px 0;">{% if order.pickup %}Самовывоз{% else %}Доставка: {{ order.address|default:"адрес не указан" }}{% endif %}</td></tr>
+      {% if order.comment %}<tr><td style="padding:2px 16px 2px 0;color:#888888;vertical-align:top;">Комментарий</td><td style="padding:2px 0;">{{ order.comment|linebreaksbr }}</td></tr>{% endif %}
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:24px 28px 0;">
+    <h2 style="margin:0 0 8px;font-size:15px;color:#888888;font-weight:normal;text-transform:uppercase;letter-spacing:.5px;">Состав заказа</h2>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:20px;border-collapse:collapse;">
+      <tr style="color:#888888;">
+        <td style="padding:6px 8px 6px 0;border-bottom:1px solid #e5e5e5;">Товар</td>
+        <td align="right" style="padding:6px 8px;border-bottom:1px solid #e5e5e5;white-space:nowrap;">Кол-во</td>
+        <td align="right" style="padding:6px 8px;border-bottom:1px solid #e5e5e5;white-space:nowrap;">Цена</td>
+        <td align="right" style="padding:6px 0 6px 8px;border-bottom:1px solid #e5e5e5;white-space:nowrap;">Сумма</td>
+      </tr>
+      {% for item in items %}
+      <tr>
+        <td style="padding:8px 8px 8px 0;border-bottom:1px solid #f0f0f0;">{{ item.name }}{% if item.size %}<br><span style="color:#888888;font-size:12px;">{{ item.size }}</span>{% endif %}</td>
+        <td align="right" style="padding:8px;border-bottom:1px solid #f0f0f0;white-space:nowrap;">{{ item.count }} шт</td>
+        <td align="right" style="padding:8px;border-bottom:1px solid #f0f0f0;white-space:nowrap;">{{ item.unit_price }}</td>
+        <td align="right" style="padding:8px 0 8px 8px;border-bottom:1px solid #f0f0f0;white-space:nowrap;">{{ item.line_total }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="3" align="right" style="padding:12px 8px 0 0;font-size:16px;"><b>Итого</b></td>
+        <td align="right" style="padding:12px 0 0 8px;font-size:16px;white-space:nowrap;"><b>{{ total }}</b></td>
+      </tr>
+    </table>
+  </td></tr>
+
+  {% if admin_url %}
+  <tr><td style="padding:24px 28px 0;">
+    <a href="{{ admin_url }}" style="display:inline-block;background:#222222;color:#ffffff;text-decoration:none;padding:10px 18px;border-radius:6px;font-size:14px;">Открыть заказ в админке</a>
+  </td></tr>
+  {% endif %}
+
+  <tr><td style="padding:24px 28px;font-size:12px;color:#aaaaaa;">Письмо отправлено автоматически сайтом {{ site_name }}.</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
