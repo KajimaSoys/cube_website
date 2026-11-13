@@ -1,4 +1,8 @@
 import { createApp } from 'vue'
+import '@fontsource/onest/400.css'
+import '@fontsource/onest/500.css'
+import '@fontsource/geologica/500.css'
+import '@fontsource/geologica/600.css'
 import './assets/style.css'
 import App from './App.vue'
 import router from './router'
