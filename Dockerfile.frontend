@@ -9,7 +9,7 @@ COPY client/ .
 RUN npm run build
 
 # Стадия 2: nginx от непривилегированного пользователя (uid 101), слушает 8080
-FROM nginxinc/nginx-unprivileged:1.30.6-alpine
+FROM nginx/nginx-unprivileged:1.31.9-alpine
 # Обновления безопасности Alpine, затем обратно на непривилегированного пользователя nginx (101).
 USER root
 RUN apk upgrade --no-cache
